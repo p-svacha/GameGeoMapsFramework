@@ -1,0 +1,33 @@
+﻿=== SOURCE DEF LISTS ===
+
+--- LineFeatureDefs.cs ---
+    public static List<LineFeatureDef> Defs => new List<LineFeatureDef>()
+    {
+        new LineFeatureDef()
+        {
+            DefName = "Street",
+            Label = "street",
+            Description = "A street without any further specifications.",
+            Color = new Color(0.667f, 0.725f, 0.788f),
+            Width = 1.2f,
+        },
+
+        new LineFeatureDef()
+        {
+            DefName = "Stream",
+            Label = "stream",
+            Description = "A small, flowing water body.",
+            Color = new Color(0.565f, 0.855f, 0.933f),
+            Width = 0.8f,
+        },
+
+        new LineFeatureDef()
+        {
+            DefName = "DirtPath",
+            Label = "dirt path",
+            Description = "A small dirt path only accessible by foot.",
+            Color = new Color(0.675f, 0.549f, 0.267f),
+            Width = 0.7f,
+        },
+    };
+
