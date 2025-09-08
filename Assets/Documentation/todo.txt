@@ -1,8 +1,9 @@
-﻿- don't allow lines and areas to have connections going back to previous points (i.e P1 -> P2 -> P1)
+﻿- building area type (with outline)
 
-- add more street types (highway/footpath)
+
+- add more street types (highway/footpath/small street)
 - add checkbox to mark if a line feature is a bridge => draw it with outline, use for water, crossings over other paths
-- add forest/tundra/greymountain/building area type
+- add tundra/greymountain/agriculture area types
 
 - feature names are editable in edit tool
 - add feature labels visible on map for areas

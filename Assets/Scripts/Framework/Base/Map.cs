@@ -41,24 +41,24 @@ public class Map
         Points.Add(p.Id, p);
     }
 
-    private void RemovePoint(Point p)
+    private void DeletePoint(Point p)
     {
         if (p.IsConnectedToAnyFeature) throw new System.Exception("Can't remove a point that is still connected to features.");
 
-        // Remove point visually
+        // Destroy point visually
         p.DestroyVisuals();
 
-        // Remove point from database
-        Debug.Log($"Removing point with id {p.Id}.");
+        // Delete point from database
+        Debug.Log($"Deleting point with id {p.Id}.");
         Points.Remove(p.Id);
     }
 
-    private void RemovePointIfOrphaned(Point p)
+    private void DeletePointIfOrphaned(Point p)
     {
         if (!p.IsConnectedToAnyFeature)
         {
-            Debug.Log($"Removing point with id {p.Id} because it is orphaned.");
-            RemovePoint(p);
+            Debug.Log($"Deleting point with id {p.Id} because it is orphaned.");
+            DeletePoint(p);
         }
     }
 
@@ -137,12 +137,20 @@ public class Map
         }
 
         // Delete all features that became invalid due to too few points
-        foreach(LineFeature toRemove in linesStagedToRemove) DeleteLineFeature(toRemove);
-        foreach(AreaFeature toRemove in areasStagedToRemove) DeleteAreaFeature(toRemove);
+        foreach (LineFeature toRemove in linesStagedToRemove) DeleteLineFeature(toRemove);
+        foreach (AreaFeature toRemove in areasStagedToRemove) DeleteAreaFeature(toRemove);
 
         // Remove p1
         p1.ConnectedFeatures.Clear();
-        RemovePoint(p1);
+        DeletePoint(p1);
+
+        // Remove duplicate points on all features
+        List<MapFeature> featuresToCheck = new List<MapFeature>(p2.ConnectedFeatures);
+        foreach (MapFeature feat in featuresToCheck)
+        {
+            if (feat is LineFeature line) RemoveDuplicateLinePoints(line);
+            if (feat is AreaFeature area) RemoveDuplicateAreaPoints(area);
+        }
 
         // Redraw all features now connected to p2
         foreach (MapFeature feat in p2.ConnectedFeatures) Renderer.RedrawFeature(feat);
@@ -185,7 +193,7 @@ public class Map
         // Remove orphaned points
         foreach (Point p in line.Points)
         {
-            RemovePointIfOrphaned(p);
+            DeletePointIfOrphaned(p);
         }
     }
 
@@ -242,6 +250,9 @@ public class Map
 
         // Remove line2
         DeleteLineFeature(line2);
+
+        // Remove duplicates in line1
+        RemoveDuplicateLinePoints(line1);
     }
 
     public void SplitLine(LineFeature existingLine, Point splitPoint)
@@ -300,9 +311,43 @@ public class Map
         point.RemoveConnectedFeature(line);
 
         // Remove point if orphaned
-        RemovePointIfOrphaned(point);
+        DeletePointIfOrphaned(point);
 
         // Redraw line
+        Renderer.RedrawFeature(line);
+    }
+
+    /// <summary>
+    /// Removes all points in a line feature that are used more than once.
+    /// </summary>
+    public void RemoveDuplicateLinePoints(LineFeature line)
+    {
+        // If less than 3 unique points, just remove it
+        if (line.Points.Distinct().Count() < 2)
+        {
+            DeleteLineFeature(line);
+            return;
+        }
+
+        // Remove duplicate points
+        List<Point> pointsToRemove = new List<Point>();
+        List<Point> visitedPoints = new List<Point>();
+        foreach (Point p in line.Points)
+        {
+            if (visitedPoints.Contains(p)) pointsToRemove.Add(p);
+            visitedPoints.Add(p);
+        }
+
+        foreach (Point pointToRemove in pointsToRemove)
+        {
+            Debug.Log($"Removing point with id {pointToRemove.Id} from line {line.Id} because it is a duplicate.");
+
+            // Remove last instance
+            int lastIndex = line.Points.LastIndexOf(pointToRemove);
+            line.Points.RemoveAt(lastIndex);
+        }
+
+        // Redraw
         Renderer.RedrawFeature(line);
     }
 
@@ -343,7 +388,7 @@ public class Map
         // Remove orphaned points
         foreach (Point p in area.Points)
         {
-            RemovePointIfOrphaned(p);
+            DeletePointIfOrphaned(p);
         }
     }
 
@@ -374,16 +419,47 @@ public class Map
         point.RemoveConnectedFeature(area);
 
         // Remove point if orphaned
-        RemovePointIfOrphaned(point);
+        DeletePointIfOrphaned(point);
 
         // Redraw line
         Renderer.RedrawFeature(area);
     }
 
+    /// <summary>
+    /// Removes all points in an area feature that are used more than once.
+    /// </summary>
+    public void RemoveDuplicateAreaPoints(AreaFeature area)
+    {
+        // If less than 3 unique points, just remove it
+        if(area.Points.Distinct().Count() < 3)
+        {
+            DeleteAreaFeature(area);
+            return;
+        }
+
+        // Remove duplicate points
+        List<Point> pointsToRemove = new List<Point>();
+        List<Point> visitedPoints = new List<Point>();
+        foreach(Point p in area.Points)
+        {
+            if (visitedPoints.Contains(p)) pointsToRemove.Add(p);
+            visitedPoints.Add(p);
+        }
+
+        foreach (Point pointToRemove in pointsToRemove)
+        {
+            Debug.Log($"Removing point with id {pointToRemove.Id} from area {area.Id} because it is a duplicate.");
+
+            // Remove last instance
+            int lastIndex = area.Points.LastIndexOf(pointToRemove);
+            area.Points.RemoveAt(lastIndex);
+        }
+
+        // Redraw
+        Renderer.RedrawFeature(area);
+    }
+
     #endregion
-
-
-
 
     public void SetName(string name)
     {

@@ -40,9 +40,14 @@ public class AreaFeature : MapFeature
     /// </summary>
     private void Init()
     {
-        IsClockwise = GeometryFunctions.IsClockwise(Points.Select(p => p.Position).ToList());
+        RecalculateClockwise();
 
         Map.Renderer.CreateAreaFeatureVisuals(this);
+    }
+
+    public void RecalculateClockwise()
+    {
+        IsClockwise = GeometryFunctions.IsClockwise(Points.Select(p => p.Position).ToList());
     }
 
     public void ShowFeaturePoints()

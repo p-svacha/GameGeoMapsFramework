@@ -132,4 +132,9 @@ public class Point
     }
 
     #endregion
+
+    public override string ToString()
+    {
+        return Id.ToString();
+    }
 }

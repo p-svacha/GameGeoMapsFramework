@@ -142,8 +142,15 @@ public class EditLineFeatureTool : EditorTool
     /// </summary>
     private void ResetHoverableFeatures()
     {
-        MouseHoverInfo.SetCheckFeatureSelection(true);
-        MouseHoverInfo.SetFeatureSelectionOptions(Map.LineFeatures.Values.Select(x => (MapFeature)x).ToList());
+        if (Map.LineFeatures.Count == 0)
+        {
+            MouseHoverInfo.SetCheckFeatureSelection(false);
+        }
+        else
+        {
+            MouseHoverInfo.SetCheckFeatureSelection(true);
+            MouseHoverInfo.SetFeatureSelectionOptions(Map.LineFeatures.Values.Select(x => (MapFeature)x).ToList());
+        }
     }
 
     #region Input Handling

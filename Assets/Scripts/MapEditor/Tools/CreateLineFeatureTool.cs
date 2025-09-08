@@ -96,7 +96,11 @@ public class CreateLineFeatureTool : EditorTool
             if (MouseHoverInfo.HoveredPoint != null)
             {
                 // Add existing point as next line point
-                AddPoint(MouseHoverInfo.HoveredPoint);
+                bool canAddPoint = true;
+
+                if (Points.Contains(MouseHoverInfo.HoveredPoint)) canAddPoint = false; // Can't reuse a point on a line feature
+
+                if (canAddPoint) AddPoint(MouseHoverInfo.HoveredPoint);
             }
 
             else

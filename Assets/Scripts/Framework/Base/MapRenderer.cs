@@ -99,7 +99,11 @@ public class MapRenderer
         p.RenderedPoint.transform.position = p.Position;
 
         // Connected features
-        foreach(MapFeature feat in p.ConnectedFeatures) RedrawFeature(feat);
+        foreach (MapFeature feat in p.ConnectedFeatures)
+        {
+            if (feat is AreaFeature area) area.RecalculateClockwise();
+            RedrawFeature(feat);
+        }
     }
 
 

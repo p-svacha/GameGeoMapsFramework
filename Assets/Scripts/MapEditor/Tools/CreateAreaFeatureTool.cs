@@ -113,8 +113,12 @@ public class CreateAreaFeatureTool : EditorTool
         {
             if (MouseHoverInfo.HoveredPoint != null)
             {
-                // Add existing point as next line point
-                AddPoint(MouseHoverInfo.HoveredPoint);
+                // Add existing point as next area point
+                bool canAddPoint = true;
+
+                if (Points.Contains(MouseHoverInfo.HoveredPoint)) canAddPoint = false; // Can't reuse a point on an area feature
+
+                if (canAddPoint) AddPoint(MouseHoverInfo.HoveredPoint);
             }
 
             else

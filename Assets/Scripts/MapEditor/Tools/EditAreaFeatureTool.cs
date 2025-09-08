@@ -52,9 +52,7 @@ public class EditAreaFeatureTool : EditorTool
         SelectFeature(null);
 
         // Display and hover options
-        MouseHoverInfo.SetShowPointSnapIndicator(false);
-        MouseHoverInfo.SetCheckFeatureSelection(true);
-        MouseHoverInfo.SetFeatureSelectionOptions(Map.AreaFeatures.Values.Select(x => (MapFeature)x).ToList());
+        ResetHoverableFeatures();
 
         SetStandardInstructions();
     }
@@ -117,6 +115,22 @@ public class EditAreaFeatureTool : EditorTool
         hoverablePoints.AddRange(SelectedFeature.Points);
         hoverablePoints.AddRange(TemporarySplitPoints);
         MouseHoverInfo.SetPointSelectionOptions(hoverablePoints);
+    }
+
+    /// <summary>
+    /// Sets hoverable features to all line features on the map.
+    /// </summary>
+    private void ResetHoverableFeatures()
+    {
+        if (Map.AreaFeatures.Count == 0)
+        {
+            MouseHoverInfo.SetCheckFeatureSelection(false);
+        }
+        else
+        {
+            MouseHoverInfo.SetCheckFeatureSelection(true);
+            MouseHoverInfo.SetFeatureSelectionOptions(Map.AreaFeatures.Values.Select(x => (MapFeature)x).ToList());
+        }
     }
 
     #region Input Handling
