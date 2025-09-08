@@ -28,6 +28,7 @@ public class MapRenderer
         { MapZLayer.Line, 900 }, // 900 - 920 based on layer
         { MapZLayer.LineSelectionIndicator, 899 },
 
+        { MapZLayer.AreaOutline, 850 },
         { MapZLayer.AreaPolygon, 800 }, // 800 - 820 based on layer
     };
     private const string SortingLayer = "Map";
@@ -179,6 +180,9 @@ public class MapRenderer
         RedrawAreaFeaturePolygon(area);
 
         // Border
+        RedrawAreaFeatureOutline(area);
+
+        // Selection Indicator
         RedrawAreaFeatureSelectionIndicator(area);
         area.ResetSelectionIndicatorColor();
     }
@@ -196,6 +200,24 @@ public class MapRenderer
         MeshRenderer polygonMeshRenderer = area.VisualPolygon.GetComponent<MeshRenderer>();
         polygonMeshRenderer.material.color = area.Def.Color;
         ApplySortingOrder(polygonMeshRenderer, MapZLayer.AreaPolygon, orderOffset: area.RenderLayer);
+    }
+
+    private void RedrawAreaFeatureOutline(AreaFeature area)
+    {
+        // Destroy old border
+        if (area.VisualOutline != null) GameObject.Destroy(area.VisualOutline);
+
+        if (area.Def.OutlineWidth > 0f)
+        {
+            // Create new border
+            area.VisualOutline = MeshGenerator.CreateSinglePolygonBorder(area.PointPositions, width: area.Def.OutlineWidth, area.Def.OutlineColor, area.IsClockwise);
+            area.VisualOutline.transform.SetParent(area.VisualRoot.transform);
+
+            // Set color and render sorting order
+            MeshRenderer borderMeshRenderer = area.VisualOutline.GetComponent<MeshRenderer>();
+            borderMeshRenderer.material.color = area.Def.OutlineColor;
+            ApplySortingOrder(borderMeshRenderer, MapZLayer.AreaOutline);
+        }
     }
 
     private void RedrawAreaFeatureSelectionIndicator(AreaFeature area)

@@ -8,6 +8,7 @@ public enum MapZLayer
     Point,
     PointSnapIndicator,
     AreaPolygon,
+    AreaOutline,
     Line,
     LineSelectionIndicator,
     AreaSelectionIndicator,

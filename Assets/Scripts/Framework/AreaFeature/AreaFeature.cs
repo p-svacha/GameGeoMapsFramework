@@ -11,6 +11,7 @@ public class AreaFeature : MapFeature
 
     public GameObject VisualRoot;
     public GameObject VisualPolygon;
+    public GameObject VisualOutline; // optional
 
     public List<Vector2> PointPositions => Points.Select(p => p.Position).ToList();
 

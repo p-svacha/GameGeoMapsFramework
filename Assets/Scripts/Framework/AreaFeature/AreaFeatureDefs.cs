@@ -43,6 +43,8 @@ public static class AreaFeatureDefs
             Label = "building",
             Description = "Building of any kind.",
             Color = new Color(0.910f, 0.914f, 0.929f),
+            OutlineWidth = 0.5f,
+            OutlineColor = new Color(0.775f, 0.782f, 0.818f),
         },
     };
 }

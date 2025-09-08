@@ -187,11 +187,6 @@
       "Y": 56.698452
     },
     {
-      "Id": 39,
-      "X": -68.77215,
-      "Y": 77.62142
-    },
-    {
       "Id": 40,
       "X": -70.87037,
       "Y": 67.55
@@ -326,7 +321,6 @@
       "DefName": "Stream",
       "Name": null,
       "PointIds": [
-        39,
         40,
         38,
         41,
@@ -360,6 +354,26 @@
         45,
         47,
         44
+      ],
+      "RenderLayer": 0
+    },
+    {
+      "Id": 9,
+      "DefName": "Footpath",
+      "Name": null,
+      "PointIds": [
+        18,
+        5
+      ],
+      "RenderLayer": 0
+    },
+    {
+      "Id": 10,
+      "DefName": "Footpath",
+      "Name": null,
+      "PointIds": [
+        53,
+        25
       ],
       "RenderLayer": 0
     }

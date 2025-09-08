@@ -17,7 +17,7 @@ public class CameraHandler : MonoBehaviour
     public Camera Camera { get; private set; }
 
     // Tunables
-    protected const float ZOOM_SPEED = 8f;        // Base mouse wheel zoom speed
+    protected const float ZOOM_SPEED = 10f;        // Base mouse wheel zoom speed
     protected const float PAN_SPEED = 60f;        // Base WASD pan speed (world units/sec)
     protected const float MIN_CAMERA_SIZE = 20f;
     protected const float MAX_CAMERA_SIZE = 800f;

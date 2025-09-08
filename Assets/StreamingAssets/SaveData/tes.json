@@ -47,24 +47,24 @@
       "Y": -46.0677948
     },
     {
-      "Id": 20,
-      "X": 139.606888,
-      "Y": 42.7815
+      "Id": 593,
+      "X": 133.887589,
+      "Y": 37.7115326
     },
     {
       "Id": 21,
-      "X": 131.591263,
-      "Y": 23.3752537
+      "X": 128.452866,
+      "Y": 23.6297169
     },
     {
       "Id": 22,
-      "X": 134.966263,
-      "Y": 4.53150558
+      "X": 132.76091,
+      "Y": 3.00471878
     },
     {
       "Id": 23,
-      "X": 141.856888,
-      "Y": -9.812246
+      "X": 140.414932,
+      "Y": -11.8479633
     },
     {
       "Id": 24,
@@ -273,13 +273,13 @@
     },
     {
       "Id": 192,
-      "X": 144.2647,
-      "Y": 65.53263
+      "X": 141.023621,
+      "Y": 65.9746
     },
     {
       "Id": 74,
-      "X": 145.737915,
-      "Y": 110.171021
+      "X": 143.478989,
+      "Y": 109.862984
     },
     {
       "Id": 75,
@@ -308,8 +308,8 @@
     },
     {
       "Id": 80,
-      "X": 141.18837,
-      "Y": 42.6326332
+      "X": 143.268753,
+      "Y": 41.28442
     },
     {
       "Id": 81,
@@ -2785,7 +2785,7 @@
   "LineFeatures": [
     {
       "Id": 13,
-      "DefName": "Street",
+      "DefName": "Footpath",
       "Name": null,
       "PointIds": [
         259,
@@ -2852,25 +2852,8 @@
       "RenderLayer": 0
     },
     {
-      "Id": 2,
-      "DefName": "Street",
-      "Name": null,
-      "PointIds": [
-        20,
-        21,
-        22,
-        23,
-        24,
-        25,
-        26,
-        27,
-        28
-      ],
-      "RenderLayer": 1
-    },
-    {
       "Id": 3,
-      "DefName": "Street",
+      "DefName": "Footpath",
       "Name": null,
       "PointIds": [
         24,
@@ -2885,7 +2868,7 @@
     },
     {
       "Id": 4,
-      "DefName": "Street",
+      "DefName": "Footpath",
       "Name": null,
       "PointIds": [
         32,
@@ -2914,7 +2897,7 @@
     },
     {
       "Id": 5,
-      "DefName": "Street",
+      "DefName": "Footpath",
       "Name": null,
       "PointIds": [
         35,
@@ -2927,7 +2910,7 @@
     },
     {
       "Id": 6,
-      "DefName": "Street",
+      "DefName": "Footpath",
       "Name": null,
       "PointIds": [
         40,
@@ -2939,7 +2922,7 @@
     },
     {
       "Id": 7,
-      "DefName": "Street",
+      "DefName": "Footpath",
       "Name": null,
       "PointIds": [
         27,
@@ -2952,7 +2935,7 @@
     },
     {
       "Id": 8,
-      "DefName": "Street",
+      "DefName": "Footpath",
       "Name": null,
       "PointIds": [
         44,
@@ -2965,19 +2948,8 @@
       "RenderLayer": 0
     },
     {
-      "Id": 9,
-      "DefName": "Street",
-      "Name": null,
-      "PointIds": [
-        20,
-        192,
-        74
-      ],
-      "RenderLayer": 0
-    },
-    {
       "Id": 10,
-      "DefName": "Street",
+      "DefName": "Footpath",
       "Name": null,
       "PointIds": [
         29,
@@ -3000,7 +2972,7 @@
     },
     {
       "Id": 14,
-      "DefName": "Street",
+      "DefName": "Footpath",
       "Name": null,
       "PointIds": [
         74,
@@ -3012,7 +2984,7 @@
     },
     {
       "Id": 16,
-      "DefName": "Street",
+      "DefName": "Footpath",
       "Name": null,
       "PointIds": [
         28,
@@ -3035,7 +3007,7 @@
     },
     {
       "Id": 20,
-      "DefName": "Street",
+      "DefName": "Footpath",
       "Name": null,
       "PointIds": [
         177,
@@ -3072,7 +3044,7 @@
     },
     {
       "Id": 21,
-      "DefName": "Street",
+      "DefName": "Footpath",
       "Name": null,
       "PointIds": [
         188,
@@ -3102,7 +3074,7 @@
     },
     {
       "Id": 24,
-      "DefName": "Street",
+      "DefName": "Footpath",
       "Name": null,
       "PointIds": [
         194,
@@ -3239,7 +3211,7 @@
     },
     {
       "Id": 34,
-      "DefName": "Street",
+      "DefName": "Footpath",
       "Name": null,
       "PointIds": [
         527,
@@ -3250,7 +3222,7 @@
     },
     {
       "Id": 35,
-      "DefName": "Street",
+      "DefName": "Footpath",
       "Name": null,
       "PointIds": [
         529,
@@ -3261,7 +3233,7 @@
     },
     {
       "Id": 36,
-      "DefName": "Street",
+      "DefName": "StreetSmall",
       "Name": null,
       "PointIds": [
         229,
@@ -3286,7 +3258,7 @@
     },
     {
       "Id": 37,
-      "DefName": "Street",
+      "DefName": "StreetSmall",
       "Name": null,
       "PointIds": [
         568,
@@ -3302,6 +3274,25 @@
         590,
         591,
         592
+      ],
+      "RenderLayer": 0
+    },
+    {
+      "Id": 38,
+      "DefName": "Footpath",
+      "Name": null,
+      "PointIds": [
+        28,
+        27,
+        26,
+        25,
+        24,
+        23,
+        22,
+        21,
+        593,
+        192,
+        74
       ],
       "RenderLayer": 0
     }
