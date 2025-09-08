@@ -36,5 +36,13 @@ public static class AreaFeatureDefs
             Description = "Urbanized area like a city or town.",
             Color = new Color(0.969f, 0.969f, 0.969f),
         },
+
+        new AreaFeatureDef()
+        {
+            DefName = "Building",
+            Label = "building",
+            Description = "Building of any kind.",
+            Color = new Color(0.910f, 0.914f, 0.929f),
+        },
     };
 }

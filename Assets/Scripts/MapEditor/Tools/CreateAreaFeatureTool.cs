@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public class CreateAreaFeatureTool : EditorTool
@@ -14,6 +15,25 @@ public class CreateAreaFeatureTool : EditorTool
     private LineRenderer FeatureLineRenderer; // Renderer that draws the current area outline
     private CursorLineRenderer2D StartCursorLineRenderer; // Renderer that draws a dynamic line from the first area point to the cursor
     private CursorLineRenderer2D EndCursorLineRenderer; // Renderer that draws a dynamic line from the last area point to the cursor
+
+    [Header("Elements")]
+    public TMP_Dropdown TypeDropdown;
+    public TMP_Dropdown LayerDropdown;
+
+    public override void Init(MapEditor editor)
+    {
+        base.Init(editor);
+
+        // UI
+        TypeDropdown.ClearOptions();
+        List<string> typeOptions = DefDatabase<AreaFeatureDef>.AllDefs.Select(x => x.LabelCap).ToList();
+        TypeDropdown.AddOptions(typeOptions);
+
+        LayerDropdown.ClearOptions();
+        List<string> layerOptions = new List<string>();
+        for (int i = 0; i <= 10; i++) layerOptions.Add(i.ToString());
+        LayerDropdown.AddOptions(layerOptions);
+    }
 
 
     /// <summary>
@@ -139,7 +159,7 @@ public class CreateAreaFeatureTool : EditorTool
     private void ConfirmFeature()
     {
         // Add area feature to map
-        Map.AddAreaFeature(Points);
+        Map.AddAreaFeature(Points, DefDatabase<AreaFeatureDef>.AllDefs[TypeDropdown.value], LayerDropdown.value);
 
         // Reset so we can start creating a new area
         Reset();

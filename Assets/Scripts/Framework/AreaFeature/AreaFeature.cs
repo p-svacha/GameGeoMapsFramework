@@ -14,11 +14,12 @@ public class AreaFeature : MapFeature
 
     public List<Vector2> PointPositions => Points.Select(p => p.Position).ToList();
 
-    public AreaFeature(Map map, int id, List<Point> points) : base(map, id)
+    public AreaFeature(Map map, int id, List<Point> points, AreaFeatureDef def, int renderLayer) : base(map, id)
     {
         Points = new List<Point>(points);
 
-        Def = DefDatabase<AreaFeatureDef>.AllDefs.First();
+        Def = def;
+        RenderLayer = renderLayer;
 
         Init();
     }

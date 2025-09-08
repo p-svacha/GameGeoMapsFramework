@@ -160,7 +160,7 @@ public class Map
 
     #region Line Features
 
-    public LineFeature AddLineFeature(List<Point> points)
+    public LineFeature AddLineFeature(List<Point> points, LineFeatureDef def, int renderLayer)
     {
         // Register all unregistered points added in line
         foreach (Point p in points)
@@ -169,7 +169,7 @@ public class Map
         }
 
         // Create new line feature
-        LineFeature newFeature = new LineFeature(this, NextLineFeatureId++, points);
+        LineFeature newFeature = new LineFeature(this, NextLineFeatureId++, points, def, renderLayer);
         LineFeatures.Add(newFeature.Id, newFeature);
 
         // Add feature reference to all points
@@ -275,7 +275,7 @@ public class Map
         foreach (Point pointToRemove in removedPoints) existingLine.Points.Remove(pointToRemove);
 
         // Create new line
-        LineFeature splitLine = AddLineFeature(newLinePoints);
+        LineFeature splitLine = AddLineFeature(newLinePoints, existingLine.Def, existingLine.RenderLayer);
         splitLine.SetType(existingLine.Def);
         splitLine.SetRenderLayer(existingLine.RenderLayer);
 
@@ -355,7 +355,7 @@ public class Map
 
     #region Area Features
 
-    public AreaFeature AddAreaFeature(List<Point> points)
+    public AreaFeature AddAreaFeature(List<Point> points, AreaFeatureDef def, int renderLayer)
     {
         // Register all unregistered points added in line
         foreach (Point p in points)
@@ -364,7 +364,7 @@ public class Map
         }
 
         // Create new line feature
-        AreaFeature newFeature = new AreaFeature(this, NextAreaFeatureId++, points);
+        AreaFeature newFeature = new AreaFeature(this, NextAreaFeatureId++, points, def, renderLayer);
         AreaFeatures.Add(newFeature.Id, newFeature);
 
         // Add feature reference to all points
@@ -529,7 +529,7 @@ public class Map
         // Save a backup
         int rng = (int)(Random.value * 15);
         string backupName = Name + "_backup_" + rng;
-        JsonUtilities.SaveData<MapData>(ToData(), backupName);
+        JsonUtilities.SaveData<MapData>(ToData(), backupName, isBackup: true);
     }
 
     public MapData ToData()

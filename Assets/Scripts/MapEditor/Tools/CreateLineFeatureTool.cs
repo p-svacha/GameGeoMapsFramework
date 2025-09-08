@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public class CreateLineFeatureTool : EditorTool
@@ -11,6 +12,26 @@ public class CreateLineFeatureTool : EditorTool
 
     private LineRenderer FeatureLineRenderer; // Renderer that draws the current line
     private CursorLineRenderer2D CursorLineRenderer; // Renderer that draws a dynamic line from the last line point to the cursor
+
+    [Header("Elements")]
+    public TMP_Dropdown TypeDropdown;
+    public TMP_Dropdown LayerDropdown;
+
+    public override void Init(MapEditor editor)
+    {
+        base.Init(editor);
+
+        // UI
+        TypeDropdown.ClearOptions();
+        List<string> typeOptions = DefDatabase<LineFeatureDef>.AllDefs.Select(x => x.LabelCap).ToList();
+        TypeDropdown.AddOptions(typeOptions);
+        TypeDropdown.onValueChanged.AddListener(TypeDropdown_OnValueChanged);
+
+        LayerDropdown.ClearOptions();
+        List<string> layerOptions = new List<string>();
+        for (int i = 0; i <= 10; i++) layerOptions.Add(i.ToString());
+        LayerDropdown.AddOptions(layerOptions);
+    }
 
     /// <summary>
     /// Resets the current line being added while the tool is active.
@@ -63,6 +84,9 @@ public class CreateLineFeatureTool : EditorTool
         FeatureLineRenderer.endWidth = 1f;
         FeatureLineRenderer.sortingLayerName = "Foreground";
         featureLineObj.gameObject.SetActive(true);
+
+        // Set line width according to selected def
+        TypeDropdown_OnValueChanged(TypeDropdown.value);
 
         // Reset
         Reset();
@@ -118,6 +142,18 @@ public class CreateLineFeatureTool : EditorTool
         Reset();
     }
 
+    private void TypeDropdown_OnValueChanged(int value)
+    {
+        LineFeatureDef selectedDef = DefDatabase<LineFeatureDef>.AllDefs[TypeDropdown.value];
+
+        FeatureLineRenderer.startWidth = selectedDef.Width;
+        FeatureLineRenderer.endWidth = selectedDef.Width;
+
+        LineRenderer cursorLineRenderer = CursorLineRenderer.GetComponent<LineRenderer>();
+        cursorLineRenderer.startWidth = selectedDef.Width;
+        cursorLineRenderer.endWidth = selectedDef.Width;
+    }
+
     /// <summary>
     /// Draws a line from the given point to the current mouse position, until hidden again.
     /// </summary>
@@ -135,7 +171,7 @@ public class CreateLineFeatureTool : EditorTool
     private void ConfirmFeature()
     {
         // Add line feature to map
-        Map.AddLineFeature(Points);
+        Map.AddLineFeature(Points, DefDatabase<LineFeatureDef>.AllDefs[TypeDropdown.value], LayerDropdown.value);
 
         // Reset so we can start creating a new line
         Reset();

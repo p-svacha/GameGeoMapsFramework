@@ -8,10 +8,12 @@ public static class JsonUtilities
 {
     public static string SAVE_DATA_PATH = Application.streamingAssetsPath + "/SaveData/";
 
-    public static void SaveData<T>(T data, string fileName)
+    public static void SaveData<T>(T data, string fileName, bool isBackup = false)
     {
         string json = JsonConvert.SerializeObject(data, Formatting.Indented);
-        string path = SAVE_DATA_PATH + fileName + ".json";
+        string basePath = SAVE_DATA_PATH;
+        if (isBackup) basePath += "Backups/";
+        string path = basePath + fileName + ".json";
         File.WriteAllText(path, json);
         Debug.Log("Successfully saved " + fileName + " data:\n\n" + json);
     }

@@ -8,7 +8,7 @@ public class MapRenderer
 {
     public static Sprite DEFAULT_POINT_SPRITE = ResourceManager.LoadSprite("Sprites/Point");
 
-    private static float LINE_SELECTION_INDICATOR_WIDTH = 3f;
+    private static float LINE_SELECTION_INDICATOR_WIDTH = 3f; // additional to line width
     public static float LINE_SELECTION_INDICATOR_ALPHA = 0.3f;
 
     private static float AREA_SELECTION_INDICATOR_WIDTH = 2f;
@@ -159,8 +159,8 @@ public class MapRenderer
         LineRenderer lr = line.SelectionIndicator.GetComponent<LineRenderer>();
         lr.startColor = new Color(line.Def.Color.r, line.Def.Color.g, line.Def.Color.b, LINE_SELECTION_INDICATOR_ALPHA);
         lr.endColor = new Color(line.Def.Color.r, line.Def.Color.g, line.Def.Color.b, LINE_SELECTION_INDICATOR_ALPHA);
-        lr.startWidth = LINE_SELECTION_INDICATOR_WIDTH;
-        lr.endWidth = LINE_SELECTION_INDICATOR_WIDTH;
+        lr.startWidth = line.Def.Width + LINE_SELECTION_INDICATOR_WIDTH;
+        lr.endWidth = line.Def.Width + LINE_SELECTION_INDICATOR_WIDTH;
 
         lr.positionCount = line.Points.Count;
         for (int i = 0; i < line.Points.Count; i++) lr.SetPosition(i, line.Points[i].Position);

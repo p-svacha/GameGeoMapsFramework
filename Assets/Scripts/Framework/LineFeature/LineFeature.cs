@@ -15,11 +15,12 @@ public class LineFeature : MapFeature
     public Point StartPoint => Points.First();
     public Point EndPoint => Points.Last();
 
-    public LineFeature(Map map, int id, List<Point> points) : base(map, id)
+    public LineFeature(Map map, int id, List<Point> points, LineFeatureDef def, int renderLayer) : base(map, id)
     {
         Points = new List<Point>(points);
 
-        Def = DefDatabase<LineFeatureDef>.AllDefs.First();
+        Def = def;
+        RenderLayer = renderLayer;
 
         Init();
     }

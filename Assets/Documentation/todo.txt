@@ -1,5 +1,7 @@
 ﻿- building area type (with outline)
 
+- ctrl click a start or end point of a line initiates a drag with a new point expanding it
+	> add instruction
 
 - add more street types (highway/footpath/small street)
 - add checkbox to mark if a line feature is a bridge => draw it with outline, use for water, crossings over other paths

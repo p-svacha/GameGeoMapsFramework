@@ -7,9 +7,45 @@
         {
             DefName = "Street",
             Label = "street",
-            Description = "A street without any further specifications.",
-            Color = new Color(0.667f, 0.725f, 0.788f),
-            Width = 1.2f,
+            Description = "A medium street often acting as connectors in neighbourhoods.",
+            Color = PAVED_STREET_COLOR,
+            Width = 6f,
+        },
+
+        new LineFeatureDef()
+        {
+            DefName = "StreetBig",
+            Label = "main street",
+            Description = "A big street often acting as the main road through a town.",
+            Color = PAVED_STREET_COLOR,
+            Width = 8f,
+        },
+
+        new LineFeatureDef()
+        {
+            DefName = "Highway",
+            Label = "highway",
+            Description = "Very wide and fast street only for cars.",
+            Color = PAVED_STREET_COLOR,
+            Width = 10f,
+        },
+
+        new LineFeatureDef()
+        {
+            DefName = "StreetSmall",
+            Label = "small street",
+            Description = "A small street often found in quartier neighbourhoods.",
+            Color = PAVED_STREET_COLOR,
+            Width = 4f,
+        },
+
+        new LineFeatureDef()
+        {
+            DefName = "Footpath",
+            Label = "footpath",
+            Description = "A paved footpath.",
+            Color = PAVED_STREET_COLOR,
+            Width = 2f,
         },
 
         new LineFeatureDef()
