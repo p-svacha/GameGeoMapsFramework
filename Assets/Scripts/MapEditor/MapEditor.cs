@@ -90,6 +90,7 @@ public class MapEditor : MonoBehaviour
     {
         Map.DestroyAllVisuals();
         Map = map;
+        // Map.Renderer3D.DrawMap();
     }
 
 

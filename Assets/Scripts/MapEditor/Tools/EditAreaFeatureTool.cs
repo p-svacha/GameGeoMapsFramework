@@ -70,7 +70,7 @@ public class EditAreaFeatureTool : EditorTool
             // Remove split points
             ClearSplitPoints();
         }
-        Map.Renderer.HideAllPoints();
+        Map.Renderer2D.HideAllPoints();
 
         // Select new feature
         SelectedFeature = feature;
@@ -178,7 +178,7 @@ public class EditAreaFeatureTool : EditorTool
                 else
                 {
                     // Refresh visible points
-                    Map.Renderer.HideAllPoints();
+                    Map.Renderer2D.HideAllPoints();
                     SelectedFeature.ShowFeaturePoints();
                 }
             }

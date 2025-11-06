@@ -7,6 +7,3 @@
 - feature names are editable in edit tool
 - add feature labels visible on map for areas
 - add feature labels visible on map for lines
-
-- hide small features depending on zoom level
-- hide small feature labels depending on zoom level

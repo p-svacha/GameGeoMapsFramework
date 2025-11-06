@@ -30,19 +30,19 @@ public class LineFeature : MapFeature
     /// </summary>
     private void Init()
     {
-        Map.Renderer.CreateLineFeatureVisuals(this);
+        Map.Renderer2D.CreateLineFeatureVisuals(this);
     }
 
     public void SetType(LineFeatureDef def)
     {
         Def = def;
-        Map.Renderer.RedrawFeature(this);
+        Map.Renderer2D.RedrawFeature(this);
     }
 
     public void SetRenderLayer(int layer)
     {
         RenderLayer = layer;
-        Map.Renderer.RedrawFeature(this);
+        Map.Renderer2D.RedrawFeature(this);
     }
 
     public void ShowFeaturePoints()
@@ -60,7 +60,7 @@ public class LineFeature : MapFeature
 
     public override void ResetSelectionIndicatorColor()
     {
-        SetSelectionIndicatorColor(new Color(Def.Color.r, Def.Color.g, Def.Color.b, MapRenderer.LINE_SELECTION_INDICATOR_ALPHA));
+        SetSelectionIndicatorColor(new Color(Def.Color.r, Def.Color.g, Def.Color.b, MapRenderer2D.LINE_SELECTION_INDICATOR_ALPHA));
     }
 
     #region Save / Load

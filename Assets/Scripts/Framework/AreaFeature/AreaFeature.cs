@@ -28,13 +28,13 @@ public class AreaFeature : MapFeature
     public void SetType(AreaFeatureDef def)
     {
         Def = def;
-        Map.Renderer.RedrawFeature(this);
+        Map.Renderer2D.RedrawFeature(this);
     }
 
     public void SetRenderLayer(int layer)
     {
         RenderLayer = layer;
-        Map.Renderer.RedrawFeature(this);
+        Map.Renderer2D.RedrawFeature(this);
     }
 
     /// <summary>
@@ -44,7 +44,7 @@ public class AreaFeature : MapFeature
     {
         RecalculateClockwise();
 
-        Map.Renderer.CreateAreaFeatureVisuals(this);
+        Map.Renderer2D.CreateAreaFeatureVisuals(this);
     }
 
     public void RecalculateClockwise()
@@ -65,7 +65,7 @@ public class AreaFeature : MapFeature
 
     public override void ResetSelectionIndicatorColor()
     {
-        SetSelectionIndicatorColor(MapRenderer.AREA_SELECTION_INDICATOR_COLOR);
+        SetSelectionIndicatorColor(MapRenderer2D.AREA_SELECTION_INDICATOR_COLOR);
     }
 
     #region Save / Load

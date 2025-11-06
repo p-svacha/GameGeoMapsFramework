@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Renderer responsible for rendering a map.
+/// Renderer responsible for rendering a map in 2D.
 /// </summary>
-public class MapRenderer
+public class MapRenderer2D
 {
     public static Sprite DEFAULT_POINT_SPRITE = ResourceManager.LoadSprite("Sprites/Point");
 
@@ -33,11 +33,11 @@ public class MapRenderer
     };
     private const string SortingLayer = "Map";
 
-    public MapRenderer(Map map)
+    public MapRenderer2D(Map map)
     {
         Map = map;
 
-        MapRoot = new GameObject("Map");
+        MapRoot = new GameObject("Map2D");
         PointsContainer = new GameObject("Points");
         PointsContainer.transform.SetParent(MapRoot.transform);
     }
@@ -252,6 +252,7 @@ public class MapRenderer
         if (feat is AreaFeature area)
         {
             RedrawAreaFeaturePolygon(area);
+            RedrawAreaFeatureOutline(area);
             RedrawAreaFeatureSelectionIndicator(area);
         }
     }

@@ -20,8 +20,13 @@ public class CameraHandler : MonoBehaviour
     protected const float ZOOM_SPEED = 10f;        // Base mouse wheel zoom speed
     protected const float PAN_SPEED = 60f;        // Base WASD pan speed (world units/sec)
     protected const float MIN_CAMERA_SIZE = 20f;
-    protected const float MAX_CAMERA_SIZE = 800f;
+    protected const float MAX_CAMERA_SIZE = 2000f;
     protected const float DRAG_SPEED = 0.03f;
+
+    protected const float CAMERA_BOUNDS = 200000;
+
+    protected const bool PAN_SPEED_SCALES_WITH_ZOOM = true;
+    protected const float PAN_SPEED_ZOOM_SCALE_FACTOR = 0.01f;
 
     // Shift boosts
     protected const float PAN_SHIFT_MULT = 6.0f;  // WASD speed boost while holding Shift
@@ -56,7 +61,7 @@ public class CameraHandler : MonoBehaviour
         {
             Camera = Camera.main;
         }
-        SetBounds(-3000, -3000, 3000, 3000);
+        SetBounds(-CAMERA_BOUNDS, -CAMERA_BOUNDS, CAMERA_BOUNDS, CAMERA_BOUNDS);
     }
 
     private void Update()
@@ -93,7 +98,9 @@ public class CameraHandler : MonoBehaviour
         if (pan.sqrMagnitude > 0f)
         {
             pan.Normalize();
-            transform.position += pan * (PAN_SPEED * panBoost * Time.deltaTime);
+            float panSpeed = PAN_SPEED * panBoost * Time.deltaTime;
+            if (PAN_SPEED_SCALES_WITH_ZOOM) panSpeed *= (Camera.orthographicSize * PAN_SPEED_ZOOM_SCALE_FACTOR);
+            transform.position += pan * panSpeed;
         }
 
         // --- Left-mouse drag triggers (kept from your original) ---

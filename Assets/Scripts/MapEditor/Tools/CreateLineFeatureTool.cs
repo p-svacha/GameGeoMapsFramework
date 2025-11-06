@@ -56,7 +56,7 @@ public class CreateLineFeatureTool : EditorTool
     public override void OnSelect()
     {
         // Diplay options
-        Map.Renderer.ShowAllPoints();
+        Map.Renderer2D.ShowAllPoints();
         MouseHoverInfo.SetShowPointSnapIndicator(true);
         MouseHoverInfo.SetCheckFeatureSelection(false);
 

@@ -60,7 +60,7 @@ public class Point
     {
         Id = id;
         IsRegistered = true;
-        RenderedPoint.GetComponent<SpriteRenderer>().sprite = MapRenderer.DEFAULT_POINT_SPRITE;
+        RenderedPoint.GetComponent<SpriteRenderer>().sprite = MapRenderer2D.DEFAULT_POINT_SPRITE;
     }
 
     /// <summary>
@@ -73,14 +73,14 @@ public class Point
     }
     private void InitVisuals(Sprite overrideSprite = null)
     {
-        RenderedPoint = Map.Renderer.DrawPoint(this, overrideSprite);
-        SnapIndicator = Map.Renderer.DrawPointSnapIndicator(this);
+        RenderedPoint = Map.Renderer2D.DrawPoint(this, overrideSprite);
+        SnapIndicator = Map.Renderer2D.DrawPointSnapIndicator(this);
     }
 
     public void SetPosition(Vector2 position)
     {
         Position = position;
-        Map.Renderer.RedrawPointAndAllConnectedFeatures(this);
+        Map.Renderer2D.RedrawPointAndAllConnectedFeatures(this);
     }
 
     public void SetDisplayColor(Color c)

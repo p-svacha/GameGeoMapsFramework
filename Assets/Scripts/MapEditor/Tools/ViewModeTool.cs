@@ -8,7 +8,7 @@ public class ViewModeTool : EditorTool
     public override void OnSelect()
     {
         // Display options
-        Map.Renderer.HideAllPoints();
+        Map.Renderer2D.HideAllPoints();
         MouseHoverInfo.SetShowPointSnapIndicator(false);
         MouseHoverInfo.SetCheckFeatureSelection(false);
     }

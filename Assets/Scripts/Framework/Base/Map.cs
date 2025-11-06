@@ -16,7 +16,8 @@ public class Map
     public int NextLineFeatureId;
     public int NextAreaFeatureId;
 
-    public MapRenderer Renderer { get; private set; }
+    public MapRenderer2D Renderer2D { get; private set; }
+    public MapRenderer3D Renderer3D { get; private set; }
 
     public Map()
     {
@@ -30,7 +31,8 @@ public class Map
         NextLineFeatureId = 1;
         NextAreaFeatureId = 1;
 
-        Renderer = new MapRenderer(this);
+        Renderer2D = new MapRenderer2D(this);
+        Renderer3D = new MapRenderer3D(this);
     }
 
     #region Points
@@ -153,7 +155,7 @@ public class Map
         }
 
         // Redraw all features now connected to p2
-        foreach (MapFeature feat in p2.ConnectedFeatures) Renderer.RedrawFeature(feat);
+        foreach (MapFeature feat in p2.ConnectedFeatures) Renderer2D.RedrawFeature(feat);
     }
 
     #endregion
@@ -246,7 +248,7 @@ public class Map
         }
 
         // Update line1 visuals
-        Renderer.RedrawFeature(line1);
+        Renderer2D.RedrawFeature(line1);
 
         // Remove line2
         DeleteLineFeature(line2);
@@ -280,8 +282,8 @@ public class Map
         splitLine.SetRenderLayer(existingLine.RenderLayer);
 
         // Redraw both lines
-        Renderer.RedrawFeature(existingLine);
-        Renderer.RedrawFeature(splitLine);
+        Renderer2D.RedrawFeature(existingLine);
+        Renderer2D.RedrawFeature(splitLine);
     }
 
     public void SplitLineSegment(LineFeature line, Point newSplitPoint, int splitIndex)
@@ -294,7 +296,33 @@ public class Map
         line.Points.Insert(splitIndex + 1, newSplitPoint);
 
         // Redraw line
-        Renderer.RedrawFeature(line);
+        Renderer2D.RedrawFeature(line);
+    }
+
+    public void ExpandLineAtStart(LineFeature line, Point newStartPoint)
+    {
+        // Register new point
+        RegisterNewPoint(newStartPoint);
+        newStartPoint.AddConnectedFeature(line);
+
+        // Insert point into line
+        line.Points.Insert(0, newStartPoint);
+
+        // Redraw line
+        Renderer2D.RedrawFeature(line);
+    }
+
+    public void ExpandLineAtEnd(LineFeature line, Point newEndPoint)
+    {
+        // Register new point
+        RegisterNewPoint(newEndPoint);
+        newEndPoint.AddConnectedFeature(line);
+
+        // Insert point into line
+        line.Points.Add(newEndPoint);
+
+        // Redraw line
+        Renderer2D.RedrawFeature(line);
     }
 
     public void RemoveLineFeaturePoint(LineFeature line, Point point)
@@ -314,7 +342,7 @@ public class Map
         DeletePointIfOrphaned(point);
 
         // Redraw line
-        Renderer.RedrawFeature(line);
+        Renderer2D.RedrawFeature(line);
     }
 
     /// <summary>
@@ -348,7 +376,7 @@ public class Map
         }
 
         // Redraw
-        Renderer.RedrawFeature(line);
+        Renderer2D.RedrawFeature(line);
     }
 
     #endregion
@@ -402,7 +430,7 @@ public class Map
         area.Points.Insert(splitIndex + 1, newSplitPoint);
 
         // Redraw line
-        Renderer.RedrawFeature(area);
+        Renderer2D.RedrawFeature(area);
     }
 
     public void RemoveAreaFeaturePoint(AreaFeature area, Point point)
@@ -422,7 +450,7 @@ public class Map
         DeletePointIfOrphaned(point);
 
         // Redraw line
-        Renderer.RedrawFeature(area);
+        Renderer2D.RedrawFeature(area);
     }
 
     /// <summary>
@@ -456,7 +484,7 @@ public class Map
         }
 
         // Redraw
-        Renderer.RedrawFeature(area);
+        Renderer2D.RedrawFeature(area);
     }
 
     #endregion
@@ -466,7 +494,7 @@ public class Map
         Name = name;
     }
 
-    public void DestroyAllVisuals() => GameObject.Destroy(Renderer.MapRoot);
+    public void DestroyAllVisuals() => GameObject.Destroy(Renderer2D.MapRoot);
 
     #region Save / Load
 
@@ -478,7 +506,8 @@ public class Map
         AreaFeatures = new Dictionary<int, AreaFeature>();
 
         // Renderer
-        Renderer = new MapRenderer(this);
+        Renderer2D = new MapRenderer2D(this);
+        Renderer3D = new MapRenderer3D(this);
 
         // Load points
         foreach (PointData pointData in data.Points)

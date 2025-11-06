@@ -7,7 +7,7 @@ public class SelectFeatureTool : EditorTool
 
     public override void OnSelect()
     {
-        Map.Renderer.HideAllPoints();
+        Map.Renderer2D.HideAllPoints();
 
         MouseHoverInfo.SetShowPointSnapIndicator(false);
         MouseHoverInfo.SetCheckFeatureSelection(true);

@@ -11,6 +11,7 @@ public class EditLineFeatureTool : EditorTool
 
     private LineFeature SelectedFeature;
 
+    private static float TEMPORARY_POINT_SCALE = 0.8f;
     private static Color MERGE_OPTION_COLOR = new Color(0f, 1f, 0f, 0.5f);
     private static Color MERGE_OPTION_HIGHLIGHTED_COLOR = new Color(0f, 1f, 0f, 0.9f);
 
@@ -86,7 +87,7 @@ public class EditLineFeatureTool : EditorTool
             // Remove split points
             ClearSplitPoints();
         }
-        Map.Renderer.HideAllPoints();
+        Map.Renderer2D.HideAllPoints();
 
         // Select new feature
         SelectedFeature = feature;
@@ -179,7 +180,10 @@ public class EditLineFeatureTool : EditorTool
             // Create new split point
             if (SelectedFeature != null && MouseHoverInfo.HoveredPoint != null && TemporarySplitPoints.Contains(MouseHoverInfo.HoveredPoint))
             {
-                SplitLineSegment(MouseHoverInfo.HoveredPoint);
+                int splitPointIndex = TemporarySplitPoints.IndexOf(MouseHoverInfo.HoveredPoint);
+                if (splitPointIndex < TemporarySplitPoints.Count - 2) SplitLineSegment(MouseHoverInfo.HoveredPoint); // Clicked a split point that splits a segment
+                if (splitPointIndex == TemporarySplitPoints.Count - 2) ExpandLineAtStart(MouseHoverInfo.HoveredPoint); // Cliked point that expands line at start
+                if (splitPointIndex == TemporarySplitPoints.Count - 1) ExpandLineAtEnd(MouseHoverInfo.HoveredPoint); // Cliked point that expands line at end
             }
 
             // Initiate point dragging
@@ -220,7 +224,7 @@ public class EditLineFeatureTool : EditorTool
                 else
                 {
                     // Refresh visible points
-                    Map.Renderer.HideAllPoints();
+                    Map.Renderer2D.HideAllPoints();
                     SelectedFeature.ShowFeaturePoints();
                 }
             }
@@ -505,22 +509,37 @@ public class EditLineFeatureTool : EditorTool
     #region Split Points
 
     /// <summary>
-    /// Between every two points in the line, this creates a temporary unregistered point, that if clicked, becomes permanent and splits a line.
+    /// Between every two points in the line, and outside both ends, this creates a temporary unregistered point, that if clicked, becomes permanent and splits a line.
     /// Likes this new points can be created on existing lines.
     /// </summary>
     private void GenerateSplitPoints()
     {
-        for(int i = 0; i < SelectedFeature.Points.Count - 1; i++)
+        // Split points between each segment
+        for (int i = 0; i < SelectedFeature.Points.Count - 1; i++)
         {
             Point segmentStart = SelectedFeature.Points[i];
             Point segmentEnd = SelectedFeature.Points[i + 1];
             Vector2 splitPosition = new Vector2((segmentStart.Position.x + segmentEnd.Position.x) / 2f, (segmentStart.Position.y + segmentEnd.Position.y) / 2f);
 
-            Point tempSplitPoint = new Point(Map, splitPosition, overrideSprite: ResourceManager.LoadSprite("Sprites/PointPlus"));
-            tempSplitPoint.RenderedPoint.transform.localScale = new Vector3(0.8f, 0.8f, 1f);
-
-            TemporarySplitPoints.Add(tempSplitPoint);
+            TemporarySplitPoints.Add(new Point(Map, splitPosition, overrideSprite: ResourceManager.LoadSprite("Sprites/PointPlus")));
         }
+
+        // Split point before start
+        Point startPoint = SelectedFeature.StartPoint;
+        Point secondPoint = SelectedFeature.Points[1];
+        Vector2 toSecondPoint = secondPoint.Position - startPoint.Position;
+        Vector2 beforeStartPosition = startPoint.Position - (toSecondPoint.normalized * toSecondPoint.magnitude / 2f);
+        TemporarySplitPoints.Add(new Point(Map, beforeStartPosition, overrideSprite: ResourceManager.LoadSprite("Sprites/PointPlus")));
+
+        // Split point after end
+        Point endPoint = SelectedFeature.EndPoint;
+        Point penultimatePoint = SelectedFeature.Points[SelectedFeature.Points.Count - 2];
+        Vector2 fromPenultimatePoint = endPoint.Position - penultimatePoint.Position;
+        Vector2 afterEndPosition = endPoint.Position + (fromPenultimatePoint.normalized * fromPenultimatePoint.magnitude / 2f);
+        TemporarySplitPoints.Add(new Point(Map, afterEndPosition, overrideSprite: ResourceManager.LoadSprite("Sprites/PointPlus")));
+
+        // Scale all split points
+        foreach (Point p in TemporarySplitPoints) p.RenderedPoint.transform.localScale = new Vector3(TEMPORARY_POINT_SCALE, TEMPORARY_POINT_SCALE, 1f);
     }
 
     private void ClearSplitPoints()
@@ -540,6 +559,30 @@ public class EditLineFeatureTool : EditorTool
     {
         int index = TemporarySplitPoints.IndexOf(newPoint);
         Map.SplitLineSegment(SelectedFeature, newPoint, index);
+
+        // Re-select feature to update everything
+        SelectFeature(SelectedFeature);
+
+        // Instantly initiate a drag to quickly be able to move it
+        InitiatePointDrag(newPoint);
+    }
+
+    public void ExpandLineAtStart(Point newPoint)
+    {
+        // Register new point
+        Map.ExpandLineAtStart(SelectedFeature, newPoint);
+
+        // Re-select feature to update everything
+        SelectFeature(SelectedFeature);
+
+        // Instantly initiate a drag to quickly be able to move it
+        InitiatePointDrag(newPoint);
+    }
+
+    public void ExpandLineAtEnd(Point newPoint)
+    {
+        // Register new point
+        Map.ExpandLineAtEnd(SelectedFeature, newPoint);
 
         // Re-select feature to update everything
         SelectFeature(SelectedFeature);

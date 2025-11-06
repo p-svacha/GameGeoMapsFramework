@@ -59,7 +59,7 @@ public class CreateAreaFeatureTool : EditorTool
     public override void OnSelect()
     {
         // Display options
-        Map.Renderer.ShowAllPoints();
+        Map.Renderer2D.ShowAllPoints();
         MouseHoverInfo.SetShowPointSnapIndicator(true);
         MouseHoverInfo.SetCheckFeatureSelection(false);
 
