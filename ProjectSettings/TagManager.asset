@@ -47,5 +47,8 @@ TagManager:
   - name: Foreground
     uniqueID: 783638039
     locked: 0
+  - name: MapOverlay
+    uniqueID: 4073391237
+    locked: 0
   m_RenderingLayers:
   - Default

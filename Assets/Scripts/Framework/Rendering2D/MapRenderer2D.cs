@@ -21,6 +21,8 @@ public class MapRenderer2D
 
     private Dictionary<MapZLayer, int> SortingOrders = new Dictionary<MapZLayer, int>()
     {
+        { MapZLayer.MapOverlay, 2000 },
+
         { MapZLayer.Point, 1010 },
         { MapZLayer.PointSnapIndicator, 1000 },
         { MapZLayer.AreaSelectionIndicator, 999 },

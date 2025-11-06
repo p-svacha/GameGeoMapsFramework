@@ -12,4 +12,5 @@ public enum MapZLayer
     Line,
     LineSelectionIndicator,
     AreaSelectionIndicator,
+    MapOverlay
 }

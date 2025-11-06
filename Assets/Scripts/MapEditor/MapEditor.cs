@@ -36,6 +36,7 @@ public class MapEditor : MonoBehaviour
     float deltaTime; // for fps
     private Dictionary<EditorToolId, EditorTool> Tools;
     public EditorTool CurrentTool;
+    private WorldGridOverlay Grid;
 
     // Colors
     public static Color ButtonSelectedColor = new Color(0.9f, 0.6f, 0.22f);
@@ -55,6 +56,7 @@ public class MapEditor : MonoBehaviour
     private void Start()
     {
         Map = new Map();
+        Grid = FindFirstObjectByType<WorldGridOverlay>();
 
         // Init tools
         Tools = new Dictionary<EditorToolId, EditorTool>()
@@ -100,6 +102,9 @@ public class MapEditor : MonoBehaviour
         UpdateHoverInfoText();
 
         HandleInputs();
+
+        // Grid overlay
+        if(Input.GetKeyDown(KeyCode.G)) Grid.gameObject.SetActive(!Grid.gameObject.activeSelf);
 
         CurrentTool.UpdateTool();
     }

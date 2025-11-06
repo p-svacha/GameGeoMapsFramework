@@ -1,5 +1,9 @@
-﻿- ctrl click a start or end point of a line initiates a drag with a new point expanding it
-	> add instruction
+﻿- add a faint grid overlay thats always visible
+
+- when dragging a point, allow it to snap to an existing LINE SEGMENT as well as to an existing point.
+	- Point proximity should keep priority
+
+- Holding ctrl should disable snapping
 
 - add checkbox to mark if a line feature is a bridge => draw it with outline, use for water, crossings over other paths
 - add tundra/greymountain/agriculture area types
