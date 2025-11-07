@@ -55,10 +55,28 @@ public static class LineFeatureDefs
         new LineFeatureDef()
         {
             DefName = "Stream",
-            Label = "stream",
+            Label = "small stream",
             Description = "A small, flowing water body.",
             Color = new Color(0.565f, 0.855f, 0.933f),
             Width = 0.8f,
+        },
+
+        new LineFeatureDef()
+        {
+            DefName = "StreamMedium",
+            Label = "medium stream",
+            Description = "A medium flowing water body.",
+            Color = new Color(0.565f, 0.855f, 0.933f),
+            Width = 2f,
+        },
+
+        new LineFeatureDef()
+        {
+            DefName = "StreamBig",
+            Label = "wide stream",
+            Description = "A wide flowing water body.",
+            Color = new Color(0.565f, 0.855f, 0.933f),
+            Width = 4f,
         },
 
         new LineFeatureDef()

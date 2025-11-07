@@ -8,12 +8,13 @@ public class LineFeature : MapFeature
     public List<Point> Points { get; private set; }
     public int RenderLayer { get; private set; }
 
-    public GameObject VisualRoot;
-    public GameObject VisualLine;
-
     public List<Vector2> PointPositions => Points.Select(p => p.Position).ToList();
     public Point StartPoint => Points.First();
     public Point EndPoint => Points.Last();
+
+    // Rendered objects
+    public GameObject VisualRoot;
+    public GameObject VisualLine;
 
     public LineFeature(Map map, int id, List<Point> points, LineFeatureDef def, int renderLayer) : base(map, id)
     {

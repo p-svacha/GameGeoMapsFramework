@@ -39,7 +39,7 @@ public class EditAreaFeatureTool : EditorTool
 
         LayerDropdown.ClearOptions();
         List<string> layerOptions = new List<string>();
-        for (int i = 0; i <= 10; i++) layerOptions.Add(i.ToString());
+        for (int i = 0; i <= Map.FEATURE_LAYERS; i++) layerOptions.Add(i.ToString());
         LayerDropdown.AddOptions(layerOptions);
         LayerDropdown.onValueChanged.AddListener(LayerDropdown_OnValueChanged);
 
@@ -118,7 +118,7 @@ public class EditAreaFeatureTool : EditorTool
     }
 
     /// <summary>
-    /// Sets hoverable features to all line features on the map.
+    /// Sets hoverable features to all area features on the map.
     /// </summary>
     private void ResetHoverableFeatures()
     {

@@ -14,6 +14,7 @@ using UnityEngine.EventSystems;
 /// </summary>
 public class CameraHandler : MonoBehaviour
 {
+    public static CameraHandler Instance;
     public Camera Camera { get; private set; }
 
     // Tunables
@@ -52,6 +53,11 @@ public class CameraHandler : MonoBehaviour
     public void SetZoom(float zoom)
     {
         Camera.orthographicSize = Mathf.Clamp(zoom, MIN_CAMERA_SIZE, MAX_CAMERA_SIZE);
+    }
+
+    private void Awake()
+    {
+        Instance = this;
     }
 
     private void Start()
@@ -95,7 +101,7 @@ public class CameraHandler : MonoBehaviour
         if (Input.GetKey(KeyCode.A)) pan += Vector3.left;
         if (Input.GetKey(KeyCode.D)) pan += Vector3.right;
 
-        if (pan.sqrMagnitude > 0f)
+        if (pan.sqrMagnitude > 0f && !HelperFunctions.IsUiFocussed())
         {
             pan.Normalize();
             float panSpeed = PAN_SPEED * panBoost * Time.deltaTime;

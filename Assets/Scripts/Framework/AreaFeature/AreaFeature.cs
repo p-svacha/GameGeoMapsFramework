@@ -9,6 +9,7 @@ public class AreaFeature : MapFeature
     public bool IsClockwise { get; private set; }
     public int RenderLayer { get; private set; }
 
+    // Rendered objects
     public GameObject VisualRoot;
     public GameObject VisualPolygon;
     public GameObject VisualOutline; // optional

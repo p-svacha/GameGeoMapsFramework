@@ -52,7 +52,7 @@ public class EditLineFeatureTool : EditorTool
 
         LayerDropdown.ClearOptions();
         List<string> layerOptions = new List<string>();
-        for (int i = 0; i <= 10; i++) layerOptions.Add(i.ToString());
+        for (int i = 0; i <= Map.FEATURE_LAYERS; i++) layerOptions.Add(i.ToString());
         LayerDropdown.AddOptions(layerOptions);
         LayerDropdown.onValueChanged.AddListener(LayerDropdown_OnValueChanged);
 

@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 /// <summary>
 /// Renderer responsible for rendering a map in 2D.
@@ -18,20 +20,22 @@ public class MapRenderer2D
 
     public GameObject MapRoot { get; private set; }
     private GameObject PointsContainer;
+    public GameObject PointFeatureContainer; // UI element
 
+    // Higher numbers get rendererd on top
     private Dictionary<MapZLayer, int> SortingOrders = new Dictionary<MapZLayer, int>()
     {
         { MapZLayer.MapOverlay, 2000 },
 
         { MapZLayer.Point, 1010 },
         { MapZLayer.PointSnapIndicator, 1000 },
-        { MapZLayer.AreaSelectionIndicator, 999 },
+        { MapZLayer.AreaFeatureSelectionIndicator, 999 },
 
-        { MapZLayer.Line, 900 }, // 900 - 920 based on layer
-        { MapZLayer.LineSelectionIndicator, 899 },
+        { MapZLayer.LineFeature, 900 }, // 900 - 920 based on layer
+        { MapZLayer.LineFeatureSelectionIndicator, 899 },
 
-        { MapZLayer.AreaOutline, 850 },
-        { MapZLayer.AreaPolygon, 800 }, // 800 - 820 based on layer
+        { MapZLayer.AreaFeatureOutline, 850 },
+        { MapZLayer.AreaFeaturePolygon, 800 }, // 800 - 820 based on layer
     };
     private const string SortingLayer = "Map";
 
@@ -42,6 +46,10 @@ public class MapRenderer2D
         MapRoot = new GameObject("Map2D");
         PointsContainer = new GameObject("Points");
         PointsContainer.transform.SetParent(MapRoot.transform);
+
+        PointFeatureContainer = new GameObject("PointFeatureContainer");
+        PointFeatureContainer.transform.SetParent(GameObject.Find("Canvas").transform);
+        PointFeatureContainer.transform.SetAsFirstSibling(); // render below all other UI
     }
 
     public void ApplySortingOrder(Renderer r, MapZLayer layer, int orderOffset = 0)
@@ -50,6 +58,28 @@ public class MapRenderer2D
         r.sortingOrder = SortingOrders[layer] + orderOffset;
         var t = r.transform;
         if (Mathf.Abs(t.position.z) > 0f) t.position = new Vector3(t.position.x, t.position.y, 0f);
+    }
+
+    /// <summary>
+    /// Called every frame.
+    /// </summary>
+    public void Update()
+    {
+        foreach (PointFeature pf in Map.PointFeatures.Values)
+        {
+            // Hide feature if zoom level is out of range
+            float zoom = CameraHandler.Instance.Camera.orthographicSize;
+            if (zoom < pf.Def.MinZoom || zoom > pf.Def.MaxZoom)
+            {
+                pf.VisualRoot.SetActive(false);
+                continue;
+            }
+            else pf.VisualRoot.SetActive(true);
+
+            // Position feature in screen space
+            Vector3 screenSpace = CameraHandler.Instance.Camera.WorldToScreenPoint(pf.Point.Position);
+            pf.VisualRoot.transform.position = screenSpace;
+        }
     }
 
     #region Display Options
@@ -111,8 +141,65 @@ public class MapRenderer2D
 
 
 
+    public void CreatePointFeatureVisuals(PointFeature feature)
+    {
+        // Root
+        feature.VisualRoot = new GameObject($"PointFeature_{feature.Id}");
+        feature.VisualRoot.transform.SetParent(PointFeatureContainer.transform);
+
+        // Icon
+        GameObject iconObj = new GameObject("Icon");
+        iconObj.transform.SetParent(feature.VisualRoot.transform);
+        feature.VisualIcon = iconObj.AddComponent<Image>();
+        feature.VisualIcon.raycastTarget = false;
+
+        // Text
+        GameObject labelObj = new GameObject("Label");
+        labelObj.transform.SetParent(feature.VisualRoot.transform);
+        feature.VisualLabel = labelObj.AddComponent<TextMeshProUGUI>();
+        feature.VisualLabel.alignment = TextAlignmentOptions.Center;
+        feature.VisualLabel.raycastTarget = false;
+
+        // Selection indicator
+        feature.SelectionIndicator = new GameObject("Selection Indicator");
+        feature.SelectionIndicator.transform.SetParent(feature.VisualRoot.transform);
+        Image selectionImage = feature.SelectionIndicator.AddComponent<Image>();
+        selectionImage.color = new Color(0f, 0f, 0f, 0.3f);
+        selectionImage.raycastTarget = false;
+        feature.SelectionIndicator.SetActive(false);
+
+        // Draw
+        RedrawPointFeature(feature);
+
+        Debug.Log($"Created PointFeature visuals for feature {feature.Id}");
+    }
+    public void RedrawPointFeature(PointFeature feature)
+    {
+        // Icon
+        feature.VisualIcon.GetComponent<RectTransform>().sizeDelta = new Vector2(feature.Def.IconSize, feature.Def.IconSize);
+        feature.VisualIcon.gameObject.SetActive(feature.Def.Icon != null);
+        feature.VisualIcon.sprite = feature.Def.Icon;
+
+        // Label
+        feature.VisualLabel.color = Color.black;
+        feature.VisualLabel.fontSize = feature.Def.LabelFontSize;
+        feature.VisualLabel.text = feature.Label;
+        feature.VisualLabel.ForceMeshUpdate();
+        Vector2 labelDimensions = new Vector2(feature.VisualLabel.textBounds.size.x, feature.Def.LabelFontSize);
+        feature.VisualLabel.GetComponent<RectTransform>().sizeDelta = labelDimensions;
+
+        if (feature.Def.Icon == null) feature.VisualLabel.transform.localPosition = Vector3.zero;
+        else feature.VisualLabel.transform.localPosition = new Vector3(0f, feature.Def.IconSize / 2 + feature.Def.LabelFontSize / 2 + 5, 0f);
+
+        // Selection indicator
+        feature.SelectionIndicator.GetComponent<RectTransform>().sizeDelta = labelDimensions + new Vector2(12, 4);
+        feature.SelectionIndicator.transform.localPosition = feature.VisualLabel.transform.localPosition;
+    }
+
+
     public void CreateLineFeatureVisuals(LineFeature line)
     {
+        // Root
         line.VisualRoot = new GameObject($"Line_{line.Id}");
         line.VisualRoot.transform.SetParent(MapRoot.transform);
 
@@ -144,7 +231,7 @@ public class MapRenderer2D
         lr.positionCount = line.Points.Count;
         for (int i = 0; i < line.Points.Count; i++) lr.SetPosition(i, line.Points[i].Position);
 
-        ApplySortingOrder(lr, MapZLayer.Line, orderOffset: line.RenderLayer);
+        ApplySortingOrder(lr, MapZLayer.LineFeature, orderOffset: line.RenderLayer);
     }
 
     public void CreateLineFeatureSelectionIndicator(LineFeature line)
@@ -168,7 +255,7 @@ public class MapRenderer2D
         lr.positionCount = line.Points.Count;
         for (int i = 0; i < line.Points.Count; i++) lr.SetPosition(i, line.Points[i].Position);
 
-        ApplySortingOrder(lr, MapZLayer.LineSelectionIndicator);
+        ApplySortingOrder(lr, MapZLayer.LineFeatureSelectionIndicator);
     }
 
 
@@ -201,7 +288,7 @@ public class MapRenderer2D
         // Set color and render sorting order
         MeshRenderer polygonMeshRenderer = area.VisualPolygon.GetComponent<MeshRenderer>();
         polygonMeshRenderer.material.color = area.Def.Color;
-        ApplySortingOrder(polygonMeshRenderer, MapZLayer.AreaPolygon, orderOffset: area.RenderLayer);
+        ApplySortingOrder(polygonMeshRenderer, MapZLayer.AreaFeaturePolygon, orderOffset: area.RenderLayer);
     }
 
     private void RedrawAreaFeatureOutline(AreaFeature area)
@@ -218,7 +305,7 @@ public class MapRenderer2D
             // Set color and render sorting order
             MeshRenderer borderMeshRenderer = area.VisualOutline.GetComponent<MeshRenderer>();
             borderMeshRenderer.material.color = area.Def.OutlineColor;
-            ApplySortingOrder(borderMeshRenderer, MapZLayer.AreaOutline);
+            ApplySortingOrder(borderMeshRenderer, MapZLayer.AreaFeatureOutline);
         }
     }
 
@@ -239,13 +326,13 @@ public class MapRenderer2D
         // Set color and render sorting order
         MeshRenderer borderMeshRenderer = area.SelectionIndicator.GetComponent<MeshRenderer>();
         borderMeshRenderer.material.color = AREA_SELECTION_INDICATOR_COLOR;
-        ApplySortingOrder(borderMeshRenderer, MapZLayer.AreaSelectionIndicator);
+        ApplySortingOrder(borderMeshRenderer, MapZLayer.AreaFeatureSelectionIndicator);
         area.SelectionIndicator.SetActive(wasOldBorderActive);
     }
 
     public void RedrawFeature(MapFeature feat)
     {
-        if (feat is PointFeature point) throw new System.NotImplementedException();
+        // Note: Point features dont need manual redraws since they are redrawn every frame in Update() because they are screen-space UI elements.
         if (feat is LineFeature line)
         {
             RedrawLineFeature(line);

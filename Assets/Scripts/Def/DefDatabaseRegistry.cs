@@ -25,6 +25,7 @@ public static class DefDatabaseRegistry
         ClearAllDatabases();
         DefDatabase<LineFeatureDef>.AddDefs(LineFeatureDefs.Defs);
         DefDatabase<AreaFeatureDef>.AddDefs(AreaFeatureDefs.Defs);
+        DefDatabase<PointFeatureDef>.AddDefs(PointFeatureDefs.Defs);
     }
 
     // Called when a DefDatabase<T> type is accessed for the first time

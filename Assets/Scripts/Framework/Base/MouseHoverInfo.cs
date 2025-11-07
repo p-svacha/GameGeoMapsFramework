@@ -10,6 +10,7 @@ public static class MouseHoverInfo
     private static int POINT_SNAP_RANGE = 25; // in pixels
     private static int AREA_SELECTION_RANGE = 60; // maximum distance in pixels to the border of an area when inside the area
     private static int LINE_SELECTION_RANGE = 30; // maximum distance in pixels to a line
+    private static int POINT_SELECTION_RANGE = 30; // maximum distance in pixels to a point
 
     public static Vector2 ScreenPosition { get; private set; }
     public static Vector2 WorldPosition { get; private set; }
@@ -145,6 +146,22 @@ public static class MouseHoverInfo
                 {
                     HoveredMapFeature = line;
                     minAreaSelectionDistance = distanceToPolygonInPixels;
+                }
+            }
+
+            // Point features
+            foreach(PointFeature pointFeature in map.PointFeatures.Values)
+            {
+                // Skip if this feature is not one we can currently select
+                if (FeatureSelectionOptions.Count > 0 && !FeatureSelectionOptions.Contains(pointFeature)) continue;
+
+                // Check distance to point
+                Vector2 featureScreenPosition = mainCam.WorldToScreenPoint(pointFeature.Point.Position);
+                float pixelDistance = Vector2.Distance(ScreenPosition, featureScreenPosition);
+                if (pixelDistance <= POINT_SELECTION_RANGE && pixelDistance < minAreaSelectionDistance)
+                {
+                    HoveredMapFeature = pointFeature;
+                    minAreaSelectionDistance = pixelDistance;
                 }
             }
 

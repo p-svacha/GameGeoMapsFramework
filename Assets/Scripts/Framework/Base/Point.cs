@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -109,7 +110,15 @@ public class Point
         IsDestroyed = true;
     }
 
+
+
+    #region Getters
+
     public bool IsConnectedToAnyFeature => ConnectedFeatures.Count > 0;
+    public PointFeature PointFeature => ConnectedFeatures.FirstOrDefault(f => f is PointFeature) as PointFeature;
+    public bool HasPointFeature => PointFeature != null;
+
+    #endregion
 
     #region Save / Load
 

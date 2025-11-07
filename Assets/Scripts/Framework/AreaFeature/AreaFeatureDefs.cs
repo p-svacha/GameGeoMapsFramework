@@ -46,5 +46,15 @@ public static class AreaFeatureDefs
             OutlineWidth = 0.5f,
             OutlineColor = new Color(0.775f, 0.782f, 0.818f),
         },
+
+        new AreaFeatureDef()
+        {
+            DefName = "BuildingBrown",
+            Label = "building (brown)",
+            Description = "Building of any kind with a brown color.",
+            Color = new Color(0.851f, 0.816f, 0.788f),
+            OutlineWidth = 0.5f,
+            OutlineColor = new Color(0.751f, 0.716f, 0.688f),
+        },
     };
 }

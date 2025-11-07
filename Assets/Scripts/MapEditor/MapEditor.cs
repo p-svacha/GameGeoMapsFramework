@@ -64,10 +64,10 @@ public class MapEditor : MonoBehaviour
                 { EditorToolId.SaveLoadTool, SaveLoadTool },
                 { EditorToolId.ViewModeTool, ViewModeTool },
                 { EditorToolId.SelectFeatureTool, SelectFeatureTool },
-               // { EditorToolId.CreatePointFeatureTool, CreatePointFeatureTool },
+                { EditorToolId.CreatePointFeatureTool, CreatePointFeatureTool },
                 { EditorToolId.CreateLineFeatureTool, CreateLineFeatureTool },
                 { EditorToolId.CreateAreaFeatureTool, CreateAreaFeatureTool },
-                //{ EditorToolId.EditPointFeatureTool, EditPointFeatureTool },
+                { EditorToolId.EditPointFeatureTool, EditPointFeatureTool },
                 { EditorToolId.EditLineFeatureTool, EditLineFeatureTool },
                 { EditorToolId.EditAreaFeatureTool, EditAreaFeatureTool },
             };
@@ -98,6 +98,8 @@ public class MapEditor : MonoBehaviour
 
     private void Update()
     {
+        Map.Update();
+
         MouseHoverInfo.Update(Map);
         UpdateHoverInfoText();
 

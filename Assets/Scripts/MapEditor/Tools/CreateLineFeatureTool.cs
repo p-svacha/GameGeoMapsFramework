@@ -29,8 +29,9 @@ public class CreateLineFeatureTool : EditorTool
 
         LayerDropdown.ClearOptions();
         List<string> layerOptions = new List<string>();
-        for (int i = 0; i <= 10; i++) layerOptions.Add(i.ToString());
+        for (int i = 0; i <= Map.FEATURE_LAYERS; i++) layerOptions.Add(i.ToString());
         LayerDropdown.AddOptions(layerOptions);
+        LayerDropdown.value = Map.FEATURE_DEFAULT_LAYER;
     }
 
     /// <summary>

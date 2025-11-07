@@ -1,13 +1,10 @@
-﻿- add a faint grid overlay thats always visible
+﻿- fix editing text on point features not correclty updating the label and selection indicator width
 
-- when dragging a point, allow it to snap to an existing LINE SEGMENT as well as to an existing point.
-	- Point proximity should keep priority
+- add action in edit point feature tool "detach"
+ - available if feature point is connected to other features
+ - clicking will create a new point close to the original point and move the selected point feature to it
 
 - Holding ctrl should disable snapping
 
 - add checkbox to mark if a line feature is a bridge => draw it with outline, use for water, crossings over other paths
 - add tundra/greymountain/agriculture area types
-
-- feature names are editable in edit tool
-- add feature labels visible on map for areas
-- add feature labels visible on map for lines

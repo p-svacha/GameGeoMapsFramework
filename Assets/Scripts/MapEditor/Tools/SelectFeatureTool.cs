@@ -18,6 +18,11 @@ public class SelectFeatureTool : EditorTool
     {
         if (MouseHoverInfo.HoveredMapFeature != null)
         {
+            if (MouseHoverInfo.HoveredMapFeature is PointFeature pointFeature)
+            {
+                Editor.SelectTool(EditorToolId.EditPointFeatureTool);
+                Editor.EditPointFeatureTool.SelectFeature(pointFeature);
+            }
             if (MouseHoverInfo.HoveredMapFeature is AreaFeature area)
             {
                 Editor.SelectTool(EditorToolId.EditAreaFeatureTool);

@@ -19,6 +19,9 @@ public class Map
     public MapRenderer2D Renderer2D { get; private set; }
     public MapRenderer3D Renderer3D { get; private set; }
 
+    public const int FEATURE_LAYERS = 20; // Line and Area features have this many layers available to render-sort the features (to decide which one drawn on top)
+    public const int FEATURE_DEFAULT_LAYER = 10;
+
     public Map()
     {
         Points = new Dictionary<int, Point>();
@@ -33,6 +36,14 @@ public class Map
 
         Renderer2D = new MapRenderer2D(this);
         Renderer3D = new MapRenderer3D(this);
+    }
+
+    /// <summary>
+    /// Called every frame.
+    /// </summary>
+    public void Update()
+    {
+        Renderer2D.Update();
     }
 
     #region Points
@@ -55,6 +66,9 @@ public class Map
         Points.Remove(p.Id);
     }
 
+    /// <summary>
+    /// Removes a point if it is not connected to any features.
+    /// </summary>
     private void DeletePointIfOrphaned(Point p)
     {
         if (!p.IsConnectedToAnyFeature)
@@ -73,10 +87,16 @@ public class Map
         List<LineFeature> linesStagedToRemove = new List<LineFeature>();
         List<AreaFeature> areasStagedToRemove = new List<AreaFeature>();
 
+        // Can't merge 2 points that both had a point feature
+        if (p1.HasPointFeature && p2.HasPointFeature) return;
+
+        // Move connected features from p1 to p2
         foreach (MapFeature feat in p1.ConnectedFeatures)
         {
-            if (feat is PointFeature point) throw new System.NotImplementedException();
-
+            if (feat is PointFeature point)
+            {
+                p1.PointFeature.SetPoint(p2);
+            }
 
             if (feat is LineFeature line)
             {
@@ -489,12 +509,51 @@ public class Map
 
     #endregion
 
+    #region Point Features
+
+    public PointFeature AddPointFeature(Point point, PointFeatureDef def, string label)
+    {
+        // Register point if not already
+        if (!point.IsRegistered) RegisterNewPoint(point);
+
+        // Create new point feature
+        PointFeature newFeature = new PointFeature(this, NextPointFeatureId++, point, def, label);
+        PointFeatures.Add(newFeature.Id, newFeature);
+
+        // Add feature reference to point
+        point.AddConnectedFeature(newFeature);
+
+        return newFeature;
+    }
+
+    public void DeletePointFeature(PointFeature feature)
+    {
+        // Remove feature reference from point
+        feature.Point.RemoveConnectedFeature(feature);
+
+        // Remove feature visuals
+        GameObject.Destroy(feature.VisualRoot);
+        feature.IsDestroyed = true;
+
+        // Remove feature from database
+        PointFeatures.Remove(feature.Id);
+
+        // Remove point if orphaned
+        DeletePointIfOrphaned(feature.Point);
+    }
+
+    #endregion
+
     public void SetName(string name)
     {
         Name = name;
     }
 
-    public void DestroyAllVisuals() => GameObject.Destroy(Renderer2D.MapRoot);
+    public void DestroyAllVisuals()
+    {
+        GameObject.Destroy(Renderer2D.MapRoot);
+        GameObject.Destroy(Renderer2D.PointFeatureContainer.gameObject);
+    }
 
     #region Save / Load
 
@@ -516,14 +575,24 @@ public class Map
             Points.Add(point.Id, point);
         }
 
-        // Load line Features
+        // Load point features
+        if (data.PointFeatures != null)
+        {
+            foreach (PointFeatureData featureData in data.PointFeatures)
+            {
+                PointFeature feature = new PointFeature(this, featureData);
+                PointFeatures.Add(feature.Id, feature);
+            }
+        }
+
+        // Load line features
         foreach (LineFeatureData featureData in data.LineFeatures)
         {
             LineFeature feature = new LineFeature(this, featureData);
             LineFeatures.Add(feature.Id, feature);
         }
 
-        // Load area Features
+        // Load area features
         foreach (AreaFeatureData featureData in data.AreaFeatures)
         {
             AreaFeature feature = new AreaFeature(this, featureData);
@@ -531,6 +600,10 @@ public class Map
         }
 
         // Add feature references to points
+        foreach (PointFeature feat in PointFeatures.Values)
+        {
+            feat.Point.AddConnectedFeature(feat);
+        }
         foreach (LineFeature feat in LineFeatures.Values)
         {
             foreach (Point p in feat.Points) p.AddConnectedFeature(feat);
@@ -566,6 +639,7 @@ public class Map
         MapData data = new MapData();
         data.Name = Name;
         data.Points = Points.Values.Select(x => x.ToData()).ToList();
+        data.PointFeatures = PointFeatures.Values.Select(x => x.ToData()).ToList();
         data.LineFeatures = LineFeatures.Values.Select(x => x.ToData()).ToList();
         data.AreaFeatures = AreaFeatures.Values.Select(x => x.ToData()).ToList();
 
