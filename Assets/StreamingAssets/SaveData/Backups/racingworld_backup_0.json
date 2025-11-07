@@ -1347,13 +1347,13 @@
       "Y": -1298.22864
     },
     {
-      "Id": 278,
-      "X": -1748.51465,
-      "Y": -1330.10364
+      "Id": 729,
+      "X": -1752.59631,
+      "Y": -1353.9342
     },
     {
       "Id": 279,
-      "X": -1750.10742,
+      "X": -1748.09851,
       "Y": -1345.03906
     },
     {
@@ -2539,7 +2539,7 @@
     {
       "Id": 516,
       "X": -2334.97729,
-      "Y": -1691.1814
+      "Y": -1690.64563
     },
     {
       "Id": 517,
@@ -3188,8 +3188,8 @@
     },
     {
       "Id": 648,
-      "X": -2349.81934,
-      "Y": -1683.37341
+      "X": -2350.75684,
+      "Y": -1683.06091
     },
     {
       "Id": 651,
@@ -3560,13 +3560,136 @@
       "Id": 725,
       "X": -2178.94946,
       "Y": -1612.334
+    },
+    {
+      "Id": 726,
+      "X": -1746.878,
+      "Y": -1311.60876
+    },
+    {
+      "Id": 727,
+      "X": -1747.59375,
+      "Y": -1337.9082
+    },
+    {
+      "Id": 730,
+      "X": 93.32214,
+      "Y": 21.0972633
+    },
+    {
+      "Id": 731,
+      "X": -2180.252,
+      "Y": -1593.7666
+    },
+    {
+      "Id": 732,
+      "X": -2172.65576,
+      "Y": -1589.50537
+    },
+    {
+      "Id": 733,
+      "X": -2159.68677,
+      "Y": -1587.46741
+    },
+    {
+      "Id": 734,
+      "X": -2148.38525,
+      "Y": -1589.69067
+    },
+    {
+      "Id": 735,
+      "X": -2133.37842,
+      "Y": -1588.579
+    },
+    {
+      "Id": 736,
+      "X": -2123.74438,
+      "Y": -1581.724
+    },
+    {
+      "Id": 737,
+      "X": -2118.001,
+      "Y": -1574.49854
+    },
+    {
+      "Id": 738,
+      "X": -2113.602,
+      "Y": -1560.7124
+    },
+    {
+      "Id": 739,
+      "X": -2111.0083,
+      "Y": -1553.11633
+    },
+    {
+      "Id": 740,
+      "X": -2109.52612,
+      "Y": -1545.335
+    },
+    {
+      "Id": 741,
+      "X": -2109.52612,
+      "Y": -1539.22107
+    },
+    {
+      "Id": 742,
+      "X": -2110.13062,
+      "Y": -1530.75476
+    },
+    {
+      "Id": 743,
+      "X": -2112.90967,
+      "Y": -1523.15869
+    },
+    {
+      "Id": 744,
+      "X": -2119.95,
+      "Y": -1517.41528
+    },
+    {
+      "Id": 745,
+      "X": -2125.87866,
+      "Y": -1513.89514
+    },
+    {
+      "Id": 746,
+      "X": -2130.14,
+      "Y": -1507.78125
+    },
+    {
+      "Id": 747,
+      "X": -2132.54834,
+      "Y": -1502.59363
+    },
+    {
+      "Id": 748,
+      "X": -2132.73364,
+      "Y": -1496.10913
+    },
+    {
+      "Id": 749,
+      "X": -2130.3252,
+      "Y": -1487.58667
+    }
+  ],
+  "PointFeatures": [
+    {
+      "Id": 1,
+      "PointId": 730,
+      "DefName": "RestStop",
+      "Label": "Finca Linda"
+    },
+    {
+      "Id": 2,
+      "PointId": 648,
+      "DefName": "Town",
+      "Label": "San Pedro"
     }
   ],
   "LineFeatures": [
     {
       "Id": 8,
       "DefName": "Street",
-      "Name": null,
       "PointIds": [
         304,
         305,
@@ -3587,7 +3710,6 @@
     {
       "Id": 2,
       "DefName": "DirtPath",
-      "Name": null,
       "PointIds": [
         89,
         101,
@@ -3620,7 +3742,6 @@
     {
       "Id": 3,
       "DefName": "Footpath",
-      "Name": null,
       "PointIds": [
         156,
         157,
@@ -3632,7 +3753,6 @@
     {
       "Id": 4,
       "DefName": "DirtPath",
-      "Name": null,
       "PointIds": [
         6,
         159,
@@ -3667,7 +3787,6 @@
     {
       "Id": 6,
       "DefName": "Footpath",
-      "Name": null,
       "PointIds": [
         6,
         189,
@@ -3678,7 +3797,6 @@
     {
       "Id": 7,
       "DefName": "StreetSmall",
-      "Name": null,
       "PointIds": [
         100,
         99,
@@ -3857,40 +3975,13 @@
         275,
         276,
         277,
-        278,
-        279,
-        280,
-        281,
-        282,
-        283,
-        284,
-        285,
-        286,
-        287,
-        288,
-        289,
-        290,
-        291,
-        292,
-        293,
-        294,
-        295,
-        296,
-        297,
-        298,
-        299,
-        300,
-        301,
-        302,
-        303,
-        304
+        726
       ],
       "RenderLayer": 1
     },
     {
       "Id": 9,
       "DefName": "StreetBig",
-      "Name": null,
       "PointIds": [
         382,
         398,
@@ -3926,8 +4017,7 @@
     },
     {
       "Id": 10,
-      "DefName": "StreetBig",
-      "Name": null,
+      "DefName": "Street",
       "PointIds": [
         409,
         426
@@ -3936,8 +4026,7 @@
     },
     {
       "Id": 11,
-      "DefName": "StreetBig",
-      "Name": null,
+      "DefName": "Street",
       "PointIds": [
         469,
         411,
@@ -3966,7 +4055,6 @@
     {
       "Id": 15,
       "DefName": "Street",
-      "Name": null,
       "PointIds": [
         425,
         470,
@@ -3990,8 +4078,7 @@
     },
     {
       "Id": 13,
-      "DefName": "StreetBig",
-      "Name": null,
+      "DefName": "Street",
       "PointIds": [
         435,
         430
@@ -4000,8 +4087,7 @@
     },
     {
       "Id": 14,
-      "DefName": "Street",
-      "Name": null,
+      "DefName": "StreetSmall",
       "PointIds": [
         427,
         426,
@@ -4014,7 +4100,6 @@
     {
       "Id": 16,
       "DefName": "Street",
-      "Name": null,
       "PointIds": [
         304,
         486,
@@ -4029,14 +4114,14 @@
         495,
         496,
         517,
-        516
+        516,
+        648
       ],
       "RenderLayer": 1
     },
     {
       "Id": 17,
       "DefName": "StreetSmall",
-      "Name": null,
       "PointIds": [
         491,
         519,
@@ -4051,7 +4136,6 @@
     {
       "Id": 18,
       "DefName": "StreetSmall",
-      "Name": null,
       "PointIds": [
         502,
         501,
@@ -4075,7 +4159,6 @@
     {
       "Id": 19,
       "DefName": "StreetSmall",
-      "Name": null,
       "PointIds": [
         519,
         520,
@@ -4090,7 +4173,6 @@
     {
       "Id": 20,
       "DefName": "Street",
-      "Name": null,
       "PointIds": [
         587,
         586,
@@ -4106,7 +4188,6 @@
     {
       "Id": 21,
       "DefName": "StreetSmall",
-      "Name": null,
       "PointIds": [
         612,
         624,
@@ -4125,7 +4206,6 @@
     {
       "Id": 22,
       "DefName": "StreetSmall",
-      "Name": null,
       "PointIds": [
         516,
         648,
@@ -4137,7 +4217,6 @@
     {
       "Id": 23,
       "DefName": "StreetSmall",
-      "Name": null,
       "PointIds": [
         621,
         626,
@@ -4148,7 +4227,6 @@
     {
       "Id": 24,
       "DefName": "StreetSmall",
-      "Name": null,
       "PointIds": [
         643,
         642,
@@ -4174,7 +4252,6 @@
     {
       "Id": 25,
       "DefName": "StreetSmall",
-      "Name": null,
       "PointIds": [
         644,
         645,
@@ -4188,7 +4265,6 @@
     {
       "Id": 26,
       "DefName": "StreetSmall",
-      "Name": null,
       "PointIds": [
         629,
         647
@@ -4198,7 +4274,6 @@
     {
       "Id": 27,
       "DefName": "StreetSmall",
-      "Name": null,
       "PointIds": [
         616,
         646,
@@ -4209,7 +4284,6 @@
     {
       "Id": 28,
       "DefName": "StreetSmall",
-      "Name": null,
       "PointIds": [
         648,
         651,
@@ -4220,7 +4294,6 @@
     {
       "Id": 32,
       "DefName": "StreetSmall",
-      "Name": null,
       "PointIds": [
         657,
         659,
@@ -4240,7 +4313,6 @@
     {
       "Id": 30,
       "DefName": "StreetSmall",
-      "Name": null,
       "PointIds": [
         657,
         618,
@@ -4253,7 +4325,6 @@
     {
       "Id": 31,
       "DefName": "StreetSmall",
-      "Name": null,
       "PointIds": [
         512,
         655,
@@ -4269,7 +4340,6 @@
     {
       "Id": 33,
       "DefName": "StreetSmall",
-      "Name": null,
       "PointIds": [
         670,
         671,
@@ -4285,7 +4355,6 @@
     {
       "Id": 34,
       "DefName": "StreetSmall",
-      "Name": null,
       "PointIds": [
         657,
         677,
@@ -4296,7 +4365,6 @@
     {
       "Id": 35,
       "DefName": "StreamMedium",
-      "Name": null,
       "PointIds": [
         525,
         725,
@@ -4350,13 +4418,101 @@
         689
       ],
       "RenderLayer": 0
+    },
+    {
+      "Id": 37,
+      "DefName": "StreetSmall",
+      "PointIds": [
+        727,
+        279,
+        729,
+        280,
+        281,
+        282,
+        283,
+        284,
+        285,
+        286,
+        287,
+        288,
+        289,
+        290,
+        291,
+        292,
+        293,
+        294,
+        295,
+        296,
+        297,
+        298,
+        299,
+        300,
+        301,
+        302,
+        303,
+        304
+      ],
+      "RenderLayer": 1
+    },
+    {
+      "Id": 38,
+      "DefName": "WaterPath",
+      "PointIds": [
+        727,
+        726
+      ],
+      "RenderLayer": 10
+    },
+    {
+      "Id": 39,
+      "DefName": "WaterPath",
+      "PointIds": [
+        316,
+        382
+      ],
+      "RenderLayer": 10
+    },
+    {
+      "Id": 40,
+      "DefName": "WaterPath",
+      "PointIds": [
+        502,
+        731,
+        732,
+        733,
+        734,
+        735,
+        736,
+        737,
+        546
+      ],
+      "RenderLayer": 10
+    },
+    {
+      "Id": 41,
+      "DefName": "DirtPath",
+      "PointIds": [
+        546,
+        738,
+        739,
+        740,
+        741,
+        742,
+        743,
+        744,
+        745,
+        746,
+        747,
+        748,
+        749
+      ],
+      "RenderLayer": 10
     }
   ],
   "AreaFeatures": [
     {
       "Id": 1,
       "DefName": "Grassland",
-      "Name": null,
       "PointIds": [
         1,
         2,
@@ -4368,7 +4524,6 @@
     {
       "Id": 2,
       "DefName": "BuildingBrown",
-      "Name": null,
       "PointIds": [
         125,
         126,
@@ -4380,7 +4535,6 @@
     {
       "Id": 3,
       "DefName": "BuildingBrown",
-      "Name": null,
       "PointIds": [
         129,
         130,
@@ -4392,7 +4546,6 @@
     {
       "Id": 4,
       "DefName": "BuildingBrown",
-      "Name": null,
       "PointIds": [
         133,
         134,
@@ -4406,7 +4559,6 @@
     {
       "Id": 5,
       "DefName": "BuildingBrown",
-      "Name": null,
       "PointIds": [
         139,
         140,
@@ -4420,7 +4572,6 @@
     {
       "Id": 6,
       "DefName": "Urban",
-      "Name": null,
       "PointIds": [
         91,
         147,
@@ -4434,7 +4585,6 @@
     {
       "Id": 7,
       "DefName": "BuildingBrown",
-      "Name": null,
       "PointIds": [
         145,
         147,
@@ -4450,7 +4600,6 @@
     {
       "Id": 8,
       "DefName": "Urban",
-      "Name": null,
       "PointIds": [
         185,
         6,
@@ -4465,7 +4614,6 @@
     {
       "Id": 9,
       "DefName": "BuildingBrown",
-      "Name": null,
       "PointIds": [
         188,
         195,
@@ -4480,7 +4628,6 @@
     {
       "Id": 10,
       "DefName": "Water",
-      "Name": null,
       "PointIds": [
         316,
         317,
@@ -4498,6 +4645,7 @@
         329,
         330,
         331,
+        727,
         332,
         333,
         334,
@@ -4507,6 +4655,7 @@
         338,
         339,
         340,
+        726,
         341,
         342,
         343,
@@ -4570,7 +4719,6 @@
     {
       "Id": 11,
       "DefName": "Urban",
-      "Name": null,
       "PointIds": [
         383,
         382,
@@ -4604,7 +4752,6 @@
     {
       "Id": 12,
       "DefName": "Water",
-      "Name": null,
       "PointIds": [
         502,
         525,
@@ -4664,7 +4811,6 @@
     {
       "Id": 13,
       "DefName": "Urban",
-      "Name": null,
       "PointIds": [
         525,
         502,
@@ -4717,6 +4863,18 @@
         608
       ],
       "RenderLayer": 1
+    },
+    {
+      "Id": 14,
+      "DefName": "Forest",
+      "PointIds": [
+        618,
+        617,
+        649,
+        648,
+        651
+      ],
+      "RenderLayer": 2
     }
   ]
 }

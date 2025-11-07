@@ -1,4 +1,6 @@
-﻿- add action in edit point feature tool "detach"
+﻿- add pathfinding tool
+
+- add action in edit point feature tool "detach"
  - available if feature point is connected to other features
  - clicking will create a new point close to the original point and move the selected point feature to it
 

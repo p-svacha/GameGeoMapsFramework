@@ -96,7 +96,7 @@ public static class LineFeatureDefs
             Label = "dirt path",
             Description = "A small dirt path only accessible by foot.",
             Color = new Color(0.675f, 0.549f, 0.267f),
-            Width = 0.7f,
+            Width = 1.2f,
         },
     };
 }

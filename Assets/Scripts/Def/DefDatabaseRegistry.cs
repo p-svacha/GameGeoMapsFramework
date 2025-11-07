@@ -18,7 +18,7 @@ public static class DefDatabaseRegistry
     private static List<Type> cachedDefOfClasses;
 
     /// <summary>
-    /// Adds all Defs that are defined in the BlockmapFramework and are useful for all projects to their respective DefDatabases.
+    /// Adds all Defs that are defined in the framework and are useful for all projects to their respective DefDatabases.
     /// </summary>
     public static void AddAllDefs()
     {

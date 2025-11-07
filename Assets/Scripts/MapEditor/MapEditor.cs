@@ -24,6 +24,7 @@ public class MapEditor : MonoBehaviour
     public SaveLoadTool SaveLoadTool;
     public ViewModeTool ViewModeTool;
     public SelectFeatureTool SelectFeatureTool;
+    public PathfindingTool PathfindingTool;
     public CreatePointFeatureTool CreatePointFeatureTool;
     public CreateLineFeatureTool CreateLineFeatureTool;
     public CreateAreaFeatureTool CreateAreaFeatureTool;
@@ -64,6 +65,7 @@ public class MapEditor : MonoBehaviour
                 { EditorToolId.SaveLoadTool, SaveLoadTool },
                 { EditorToolId.ViewModeTool, ViewModeTool },
                 { EditorToolId.SelectFeatureTool, SelectFeatureTool },
+                { EditorToolId.PathfindingTool, PathfindingTool },
                 { EditorToolId.CreatePointFeatureTool, CreatePointFeatureTool },
                 { EditorToolId.CreateLineFeatureTool, CreateLineFeatureTool },
                 { EditorToolId.CreateAreaFeatureTool, CreateAreaFeatureTool },

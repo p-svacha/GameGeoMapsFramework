@@ -27,6 +27,8 @@ public class MapRenderer2D
     {
         { MapZLayer.MapOverlay, 2000 },
 
+        { MapZLayer.PathPreview, 1500 },
+
         { MapZLayer.Point, 1010 },
         { MapZLayer.PointSnapIndicator, 1000 },
         { MapZLayer.AreaFeatureSelectionIndicator, 999 },
@@ -170,8 +172,6 @@ public class MapRenderer2D
 
         // Draw
         RedrawPointFeature(feature);
-
-        Debug.Log($"Created PointFeature visuals for feature {feature.Id}");
     }
     public void RedrawPointFeature(PointFeature feature)
     {

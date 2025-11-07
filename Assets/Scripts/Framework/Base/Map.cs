@@ -619,6 +619,8 @@ public class Map
         NextLineFeatureId = LineFeatures.Count == 0 ? 1 : LineFeatures.Max(x => x.Key) + 1;
         NextAreaFeatureId = AreaFeatures.Count == 0 ? 1 : AreaFeatures.Max(x => x.Key) + 1;
 
+        // Log
+        Debug.Log($"Successfully loaded Map {data.Name}: Loaded {Points.Count} points, {PointFeatures.Count} point features, {LineFeatures.Count} line features, {AreaFeatures.Count} area features.");
     }
 
     /// <summary>

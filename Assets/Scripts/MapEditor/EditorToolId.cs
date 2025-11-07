@@ -5,6 +5,7 @@ public enum EditorToolId
     SaveLoadTool,
     ViewModeTool,
     SelectFeatureTool,
+    PathfindingTool,
     CreatePointFeatureTool,
     CreateLineFeatureTool,
     CreateAreaFeatureTool,

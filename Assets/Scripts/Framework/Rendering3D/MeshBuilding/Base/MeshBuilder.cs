@@ -158,7 +158,7 @@ public class MeshBuilder
     /// <summary>
     /// Adds all meshvertices and the resulting meshriangle to the meshbuilder. Returns a MeshTriangle containing all data.
     /// <br/> Does not support UVs.
-    /// <br/> UV2 is forced to 0.5/0.5 so it doesn't interfere with shader (BlockMap-specific).
+    /// <br/> UV2 is forced to 0.5/0.5 so it doesn't interfere with shader.
     /// </summary>
     public MeshTriangle BuildTriangle(int submeshIndex, Vector3 v1, Vector3 v2, Vector3 v3, bool mirror = false)
     {
@@ -173,7 +173,7 @@ public class MeshBuilder
     /// <summary>
     /// Adds all meshvertices and meshtriangles to build a plane. Returns a MeshPlane containing all data.
     /// UV from first to second vector is uv-x-axis
-    /// <br/> UV2 is forced to 0.5/0.5 so it doesn't interfere with shader (BlockMap-specific).
+    /// <br/> UV2 is forced to 0.5/0.5 so it doesn't interfere with shader.
     /// </summary>
     public MeshPlane BuildPlane(int submeshIndex, Vector3 v1, Vector3 v2, Vector3 v3, Vector3 v4, Vector2 uvStart, Vector2 uvEnd, bool mirror = false)
     {

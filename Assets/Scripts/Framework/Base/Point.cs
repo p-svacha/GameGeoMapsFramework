@@ -117,6 +117,35 @@ public class Point
     public bool IsConnectedToAnyFeature => ConnectedFeatures.Count > 0;
     public PointFeature PointFeature => ConnectedFeatures.FirstOrDefault(f => f is PointFeature) as PointFeature;
     public bool HasPointFeature => PointFeature != null;
+    public List<LineFeature> LineFeatures => ConnectedFeatures.Where(f => f is LineFeature).Select(f => (LineFeature)f).ToList();
+    public bool HasLineFeature => LineFeatures.Count > 0;
+    public List<AreaFeature> AreaFeatures => ConnectedFeatures.Where(f => f is AreaFeature).Select(f => (AreaFeature)f).ToList();
+    public bool HasAreaFeature => AreaFeatures.Count > 0;
+
+    /// <summary>
+    /// Returns all transitions with this point as the source.
+    /// </summary>
+    public List<Transition> GetTransitions()
+    {
+        if(!HasLineFeature) return new List<Transition>();
+
+        List<Transition> transitions = new List<Transition>();
+
+        foreach(LineFeature lineFeature in LineFeatures)
+        {
+            int pointIndex = lineFeature.Points.IndexOf(this);
+            if (pointIndex > 0)
+            {
+                transitions.Add(new Transition(this, lineFeature.Points[pointIndex - 1], lineFeature));
+            }
+            if (pointIndex < lineFeature.Points.Count - 1)
+            {
+                transitions.Add(new Transition(this, lineFeature.Points[pointIndex + 1], lineFeature));
+            }
+        }
+
+        return transitions;
+    }
 
     #endregion
 
