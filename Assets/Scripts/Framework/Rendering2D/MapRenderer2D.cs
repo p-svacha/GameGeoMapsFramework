@@ -260,8 +260,8 @@ public class MapRenderer2D
     private void RedrawLineSelectionIndicator(LineFeature line)
     {
         LineRenderer lr = line.SelectionIndicator.GetComponent<LineRenderer>();
-        lr.startColor = new Color(line.Def.Color.r, line.Def.Color.g, line.Def.Color.b, LINE_SELECTION_INDICATOR_ALPHA);
-        lr.endColor = new Color(line.Def.Color.r, line.Def.Color.g, line.Def.Color.b, LINE_SELECTION_INDICATOR_ALPHA);
+        lr.startColor = new Color(Mathf.Max(line.Def.Color.r - 0.2f, 0f), Mathf.Max(line.Def.Color.g - 0.2f, 0f), Mathf.Max(line.Def.Color.b - 0.2f, 0f), LINE_SELECTION_INDICATOR_ALPHA);
+        lr.endColor = new Color(Mathf.Max(line.Def.Color.r - 0.2f, 0f), Mathf.Max(line.Def.Color.g - 0.2f, 0f), Mathf.Max(line.Def.Color.b - 0.2f, 0f), LINE_SELECTION_INDICATOR_ALPHA);
         lr.startWidth = line.Def.Width + LINE_SELECTION_INDICATOR_WIDTH;
         lr.endWidth = line.Def.Width + LINE_SELECTION_INDICATOR_WIDTH;
 

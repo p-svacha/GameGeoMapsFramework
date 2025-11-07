@@ -20,4 +20,22 @@ public class Entity
     public float AsphaltSpeed; // units per second
     public float DirtSpeed; // units per second
     public float SwimSpeed; // units per second
+
+    #region Getters
+
+    /// <summary>
+    /// Returns this entity's speed in units per second on the given surface.
+    /// </summary>
+    public float GetSurfaceSpeed(LineFeatureSurface surface)
+    {
+        switch(surface)
+        {
+            case LineFeatureSurface.Asphalt: return AsphaltSpeed;
+            case LineFeatureSurface.Dirt: return DirtSpeed;
+            case LineFeatureSurface.Water: return SwimSpeed;
+            default: throw new Exception($"Surface {surface} not handled.");
+        }
+    }
+
+    #endregion
 }

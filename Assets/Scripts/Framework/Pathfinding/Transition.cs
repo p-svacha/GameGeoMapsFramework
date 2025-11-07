@@ -24,9 +24,7 @@ public class Transition
         float cost = Length;
 
         // Surface modifier
-        if (LineFeature.Def.DefName == "DirtPath") cost /= e.DirtSpeed;
-        else if (LineFeature.Def.DefName == "WaterPath" || LineFeature.Def.DefName == "Stream" || LineFeature.Def.DefName == "StreamMedium" || LineFeature.Def.DefName == "StreamBig") cost /= e.SwimSpeed;
-        else cost /= e.AsphaltSpeed;
+        cost /= e.GetSurfaceSpeed(LineFeature.Def.Surface);
 
         return cost;
     }

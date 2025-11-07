@@ -14,6 +14,7 @@ public static class LineFeatureDefs
             Description = "A medium street often acting as connectors in neighbourhoods.",
             Color = PAVED_STREET_COLOR,
             Width = 6f,
+            Surface = LineFeatureSurface.Asphalt,
         },
 
         new LineFeatureDef()
@@ -23,6 +24,7 @@ public static class LineFeatureDefs
             Description = "A big street often acting as the main road through a town.",
             Color = PAVED_STREET_COLOR,
             Width = 8f,
+            Surface = LineFeatureSurface.Asphalt,
         },
 
         new LineFeatureDef()
@@ -32,6 +34,7 @@ public static class LineFeatureDefs
             Description = "Very wide and fast street only for cars.",
             Color = PAVED_STREET_COLOR,
             Width = 10f,
+            Surface = LineFeatureSurface.Asphalt,
         },
 
         new LineFeatureDef()
@@ -41,6 +44,7 @@ public static class LineFeatureDefs
             Description = "A small street often found in quartier neighbourhoods.",
             Color = PAVED_STREET_COLOR,
             Width = 4f,
+            Surface = LineFeatureSurface.Asphalt,
         },
 
         new LineFeatureDef()
@@ -50,6 +54,7 @@ public static class LineFeatureDefs
             Description = "A paved footpath.",
             Color = PAVED_STREET_COLOR,
             Width = 2f,
+            Surface = LineFeatureSurface.Asphalt,
         },
 
         new LineFeatureDef()
@@ -61,6 +66,7 @@ public static class LineFeatureDefs
             Width = 2f,
             Texture = LineTexture.Dashed,
             RoundedCorners = true,
+            Surface = LineFeatureSurface.Water,
         },
 
         new LineFeatureDef()
@@ -70,6 +76,7 @@ public static class LineFeatureDefs
             Description = "A small, flowing water body.",
             Color = new Color(0.565f, 0.855f, 0.933f),
             Width = 0.8f,
+            Surface = LineFeatureSurface.Water,
         },
 
         new LineFeatureDef()
@@ -79,6 +86,7 @@ public static class LineFeatureDefs
             Description = "A medium flowing water body.",
             Color = new Color(0.565f, 0.855f, 0.933f),
             Width = 2f,
+            Surface = LineFeatureSurface.Water,
         },
 
         new LineFeatureDef()
@@ -88,6 +96,7 @@ public static class LineFeatureDefs
             Description = "A wide flowing water body.",
             Color = new Color(0.565f, 0.855f, 0.933f),
             Width = 4f,
+            Surface = LineFeatureSurface.Water,
         },
 
         new LineFeatureDef()
@@ -97,6 +106,7 @@ public static class LineFeatureDefs
             Description = "A flowing water body.",
             Color = new Color(0.565f, 0.855f, 0.933f),
             Width = 8f,
+            Surface = LineFeatureSurface.Water,
         },
 
         new LineFeatureDef()
@@ -106,6 +116,7 @@ public static class LineFeatureDefs
             Description = "A small dirt path only accessible by foot.",
             Color = new Color(0.675f, 0.549f, 0.267f),
             Width = 1.2f,
+            Surface = LineFeatureSurface.Dirt,
         },
     };
 }

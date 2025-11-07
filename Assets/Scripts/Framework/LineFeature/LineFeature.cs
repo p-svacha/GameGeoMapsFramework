@@ -61,7 +61,7 @@ public class LineFeature : MapFeature
 
     public override void ResetSelectionIndicatorColor()
     {
-        SetSelectionIndicatorColor(new Color(Def.Color.r, Def.Color.g, Def.Color.b, MapRenderer2D.LINE_SELECTION_INDICATOR_ALPHA));
+        SetSelectionIndicatorColor(new Color(Mathf.Max(Def.Color.r - 0.2f, 0f), Mathf.Max(Def.Color.g - 0.2f, 0f), Mathf.Max(Def.Color.b - 0.2f, 0f), MapRenderer2D.LINE_SELECTION_INDICATOR_ALPHA));
     }
 
     #region Save / Load
