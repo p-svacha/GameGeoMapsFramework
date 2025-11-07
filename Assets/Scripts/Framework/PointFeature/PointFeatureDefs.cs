@@ -16,7 +16,7 @@ public static class PointFeatureDefs
             Label = "town",
             Description = "A small urban area.",
             MinZoom = 100,
-            MaxZoom = 1000,
+            MaxZoom = 2000,
             LabelFontSize = 26,
         },
 
@@ -27,8 +27,8 @@ public static class PointFeatureDefs
             Description = "A place to rest.",
             Icon = Resources.Load<Sprite>("Sprites/PointFeatureIcons/RestStop"),
             IconSize = 24,
-            MaxZoom = 800,
-            LabelFontSize = 16,
+            MaxZoom = 1400,
+            LabelFontSize = 12,
         },
     };
 }

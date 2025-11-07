@@ -182,18 +182,26 @@ public class MapRenderer2D
 
         // Label
         feature.VisualLabel.color = Color.black;
+        feature.VisualLabel.textWrappingMode = TextWrappingModes.NoWrap; // Single line only
         feature.VisualLabel.fontSize = feature.Def.LabelFontSize;
         feature.VisualLabel.text = feature.Label;
+
+        // Label size
+        Canvas.ForceUpdateCanvases();
         feature.VisualLabel.ForceMeshUpdate();
-        Vector2 labelDimensions = new Vector2(feature.VisualLabel.textBounds.size.x, feature.Def.LabelFontSize);
+        Vector2 labelDimensions = feature.VisualLabel.GetPreferredValues(feature.VisualLabel.text);
         feature.VisualLabel.GetComponent<RectTransform>().sizeDelta = labelDimensions;
 
-        if (feature.Def.Icon == null) feature.VisualLabel.transform.localPosition = Vector3.zero;
-        else feature.VisualLabel.transform.localPosition = new Vector3(0f, feature.Def.IconSize / 2 + feature.Def.LabelFontSize / 2 + 5, 0f);
+        // Label local position
+        Vector2 labelLocalPosition;
+        if (feature.Def.Icon == null) labelLocalPosition = Vector3.zero;
+        else labelLocalPosition = new Vector3(0f, feature.Def.IconSize / 2 + labelDimensions.y / 2 + 5, 0f);
+        feature.VisualLabel.transform.localPosition = labelLocalPosition;
 
         // Selection indicator
-        feature.SelectionIndicator.GetComponent<RectTransform>().sizeDelta = labelDimensions + new Vector2(12, 4);
-        feature.SelectionIndicator.transform.localPosition = feature.VisualLabel.transform.localPosition;
+        Vector2 selectionIndicatorMargins = new Vector2(12, 4);
+        feature.SelectionIndicator.GetComponent<RectTransform>().sizeDelta = labelDimensions + selectionIndicatorMargins;
+        feature.SelectionIndicator.transform.localPosition = labelLocalPosition;
     }
 
 
