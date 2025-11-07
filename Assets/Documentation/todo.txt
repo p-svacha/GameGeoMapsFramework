@@ -1,4 +1,4 @@
-﻿- add pathfinding tool
+﻿- when creating line feature, add label next to cursor showing both full line length and segment length
 
 - add action in edit point feature tool "detach"
  - available if feature point is connected to other features

@@ -88,6 +88,15 @@
 
         new LineFeatureDef()
         {
+            DefName = "RiverNarrow",
+            Label = "narrow river",
+            Description = "A flowing water body.",
+            Color = new Color(0.565f, 0.855f, 0.933f),
+            Width = 8f,
+        },
+
+        new LineFeatureDef()
+        {
             DefName = "DirtPath",
             Label = "dirt path",
             Description = "A small dirt path only accessible by foot.",

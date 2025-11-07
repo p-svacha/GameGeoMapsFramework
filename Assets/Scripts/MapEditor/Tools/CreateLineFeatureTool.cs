@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CreateLineFeatureTool : EditorTool
@@ -52,6 +53,27 @@ public class CreateLineFeatureTool : EditorTool
 
         // Instructions
         Editor.SetInstructionsText("Click anywhere to start creating a new line.");
+
+        // Tooltip
+        Tooltip.Instance.Hide();
+    }
+
+    public override void UpdateTool()
+    {
+        if (Tooltip.Instance.isActiveAndEnabled)
+        {
+            float existingLineLength = 0f;
+            for(int i = 0; i < Points.Count - 1; i++)
+            {
+                existingLineLength += Vector2.Distance(Points[i].Position, Points[i + 1].Position);
+            }
+            Vector2 prevPointPos = Points.Last().Position;
+            Vector2 currentPos = MouseHoverInfo.WorldPosition;
+            float distanceToPrevPoint = Vector2.Distance(prevPointPos, currentPos);
+            string tooltipText = $"Segment Length: {(int)distanceToPrevPoint}m\nLine Length: {(int)(existingLineLength + distanceToPrevPoint)}m";
+
+            Tooltip.Instance.Init(Tooltip.TooltipType.TextOnly, "", tooltipText);
+        }
     }
 
     public override void OnSelect()
@@ -97,6 +119,7 @@ public class CreateLineFeatureTool : EditorTool
     {
         GameObject.Destroy(CursorLineRenderer.gameObject);
         GameObject.Destroy(FeatureLineRenderer.gameObject);
+        Tooltip.Instance.Hide();
     }
 
     public override void HandleLeftClick()
@@ -199,5 +222,8 @@ public class CreateLineFeatureTool : EditorTool
         hoverablePoints.AddRange(Map.Points.Values);
         foreach (Point p in Points.Where(x => !x.IsRegistered)) hoverablePoints.Add(p);
         MouseHoverInfo.SetPointSelectionOptions(hoverablePoints);
+
+        // Show tooltip
+        Tooltip.Instance.Init(Tooltip.TooltipType.TextOnly, "", "");
     }
 }
