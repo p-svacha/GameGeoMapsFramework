@@ -224,17 +224,22 @@ public class MapRenderer2D
         line.VisualLine = new GameObject($"Line");
         line.VisualLine.transform.SetParent(line.VisualRoot.transform);
         LineRenderer lr = line.VisualLine.AddComponent<LineRenderer>();
-        lr.material = ResourceManager.LoadMaterial("Materials/White");
+        lr.textureMode = LineTextureMode.Tile;
 
         RedrawLineFeature(line);
     }
     private void RedrawLineFeature(LineFeature line)
     {
         LineRenderer lr = line.VisualLine.GetComponent<LineRenderer>();
+        lr.material = line.Def.Material;
         lr.startColor = line.Def.Color;
         lr.endColor = line.Def.Color;
         lr.startWidth = line.Def.Width;
         lr.endWidth = line.Def.Width;
+        lr.numCornerVertices = line.Def.RoundedCorners ? 5 : 0;
+
+        float textureScale = 0.5f / line.Def.Width;
+        lr.textureScale = new Vector2(textureScale, 1f);
 
         lr.positionCount = line.Points.Count;
         for (int i = 0; i < line.Points.Count; i++) lr.SetPosition(i, line.Points[i].Position);
@@ -247,7 +252,7 @@ public class MapRenderer2D
         line.SelectionIndicator = new GameObject($"Selection Indicator");
         line.SelectionIndicator.transform.SetParent(line.VisualRoot.transform);
         LineRenderer lr = line.SelectionIndicator.AddComponent<LineRenderer>();
-        lr.material = ResourceManager.LoadMaterial("Materials/White");
+        lr.material = ResourceManager.LoadMaterial("Materials/LineMaterials/Default");
 
         RedrawLineSelectionIndicator(line);
         line.SelectionIndicator.SetActive(false);

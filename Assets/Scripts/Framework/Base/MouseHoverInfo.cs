@@ -158,6 +158,7 @@ public static class MouseHoverInfo
                 // Check distance to point
                 Vector2 featureScreenPosition = mainCam.WorldToScreenPoint(pointFeature.Point.Position);
                 float pixelDistance = Vector2.Distance(ScreenPosition, featureScreenPosition);
+                pixelDistance -= 10f; // Give point features some more priority, else they will never be chosen over line / area features
                 if (pixelDistance <= POINT_SELECTION_RANGE && pixelDistance < minAreaSelectionDistance)
                 {
                     HoveredMapFeature = pointFeature;

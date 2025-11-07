@@ -65,7 +65,7 @@ public class CreateLineFeatureTool : EditorTool
         GameObject clrGo = new GameObject("CursorLineRenderer");
 
         LineRenderer cursorLineRenderer = clrGo.AddComponent<LineRenderer>();
-        cursorLineRenderer.material = ResourceManager.LoadMaterial("Materials/Line");
+        cursorLineRenderer.material = ResourceManager.LoadMaterial("Materials/LineMaterials/DefaultWithOutline");
         cursorLineRenderer.startColor = Color.white;
         cursorLineRenderer.endColor = Color.white;
         cursorLineRenderer.startWidth = 1f;
@@ -78,7 +78,7 @@ public class CreateLineFeatureTool : EditorTool
         // Create feature line renderer
         GameObject featureLineObj = new GameObject("CurrentlyAddedLineLine");
         FeatureLineRenderer = featureLineObj.AddComponent<LineRenderer>();
-        FeatureLineRenderer.material = ResourceManager.LoadMaterial("Materials/Line");
+        FeatureLineRenderer.material = ResourceManager.LoadMaterial("Materials/LineMaterials/DefaultWithOutline");
         FeatureLineRenderer.startColor = Color.white;
         FeatureLineRenderer.endColor = Color.white;
         FeatureLineRenderer.startWidth = 1f;

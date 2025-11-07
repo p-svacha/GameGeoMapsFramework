@@ -21,7 +21,8 @@ public class CameraHandler : MonoBehaviour
     protected const float ZOOM_STEP = 1.1f;       // Base mouse wheel zoom speed (multiplicative)
     protected const float PAN_SPEED = 60f;        // Base WASD pan speed (world units/sec)
     protected const float MIN_CAMERA_SIZE = 20f;
-    protected const float MAX_CAMERA_SIZE = 2500f;
+    protected const float MAX_CAMERA_SIZE = 5000f;
+    protected const float INITIAL_CAMERA_SIZE = 200f;
     protected const float DRAG_SPEED = 0.03f;
 
     protected const float CAMERA_BOUNDS = 200000;
@@ -68,13 +69,14 @@ public class CameraHandler : MonoBehaviour
             Camera = Camera.main;
         }
         SetBounds(-CAMERA_BOUNDS, -CAMERA_BOUNDS, CAMERA_BOUNDS, CAMERA_BOUNDS);
+        Camera.orthographicSize = INITIAL_CAMERA_SIZE;
     }
 
     private void Update()
     {
         // --- Zoom (mouse wheel) ---
         float wheel = Input.mouseScrollDelta.y;
-        if (Mathf.Abs(wheel) > 0.0001f && !HelperFunctions.IsUiFocussed())
+        if (Mathf.Abs(wheel) > 0.0001f && !HelperFunctions.IsUiFocussed() && !HelperFunctions.IsMouseOverUi())
         {
             // Calculate new camera orthographic size
             bool shift = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);

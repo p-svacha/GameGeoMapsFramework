@@ -54,6 +54,17 @@ public static class LineFeatureDefs
 
         new LineFeatureDef()
         {
+            DefName = "WaterPath",
+            Label = "water path",
+            Description = "A ferryway or path to swim through a body of water.",
+            Color = new Color(0.365f, 0.655f, 0.733f),
+            Width = 2f,
+            Texture = LineTexture.Dashed,
+            RoundedCorners = true,
+        },
+
+        new LineFeatureDef()
+        {
             DefName = "Stream",
             Label = "small stream",
             Description = "A small, flowing water body.",

@@ -1,6 +1,4 @@
-﻿- fix editing text on point features not correclty updating the label and selection indicator width
-
-- add action in edit point feature tool "detach"
+﻿- add action in edit point feature tool "detach"
  - available if feature point is connected to other features
  - clicking will create a new point close to the original point and move the selected point feature to it
 

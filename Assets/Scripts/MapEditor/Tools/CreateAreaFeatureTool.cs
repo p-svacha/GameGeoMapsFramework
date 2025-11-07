@@ -68,7 +68,7 @@ public class CreateAreaFeatureTool : EditorTool
         GameObject startCursorLineObj = new GameObject("StartCursorLineRenderer");
 
         LineRenderer startCursorLineRenderer = startCursorLineObj.AddComponent<LineRenderer>();
-        startCursorLineRenderer.material = ResourceManager.LoadMaterial("Materials/White");
+        startCursorLineRenderer.material = ResourceManager.LoadMaterial("Materials/LineMaterials/Default");
         startCursorLineRenderer.startColor = Color.white;
         startCursorLineRenderer.endColor = Color.white;
         startCursorLineRenderer.startWidth = AREA_LINE_WIDTH;
@@ -82,7 +82,7 @@ public class CreateAreaFeatureTool : EditorTool
         GameObject endCursorLineObj = new GameObject("StartCursorLineRenderer");
 
         LineRenderer endCursorLineRenderer = endCursorLineObj.AddComponent<LineRenderer>();
-        endCursorLineRenderer.material = ResourceManager.LoadMaterial("Materials/White");
+        endCursorLineRenderer.material = ResourceManager.LoadMaterial("Materials/LineMaterials/Default");
         endCursorLineRenderer.startColor = Color.white;
         endCursorLineRenderer.endColor = Color.white;
         endCursorLineRenderer.startWidth = AREA_LINE_WIDTH;
@@ -95,7 +95,7 @@ public class CreateAreaFeatureTool : EditorTool
         // Create feature line renderer from start point
         GameObject featureLineObj = new GameObject("CurrentlyAddedAreaLine");
         FeatureLineRenderer = featureLineObj.AddComponent<LineRenderer>();
-        FeatureLineRenderer.material = ResourceManager.LoadMaterial("Materials/White");
+        FeatureLineRenderer.material = ResourceManager.LoadMaterial("Materials/LineMaterials/Default");
         FeatureLineRenderer.startColor = Color.white;
         FeatureLineRenderer.endColor = Color.white;
         FeatureLineRenderer.startWidth = AREA_LINE_WIDTH;
