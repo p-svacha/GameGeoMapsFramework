@@ -23,6 +23,7 @@ public static class DefDatabaseRegistry
     public static void AddAllDefs()
     {
         ClearAllDatabases();
+        DefDatabase<SurfaceDef>.AddDefs(SurfaceDefs.Defs);
         DefDatabase<LineFeatureDef>.AddDefs(LineFeatureDefs.Defs);
         DefDatabase<AreaFeatureDef>.AddDefs(AreaFeatureDefs.Defs);
         DefDatabase<PointFeatureDef>.AddDefs(PointFeatureDefs.Defs);

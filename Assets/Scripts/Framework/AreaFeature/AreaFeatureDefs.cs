@@ -56,5 +56,37 @@ public static class AreaFeatureDefs
             OutlineWidth = 0.5f,
             OutlineColor = new Color(0.751f, 0.716f, 0.688f),
         },
+
+        new AreaFeatureDef()
+        {
+            DefName = "Mountain",
+            Label = "mountain",
+            Description = "Mountaneous terrain.",
+            Color = new Color(0.960f, 0.941f, 0.898f),
+        },
+
+        new AreaFeatureDef()
+        {
+            DefName = "MountainHigh",
+            Label = "high mountain",
+            Description = "High mountaneous terrain.",
+            Color = new Color(0.921f, 0.913f, 0.898f),
+        },
+
+        new AreaFeatureDef()
+        {
+            DefName = "DesertSand",
+            Label = "desert",
+            Description = "Desert.",
+            Color = new Color(0.960f, 0.941f, 0.902f),
+        },
+
+        new AreaFeatureDef()
+        {
+            DefName = "DesertRocky",
+            Label = "rocky desert",
+            Description = "Rocky desert.",
+            Color = new Color(0.949f, 0.906f, 0.831f),
+        },
     };
 }

@@ -51,36 +51,6 @@ public class PathfindingTool : EditorTool
             {
                 Name = "Default",
                 Color = Color.yellow,
-                AsphaltSpeed = Entity.DEFAULT_ASPHALT_SPEED,
-                DirtSpeed = Entity.DEFAULT_DIRT_SPEED,
-                SwimSpeed = Entity.DEFAULT_SWIM_SPEED,
-            },
-
-            new Entity()
-            {
-                Name = "Asphalt Runner",
-                Color = Color.gray,
-                AsphaltSpeed = 3f,
-                DirtSpeed = 1f,
-                SwimSpeed = 1f,
-            },
-
-            new Entity()
-            {
-                Name = "Dirt Runner",
-                Color = new Color(0.6f, 0.2f, 0.1f),
-                AsphaltSpeed = 1f,
-                DirtSpeed = 3f,
-                SwimSpeed = 1f,
-            },
-
-            new Entity()
-            {
-                Name = "Swimmer",
-                Color = new Color(0.1f, 0.4f, 0.7f),
-                AsphaltSpeed = 1f,
-                DirtSpeed = 1f,
-                SwimSpeed = 3f,
             },
         };
 

@@ -64,6 +64,18 @@ public class LineFeature : MapFeature
         SetSelectionIndicatorColor(new Color(Mathf.Max(Def.Color.r - 0.2f, 0f), Mathf.Max(Def.Color.g - 0.2f, 0f), Mathf.Max(Def.Color.b - 0.2f, 0f), MapRenderer2D.LINE_SELECTION_INDICATOR_ALPHA));
     }
 
+    #region Navigation
+
+    /// <summary>
+    /// Recalculates the transitions of all points of this line feature.
+    /// </summary>
+    public void RecalculateTransitions()
+    {
+        foreach (Point p in Points) p.RecalculateTransitions();
+    }
+
+    #endregion
+
     #region Save / Load
 
     public LineFeature(Map map, LineFeatureData data) : base(map, data.Id)

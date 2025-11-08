@@ -49,6 +49,9 @@ public class MapRenderer2D
         PointsContainer = new GameObject("Points");
         PointsContainer.transform.SetParent(MapRoot.transform);
 
+        GameObject canvas = GameObject.Find("Canvas");
+        if (canvas == null) throw new System.Exception("A canvas needs to exist to render point features.");
+
         PointFeatureContainer = new GameObject("PointFeatureContainer");
         PointFeatureContainer.transform.SetParent(GameObject.Find("Canvas").transform);
         PointFeatureContainer.transform.SetAsFirstSibling(); // render below all other UI

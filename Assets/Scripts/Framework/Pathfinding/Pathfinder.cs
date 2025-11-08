@@ -49,10 +49,8 @@ public static class Pathfinder
             closedSet.Add(currentNode);
 
             // Explore neighbours
-            foreach (Transition transition in currentNode.GetTransitions())
+            foreach (Transition transition in currentNode.Transitions)
             {
-                Debug.Log($"Point {currentNode.Id} has {currentNode.GetTransitions().Count} transitions.");
-
                 Point neighbour = transition.To;
 
                 // Skip any invalid or closed neighbours

@@ -100,7 +100,7 @@ public class MapEditor : MonoBehaviour
 
     private void Update()
     {
-        Map.Update();
+        Map.Render();
 
         MouseHoverInfo.Update(Map);
         UpdateHoverInfoText();

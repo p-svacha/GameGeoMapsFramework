@@ -40,9 +40,15 @@ public class Point
     public List<MapFeature> ConnectedFeatures { get; private set; }
 
     /// <summary>
+    /// List containing all transitions with this point as the origin.
+    /// </summary>
+    public List<Transition> Transitions { get; private set; }
+
+    /// <summary>
     /// Flag that this point has been destroyed. Used for ghost references.
     /// </summary>
     public bool IsDestroyed { get; private set; }
+
 
 
     /// <summary>
@@ -110,28 +116,23 @@ public class Point
         IsDestroyed = true;
     }
 
+    #region Navigation
 
-
-    #region Getters
-
-    public bool IsConnectedToAnyFeature => ConnectedFeatures.Count > 0;
-    public PointFeature PointFeature => ConnectedFeatures.FirstOrDefault(f => f is PointFeature) as PointFeature;
-    public bool HasPointFeature => PointFeature != null;
-    public List<LineFeature> LineFeatures => ConnectedFeatures.Where(f => f is LineFeature).Select(f => (LineFeature)f).ToList();
-    public bool HasLineFeature => LineFeatures.Count > 0;
-    public List<AreaFeature> AreaFeatures => ConnectedFeatures.Where(f => f is AreaFeature).Select(f => (AreaFeature)f).ToList();
-    public bool HasAreaFeature => AreaFeatures.Count > 0;
+    public void RecalculateTransitions()
+    {
+        Transitions = GetTransitions();
+    }
 
     /// <summary>
     /// Returns all transitions with this point as the source.
     /// </summary>
-    public List<Transition> GetTransitions()
+    private List<Transition> GetTransitions()
     {
-        if(!HasLineFeature) return new List<Transition>();
+        if (!HasLineFeature) return new List<Transition>();
 
         List<Transition> transitions = new List<Transition>();
 
-        foreach(LineFeature lineFeature in LineFeatures)
+        foreach (LineFeature lineFeature in LineFeatures)
         {
             int pointIndex = lineFeature.Points.IndexOf(this);
             if (pointIndex > 0)
@@ -146,6 +147,19 @@ public class Point
 
         return transitions;
     }
+
+    #endregion
+
+
+    #region Getters
+
+    public bool IsConnectedToAnyFeature => ConnectedFeatures.Count > 0;
+    public PointFeature PointFeature => ConnectedFeatures.FirstOrDefault(f => f is PointFeature) as PointFeature;
+    public bool HasPointFeature => PointFeature != null;
+    public List<LineFeature> LineFeatures => ConnectedFeatures.Where(f => f is LineFeature).Select(f => (LineFeature)f).ToList();
+    public bool HasLineFeature => LineFeatures.Count > 0;
+    public List<AreaFeature> AreaFeatures => ConnectedFeatures.Where(f => f is AreaFeature).Select(f => (AreaFeature)f).ToList();
+    public bool HasAreaFeature => AreaFeatures.Count > 0;
 
     #endregion
 

@@ -8,5 +8,6 @@ public enum LineTexture
     DashedShort,
     DottedSquare,
     DottedRound,
-    DottedRoundWithOutline
+    DottedRoundWithOutline,
+    Specked,
 }

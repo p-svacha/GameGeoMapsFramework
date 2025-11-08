@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEngine;
 
@@ -41,7 +42,7 @@ public class Map
     /// <summary>
     /// Called every frame.
     /// </summary>
-    public void Update()
+    public void Render()
     {
         Renderer2D.Update();
     }
@@ -62,7 +63,6 @@ public class Map
         p.DestroyVisuals();
 
         // Delete point from database
-        Debug.Log($"Deleting point with id {p.Id}.");
         Points.Remove(p.Id);
     }
 
@@ -73,7 +73,6 @@ public class Map
     {
         if (!p.IsConnectedToAnyFeature)
         {
-            Debug.Log($"Deleting point with id {p.Id} because it is orphaned.");
             DeletePoint(p);
         }
     }
@@ -174,6 +173,9 @@ public class Map
             if (feat is AreaFeature area) RemoveDuplicateAreaPoints(area);
         }
 
+        // Recalculate all transitions from line features now connected to p2
+        foreach (LineFeature line in p2.LineFeatures) line.RecalculateTransitions();
+
         // Redraw all features now connected to p2
         foreach (MapFeature feat in p2.ConnectedFeatures) Renderer2D.RedrawFeature(feat);
     }
@@ -197,6 +199,9 @@ public class Map
         // Add feature reference to all points
         foreach (Point p in points) p.AddConnectedFeature(newFeature);
 
+        // Calculate transitions
+        newFeature.RecalculateTransitions();
+
         return newFeature;
     }
 
@@ -211,6 +216,9 @@ public class Map
 
         // Remove line from database
         LineFeatures.Remove(line.Id);
+
+        // Recalculate transitions in points of deleted line feature
+        foreach (Point p in line.Points) p.RecalculateTransitions();
 
         // Remove orphaned points
         foreach (Point p in line.Points)
@@ -275,6 +283,9 @@ public class Map
 
         // Remove duplicates in line1
         RemoveDuplicateLinePoints(line1);
+
+        // Recalculate transitions
+        line1.RecalculateTransitions();
     }
 
     public void SplitLine(LineFeature existingLine, Point splitPoint)
@@ -301,6 +312,10 @@ public class Map
         splitLine.SetType(existingLine.Def);
         splitLine.SetRenderLayer(existingLine.RenderLayer);
 
+        // Recalculate transitions
+        existingLine.RecalculateTransitions();
+        splitLine.RecalculateTransitions();
+
         // Redraw both lines
         Renderer2D.RedrawFeature(existingLine);
         Renderer2D.RedrawFeature(splitLine);
@@ -317,6 +332,9 @@ public class Map
 
         // Redraw line
         Renderer2D.RedrawFeature(line);
+
+        // Recalculate transitions
+        line.RecalculateTransitions();
     }
 
     public void ExpandLineAtStart(LineFeature line, Point newStartPoint)
@@ -330,6 +348,9 @@ public class Map
 
         // Redraw line
         Renderer2D.RedrawFeature(line);
+
+        // Recalculate transitions
+        line.RecalculateTransitions();
     }
 
     public void ExpandLineAtEnd(LineFeature line, Point newEndPoint)
@@ -343,6 +364,9 @@ public class Map
 
         // Redraw line
         Renderer2D.RedrawFeature(line);
+
+        // Recalculate transitions
+        line.RecalculateTransitions();
     }
 
     public void RemoveLineFeaturePoint(LineFeature line, Point point)
@@ -363,6 +387,9 @@ public class Map
 
         // Redraw line
         Renderer2D.RedrawFeature(line);
+
+        // Recalculate transitions
+        line.RecalculateTransitions();
     }
 
     /// <summary>
@@ -397,6 +424,9 @@ public class Map
 
         // Redraw
         Renderer2D.RedrawFeature(line);
+
+        // Recalculate transitions
+        line.RecalculateTransitions();
     }
 
     #endregion
@@ -544,6 +574,20 @@ public class Map
 
     #endregion
 
+    #region Rendering
+
+    /// <summary>
+    /// Changes display settings to disable all interactions with the map and hiding all points.
+    /// </summary>
+    public void SetDisplayToViewMode()
+    {
+        Renderer2D.HideAllPoints();
+        MouseHoverInfo.SetShowPointSnapIndicator(false);
+        MouseHoverInfo.SetCheckFeatureSelection(false);
+    }
+
+    #endregion
+
     public void SetName(string name)
     {
         Name = name;
@@ -556,6 +600,16 @@ public class Map
     }
 
     #region Save / Load
+
+    /// <summary>
+    /// Loads the map in the default map data directory with the given name.
+    /// </summary>
+    public static Map LoadMap(string name)
+    {
+        MapData loadedData = JsonUtilities.LoadData<MapData>(name);
+        Map loadedMap = new Map(loadedData);
+        return loadedMap;
+    }
 
     public Map(MapData data)
     {
@@ -612,6 +666,9 @@ public class Map
         {
             foreach (Point p in feat.Points) p.AddConnectedFeature(feat);
         }
+
+        // Calculate transitions
+        foreach (LineFeature feat in LineFeatures.Values) feat.RecalculateTransitions();
 
         // Database ID's
         NextPointId = Points.Count == 0 ? 1 : Points.Max(x => x.Key) + 1;
