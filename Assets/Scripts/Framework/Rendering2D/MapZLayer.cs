@@ -13,5 +13,4 @@ public enum MapZLayer
     LineFeatureSelectionIndicator,
     AreaFeatureSelectionIndicator,
     PathPreview,
-    MapOverlay,
 }

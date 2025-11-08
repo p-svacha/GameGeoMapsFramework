@@ -47,11 +47,7 @@ public class PathfindingTool : EditorTool
         // Entities
         Entities = new List<Entity>()
         {
-            new Entity()
-            {
-                Name = "Default",
-                Color = Color.yellow,
-            },
+            new Entity(Map, "Default", Color.yellow, null)
         };
 
         HelperFunctions.DestroyAllChildredImmediately(EntitiesContainer);
@@ -190,7 +186,7 @@ public class PathfindingTool : EditorTool
 
         foreach(Entity e in Entities)
         {
-            NavigationPath path = Pathfinder.GetPath(Map, e, HighlightedPathPoints[0], HighlightedPathPoints[1]);
+            NavigationPath path = Pathfinder.GetCheapestPath(Map, e, HighlightedPathPoints[0], HighlightedPathPoints[1]);
             EntityPaths[e] = path;
 
             if (path != null)

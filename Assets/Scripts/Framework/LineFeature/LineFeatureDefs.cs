@@ -77,6 +77,7 @@ public static class LineFeatureDefs
             Width = 2f,
             Texture = LineTexture.Dashed,
             RoundedCorners = true,
+            StretchFactor = 2f,
             Surface = SurfaceDefOf.Water,
         },
 
@@ -122,12 +123,25 @@ public static class LineFeatureDefs
 
         new LineFeatureDef()
         {
-            DefName = "DirtPath",
+            DefName = "HikingTrail",
             Label = "hiking trail",
-            Description = "A small dirt path only accessible by foot.",
-            Color = new Color(0.675f, 0.549f, 0.267f),
+            Description = "A hiking trail with rough, uneven surfaces.",
+            Color = new Color(0.267f, 0.451f, 0.329f),
             Width = 2f,
             Surface = SurfaceDefOf.Trail,
+            Texture = LineTexture.Dashed,
+            StretchFactor = 2.5f,
+            RoundedCorners = true,
+        },
+
+        new LineFeatureDef()
+        {
+            DefName = "DirtRoad",
+            Label = "dirt road",
+            Description = "A small dirt path only accessible by foot.",
+            Color = new Color(0.675f, 0.549f, 0.267f),
+            Width = 4f,
+            Surface = SurfaceDefOf.Dirt,
         },
     };
 }

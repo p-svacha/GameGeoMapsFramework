@@ -6,6 +6,7 @@ public class LineFeatureDef : Def
     public float Width { get; init; }
     public SurfaceDef Surface { get; init; }
     public LineTexture Texture { get; init; } = LineTexture.Default;
+    public float StretchFactor { get; init; } = 1f;
     public bool RoundedCorners { get; init; } = false;
 
     public Material Material => ResourceManager.LoadMaterial("Materials/LineMaterials/" + Texture.ToString());

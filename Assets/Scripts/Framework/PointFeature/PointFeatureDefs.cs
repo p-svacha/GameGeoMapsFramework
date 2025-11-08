@@ -30,5 +30,15 @@ public static class PointFeatureDefs
             MaxZoom = 1400,
             LabelFontSize = 12,
         },
+
+        new PointFeatureDef()
+        {
+            DefName = "Pin",
+            Label = "pin",
+            Description = "General pin that's always visible to mark any point of interest.",
+            Icon = Resources.Load<Sprite>("Sprites/PointFeatureIcons/Pin"),
+            IconSize = 64,
+            LabelFontSize = 20,
+        },
     };
 }

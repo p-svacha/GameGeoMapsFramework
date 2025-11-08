@@ -44,6 +44,9 @@ TagManager:
   - name: Map
     uniqueID: 3604328347
     locked: 0
+  - name: Entity
+    uniqueID: 2003743989
+    locked: 0
   - name: Foreground
     uniqueID: 783638039
     locked: 0

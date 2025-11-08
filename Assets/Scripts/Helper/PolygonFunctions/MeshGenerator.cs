@@ -7,6 +7,9 @@ public class MeshGenerator
 {
     public static GameObject GeneratePolygon(List<Vector2> vertices2D, string objectName = "")
     {
+        // Remove any duplicates
+        vertices2D = vertices2D.Distinct().ToList();
+
         // Use the triangulator to get indices for creating triangles
         Triangulator tr = new Triangulator(vertices2D.ToArray());
         int[] indices = tr.Triangulate();
@@ -65,6 +68,9 @@ public class MeshGenerator
     /// </summary>
     public static GameObject CreateSinglePolygonBorder(List<Vector2> points, float width, Color c, bool clockwise = false)
     {
+        // Remove any duplicates
+        points = points.Distinct().ToList();
+
         List<Vector2> outerVertices = new List<Vector2>(points);
         List<Vector2> innerVertices = new List<Vector2>();
         for (int i = 0; i < outerVertices.Count; i++)

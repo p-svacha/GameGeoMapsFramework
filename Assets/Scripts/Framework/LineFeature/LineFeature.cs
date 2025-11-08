@@ -74,6 +74,24 @@ public class LineFeature : MapFeature
         foreach (Point p in Points) p.RecalculateTransitions();
     }
 
+    public NavigationPath GetAsNavigationPath()
+    {
+        List<Point> points = new List<Point>(Points);
+        List<Transition> transitions = new List<Transition>();
+        for(int i = 0; i < points.Count - 1; i++)
+        {
+            Transition t = points[i].GetTransition(points[i + 1], this);
+            transitions.Add(t);
+        }
+        return new NavigationPath(Map, points, transitions);
+    }
+
+    #endregion
+
+    #region Getters
+
+    public SurfaceDef Surface => Def.Surface;
+
     #endregion
 
     #region Save / Load

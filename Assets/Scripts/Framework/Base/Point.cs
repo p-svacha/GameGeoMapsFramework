@@ -124,6 +124,14 @@ public class Point
     }
 
     /// <summary>
+    /// Returns the transition to another point on a specific line.
+    /// </summary>
+    public Transition GetTransition(Point to, LineFeature line)
+    {
+        return Transitions.FirstOrDefault(t => t.To == to && t.LineFeature == line);
+    }
+
+    /// <summary>
     /// Returns all transitions with this point as the source.
     /// </summary>
     private List<Transition> GetTransitions()

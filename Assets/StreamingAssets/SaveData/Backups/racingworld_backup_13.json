@@ -15572,6 +15572,18 @@
       "PointId": 2617,
       "DefName": "Town",
       "Label": "Osma"
+    },
+    {
+      "Id": 6,
+      "PointId": 3123,
+      "DefName": "Pin",
+      "Label": "TestRaceStart"
+    },
+    {
+      "Id": 7,
+      "PointId": 158,
+      "DefName": "Pin",
+      "Label": "TestRaceEnd"
     }
   ],
   "LineFeatures": [
@@ -15597,7 +15609,7 @@
     },
     {
       "Id": 2,
-      "DefName": "DirtPath",
+      "DefName": "DirtRoad",
       "PointIds": [
         89,
         101,
@@ -15640,7 +15652,7 @@
     },
     {
       "Id": 4,
-      "DefName": "DirtPath",
+      "DefName": "DirtRoad",
       "PointIds": [
         6,
         159,
@@ -16385,11 +16397,11 @@
         737,
         546
       ],
-      "RenderLayer": 10
+      "RenderLayer": 11
     },
     {
       "Id": 41,
-      "DefName": "DirtPath",
+      "DefName": "HikingTrail",
       "PointIds": [
         546,
         738,
@@ -16851,7 +16863,7 @@
     },
     {
       "Id": 54,
-      "DefName": "DirtPath",
+      "DefName": "HikingTrail",
       "PointIds": [
         1200,
         1201,
@@ -16913,7 +16925,7 @@
     },
     {
       "Id": 56,
-      "DefName": "DirtPath",
+      "DefName": "DirtRoad",
       "PointIds": [
         184,
         1293,
@@ -16960,7 +16972,7 @@
     },
     {
       "Id": 57,
-      "DefName": "DirtPath",
+      "DefName": "DirtRoad",
       "PointIds": [
         1295,
         1332,
@@ -16975,7 +16987,7 @@
     },
     {
       "Id": 58,
-      "DefName": "DirtPath",
+      "DefName": "Street",
       "PointIds": [
         219,
         1503,
@@ -17282,7 +17294,7 @@
     },
     {
       "Id": 66,
-      "DefName": "DirtPath",
+      "DefName": "HikingTrail",
       "PointIds": [
         1906,
         1935,
@@ -17325,7 +17337,7 @@
     },
     {
       "Id": 67,
-      "DefName": "DirtPath",
+      "DefName": "HikingTrail",
       "PointIds": [
         1969,
         1970,
@@ -17431,25 +17443,6 @@
       "RenderLayer": 10
     },
     {
-      "Id": 69,
-      "DefName": "DirtPath",
-      "PointIds": [
-        2062,
-        2063,
-        2064,
-        2065,
-        2066,
-        2067,
-        2068,
-        2069,
-        2070,
-        2071,
-        2072,
-        2073
-      ],
-      "RenderLayer": 10
-    },
-    {
       "Id": 70,
       "DefName": "RiverNarrow",
       "PointIds": [
@@ -17520,7 +17513,7 @@
     },
     {
       "Id": 72,
-      "DefName": "DirtPath",
+      "DefName": "HikingTrail",
       "PointIds": [
         2073,
         2126,
@@ -17630,8 +17623,19 @@
     },
     {
       "Id": 76,
-      "DefName": "DirtPath",
+      "DefName": "HikingTrail",
       "PointIds": [
+        2073,
+        2072,
+        2071,
+        2070,
+        2069,
+        2068,
+        2067,
+        2066,
+        2065,
+        2064,
+        2063,
         2062,
         2206,
         2207,
@@ -17694,7 +17698,7 @@
     },
     {
       "Id": 78,
-      "DefName": "DirtPath",
+      "DefName": "DirtRoad",
       "PointIds": [
         2238,
         2253,
@@ -17863,7 +17867,7 @@
     },
     {
       "Id": 81,
-      "DefName": "DirtPath",
+      "DefName": "HikingTrail",
       "PointIds": [
         2158,
         2422,
@@ -17908,7 +17912,7 @@
     },
     {
       "Id": 82,
-      "DefName": "DirtPath",
+      "DefName": "HikingTrail",
       "PointIds": [
         2436,
         2458,
@@ -17976,7 +17980,7 @@
     },
     {
       "Id": 85,
-      "DefName": "DirtPath",
+      "DefName": "DirtRoad",
       "PointIds": [
         2491,
         2659,
@@ -18083,7 +18087,7 @@
     },
     {
       "Id": 86,
-      "DefName": "DirtPath",
+      "DefName": "HikingTrail",
       "PointIds": [
         2696,
         2738,
@@ -18106,7 +18110,7 @@
     },
     {
       "Id": 87,
-      "DefName": "DirtPath",
+      "DefName": "HikingTrail",
       "PointIds": [
         2745,
         2746,
@@ -18164,7 +18168,7 @@
     },
     {
       "Id": 89,
-      "DefName": "DirtPath",
+      "DefName": "HikingTrail",
       "PointIds": [
         2766,
         2768,
@@ -18236,7 +18240,7 @@
         2825,
         2826
       ],
-      "RenderLayer": 10
+      "RenderLayer": 9
     },
     {
       "Id": 91,
@@ -18259,7 +18263,7 @@
         2841,
         736
       ],
-      "RenderLayer": 10
+      "RenderLayer": 9
     },
     {
       "Id": 92,

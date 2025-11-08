@@ -1,14 +1,14 @@
 using UnityEngine;
 
 /// <summary>
-/// A single segment between 2 adjacent points within a Line Feature used for pathfinding.
+/// A single unidirectional segment between 2 adjacent points within a Line Feature used for pathfinding.
 /// </summary>
 public class Transition
 {
-    public Point From;
-    public Point To;
-    public LineFeature LineFeature;
-    private float Length;
+    public Point From { get; private set; }
+    public Point To { get; private set; }
+    public LineFeature LineFeature { get; private set; }
+    public float Length { get; private set; }
 
     public Transition(Point from, Point to, LineFeature lineFeature)
     {

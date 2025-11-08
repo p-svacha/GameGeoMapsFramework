@@ -10,6 +10,8 @@ public class MapRenderer2D
 {
     public static Sprite DEFAULT_POINT_SPRITE = ResourceManager.LoadSprite("Sprites/Point");
 
+    private static float POINT_DISPLAY_SIZE = 2f;
+
     private static float LINE_SELECTION_INDICATOR_WIDTH = 3f; // additional to line width
     public static float LINE_SELECTION_INDICATOR_ALPHA = 0.3f;
 
@@ -25,8 +27,6 @@ public class MapRenderer2D
     // Higher numbers get rendererd on top
     private Dictionary<MapZLayer, int> SortingOrders = new Dictionary<MapZLayer, int>()
     {
-        { MapZLayer.MapOverlay, 2000 },
-
         { MapZLayer.PathPreview, 1500 },
 
         { MapZLayer.Point, 1010 },
@@ -108,6 +108,7 @@ public class MapRenderer2D
         GameObject obj = new GameObject($"Point {p.Position.x.ToString("#.##")}/{p.Position.y.ToString("#.##")}");
         obj.transform.SetParent(PointsContainer.transform);
         obj.transform.position = p.Position;
+        obj.transform.localScale = new Vector3(POINT_DISPLAY_SIZE, POINT_DISPLAY_SIZE, 1f);
         SpriteRenderer spriteRenderer = obj.AddComponent<SpriteRenderer>();
         spriteRenderer.sprite = overrideSprite != null ? overrideSprite : DEFAULT_POINT_SPRITE;
         ApplySortingOrder(spriteRenderer, MapZLayer.Point);
@@ -124,7 +125,7 @@ public class MapRenderer2D
         spriteRenderer.sprite = ResourceManager.LoadSprite("Sprites/Circle");
         spriteRenderer.color = new Color(1f, 1f, 1f, 0.5f);
         ApplySortingOrder(spriteRenderer, MapZLayer.PointSnapIndicator);
-        obj.transform.localScale = new Vector3(2f, 2f, 2f);
+        obj.transform.localScale = new Vector3(POINT_DISPLAY_SIZE + 1f, POINT_DISPLAY_SIZE + 1f, 1f);
         obj.transform.localPosition = Vector3.zero;
         obj.SetActive(false);
 
@@ -241,7 +242,7 @@ public class MapRenderer2D
         lr.endWidth = line.Def.Width;
         lr.numCornerVertices = line.Def.RoundedCorners ? 5 : 0;
 
-        float textureScale = 0.5f / line.Def.Width;
+        float textureScale = (0.5f / line.Def.Width) / line.Def.StretchFactor;
         lr.textureScale = new Vector2(textureScale, 1f);
 
         lr.positionCount = line.Points.Count;

@@ -40,7 +40,7 @@ public static class SurfaceDefs
             DefName = "Trail",
             Label = "trail",
             Description = "",
-            DefaultDisplayColor = new Color(0.575f, 0.549f, 0.367f),
+            DefaultDisplayColor = new Color(0.067f, 0.251f, 0.129f),
             DefaultSpeed = 1.4f,
             EnergyDrainFactor = 1.5f,
         },

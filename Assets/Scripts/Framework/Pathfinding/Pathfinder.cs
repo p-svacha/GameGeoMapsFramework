@@ -11,10 +11,10 @@ public static class Pathfinder
 
     // A* algorithm implementation. https://pavcreations.com/tilemap-based-a-star-algorithm-implementation-in-unity-game/
     /// <summary>
-    /// Returns the shortest path from a source node to a target node for the given entity.
+    /// Returns the lowest cost path from a source node to a target node for the given entity.
     /// <br/>Returned path includes both source and target.
     /// </summary>
-    public static NavigationPath GetPath(Map map, Entity entity, Point from, Point to, List<LineFeature> forbiddenLineFeatures = null)
+    public static NavigationPath GetCheapestPath(Map map, Entity entity, Point from, Point to, List<LineFeature> forbiddenLineFeatures = null)
     {
         Map = map;
         if (Map == null || from == null || to == null) return null;
@@ -89,7 +89,7 @@ public static class Pathfinder
     /// </summary>
     public static float GetPathCost(Map map, Entity entity, Point from, Point to, List<LineFeature> forbiddenLineFeatures = null)
     {
-        NavigationPath path = GetPath(map, entity, from, to, forbiddenLineFeatures);
+        NavigationPath path = GetCheapestPath(map, entity, from, to, forbiddenLineFeatures);
         if (path == null) return float.MaxValue;
         else return path.GetCost(entity);
     }
