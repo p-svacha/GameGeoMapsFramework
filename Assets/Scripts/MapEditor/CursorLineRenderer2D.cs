@@ -7,14 +7,14 @@ using UnityEngine;
 [RequireComponent(typeof(LineRenderer))]
 public class CursorLineRenderer2D : MonoBehaviour
 {
-    private LineRenderer lineRenderer;
-    private Vector3 startWorldPosition;
+    public LineRenderer LineRenderer;
+    private Vector3 StartWorldPosition;
 
     private void Awake()
     {
-        lineRenderer = GetComponent<LineRenderer>();
-        lineRenderer.positionCount = 2;
-        lineRenderer.useWorldSpace = true;
+        LineRenderer = GetComponent<LineRenderer>();
+        LineRenderer.positionCount = 2;
+        LineRenderer.useWorldSpace = true;
     }
 
     /// <summary>
@@ -23,14 +23,14 @@ public class CursorLineRenderer2D : MonoBehaviour
     /// <param name="fixedPoint">Fixed start position in world space.</param>
     public void Init(Vector3 fixedPoint)
     {
-        startWorldPosition = fixedPoint;
+        StartWorldPosition = fixedPoint;
     }
 
     private void Update()
     {
-        if (lineRenderer == null) return;
+        if (LineRenderer == null) return;
 
-        lineRenderer.SetPosition(0, startWorldPosition);
-        lineRenderer.SetPosition(1, MouseHoverInfo.WorldPositionWithSnap);
+        LineRenderer.SetPosition(0, StartWorldPosition);
+        LineRenderer.SetPosition(1, MouseHoverInfo.WorldPositionWithSnap);
     }
 }

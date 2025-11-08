@@ -8,9 +8,11 @@ public class CreateAreaFeatureTool : EditorTool
     public override EditorToolId Id => EditorToolId.CreateAreaFeatureTool;
     public override string Name => "Create Area Feature";
 
-    public static float AREA_LINE_WIDTH = 0.5f;
+    public static float AREA_LINE_WIDTH = 5f;
 
     public List<Point> Points = new List<Point>();
+
+    private Color PREVIEW_COLOR = Color.black;
 
     private LineRenderer FeatureLineRenderer; // Renderer that draws the current area outline
     private CursorLineRenderer2D StartCursorLineRenderer; // Renderer that draws a dynamic line from the first area point to the cursor
@@ -69,8 +71,8 @@ public class CreateAreaFeatureTool : EditorTool
 
         LineRenderer startCursorLineRenderer = startCursorLineObj.AddComponent<LineRenderer>();
         startCursorLineRenderer.material = ResourceManager.LoadMaterial("Materials/LineMaterials/Default");
-        startCursorLineRenderer.startColor = Color.white;
-        startCursorLineRenderer.endColor = Color.white;
+        startCursorLineRenderer.startColor = PREVIEW_COLOR;
+        startCursorLineRenderer.endColor = PREVIEW_COLOR;
         startCursorLineRenderer.startWidth = AREA_LINE_WIDTH;
         startCursorLineRenderer.endWidth = AREA_LINE_WIDTH;
         startCursorLineRenderer.sortingLayerName = "Foreground";
@@ -79,12 +81,12 @@ public class CreateAreaFeatureTool : EditorTool
         startCursorLineObj.SetActive(false);
 
         // Create cursor line renderer from end point
-        GameObject endCursorLineObj = new GameObject("StartCursorLineRenderer");
+        GameObject endCursorLineObj = new GameObject("EndCursorLineRenderer");
 
         LineRenderer endCursorLineRenderer = endCursorLineObj.AddComponent<LineRenderer>();
         endCursorLineRenderer.material = ResourceManager.LoadMaterial("Materials/LineMaterials/Default");
-        endCursorLineRenderer.startColor = Color.white;
-        endCursorLineRenderer.endColor = Color.white;
+        endCursorLineRenderer.startColor = PREVIEW_COLOR;
+        endCursorLineRenderer.endColor = PREVIEW_COLOR;
         endCursorLineRenderer.startWidth = AREA_LINE_WIDTH;
         endCursorLineRenderer.endWidth = AREA_LINE_WIDTH;
         endCursorLineRenderer.sortingLayerName = "Foreground";
@@ -96,8 +98,8 @@ public class CreateAreaFeatureTool : EditorTool
         GameObject featureLineObj = new GameObject("CurrentlyAddedAreaLine");
         FeatureLineRenderer = featureLineObj.AddComponent<LineRenderer>();
         FeatureLineRenderer.material = ResourceManager.LoadMaterial("Materials/LineMaterials/Default");
-        FeatureLineRenderer.startColor = Color.white;
-        FeatureLineRenderer.endColor = Color.white;
+        FeatureLineRenderer.startColor = PREVIEW_COLOR;
+        FeatureLineRenderer.endColor = PREVIEW_COLOR;
         FeatureLineRenderer.startWidth = AREA_LINE_WIDTH;
         FeatureLineRenderer.endWidth = AREA_LINE_WIDTH;
         FeatureLineRenderer.sortingLayerName = "Foreground";
@@ -111,6 +113,18 @@ public class CreateAreaFeatureTool : EditorTool
     {
         GameObject.Destroy(StartCursorLineRenderer.gameObject);
         GameObject.Destroy(FeatureLineRenderer.gameObject);
+    }
+
+    public override void UpdateTool()
+    {
+        // Set preview line width based on zoom
+        float lineWidth = CameraHandler.Instance.Camera.orthographicSize / 100f;
+        FeatureLineRenderer.startWidth = lineWidth;
+        FeatureLineRenderer.endWidth = lineWidth;
+        StartCursorLineRenderer.LineRenderer.startWidth = lineWidth;
+        StartCursorLineRenderer.LineRenderer.endWidth = lineWidth;
+        EndCursorLineRenderer.LineRenderer.startWidth = lineWidth;
+        EndCursorLineRenderer.LineRenderer.endWidth = lineWidth;
     }
 
     public override void HandleLeftClick()
