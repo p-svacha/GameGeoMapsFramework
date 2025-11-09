@@ -572,6 +572,8 @@ public class Map
         DeletePointIfOrphaned(feature.Point);
     }
 
+    public List<Point> GetNavigationNetworkPoints() => Points.Values.Where(p => p.HasLineFeature).ToList();
+
     #endregion
 
     #region Rendering

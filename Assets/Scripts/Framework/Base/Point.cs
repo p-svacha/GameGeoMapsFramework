@@ -67,7 +67,7 @@ public class Point
     {
         Id = id;
         IsRegistered = true;
-        RenderedPoint.GetComponent<SpriteRenderer>().sprite = MapRenderer2D.DEFAULT_POINT_SPRITE;
+        Map.Renderer2D.RedrawPoint(this);
     }
 
     /// <summary>
@@ -195,6 +195,6 @@ public class Point
 
     public override string ToString()
     {
-        return Id.ToString();
+        return Id.ToString() + " " + Position.ToString();
     }
 }

@@ -45,6 +45,25 @@ public static class HelperFunctions
 
     #endregion
 
+    #region String
+
+    //(HH):MM:SS
+    public static string GetDurationString(float seconds, bool includeMilliseconds = false)
+    {
+        bool isNegative = seconds < 0;
+        System.TimeSpan ts = System.TimeSpan.FromSeconds(System.Math.Abs(seconds));
+
+        string core = ts.TotalHours >= 1
+            ? $"{(int)ts.TotalHours:00}:{ts.Minutes:00}:{ts.Seconds:00}"
+            : $"{(int)ts.TotalMinutes:00}:{ts.Seconds:00}";
+
+        if (includeMilliseconds) core += "." + ts.Milliseconds;
+
+        return isNegative ? "-" + core : core;
+    }
+
+    #endregion
+
     #region Enum
 
     public static string GetEnumDescription(System.Enum value)

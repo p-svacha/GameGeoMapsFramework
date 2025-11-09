@@ -307,7 +307,7 @@ public class EditAreaFeatureTool : EditorTool
             Vector2 splitPosition = new Vector2((segmentStart.Position.x + segmentEnd.Position.x) / 2f, (segmentStart.Position.y + segmentEnd.Position.y) / 2f);
 
             Point tempSplitPoint = new Point(Map, splitPosition, overrideSprite: ResourceManager.LoadSprite("Sprites/PointPlus"));
-            tempSplitPoint.RenderedPoint.transform.localScale = new Vector3(0.8f, 0.8f, 1f);
+            tempSplitPoint.RenderedPoint.transform.localScale = new Vector3(MapRenderer2D.POINT_DISPLAY_SIZE * 0.8f, MapRenderer2D.POINT_DISPLAY_SIZE * 0.8f, 1f);
 
             TemporarySplitPoints.Add(tempSplitPoint);
         }

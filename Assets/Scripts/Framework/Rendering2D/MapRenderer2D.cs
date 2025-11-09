@@ -10,7 +10,7 @@ public class MapRenderer2D
 {
     public static Sprite DEFAULT_POINT_SPRITE = ResourceManager.LoadSprite("Sprites/Point");
 
-    private static float POINT_DISPLAY_SIZE = 2f;
+    public static float POINT_DISPLAY_SIZE = 2f;
 
     private static float LINE_SELECTION_INDICATOR_WIDTH = 3f; // additional to line width
     public static float LINE_SELECTION_INDICATOR_ALPHA = 0.3f;
@@ -114,6 +114,14 @@ public class MapRenderer2D
         ApplySortingOrder(spriteRenderer, MapZLayer.Point);
 
         return obj;
+    }
+
+    public void RedrawPoint(Point p)
+    {
+        if (!p.IsRegistered) throw new System.Exception("Can only redraw registered points.");
+        p.RenderedPoint.GetComponent<SpriteRenderer>().sprite = MapRenderer2D.DEFAULT_POINT_SPRITE;
+        p.RenderedPoint.transform.localScale = new Vector3(POINT_DISPLAY_SIZE, POINT_DISPLAY_SIZE, 1f);
+        p.SnapIndicator.transform.localScale = new Vector3(POINT_DISPLAY_SIZE + 1f, POINT_DISPLAY_SIZE + 1f, 1f);
     }
 
     public GameObject DrawPointSnapIndicator(Point p)

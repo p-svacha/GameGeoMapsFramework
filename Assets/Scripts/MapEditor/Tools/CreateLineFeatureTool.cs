@@ -60,6 +60,7 @@ public class CreateLineFeatureTool : EditorTool
 
     public override void UpdateTool()
     {
+        // Tooltip
         if (Tooltip.Instance.isActiveAndEnabled)
         {
             float existingLineLength = 0f;
@@ -117,9 +118,10 @@ public class CreateLineFeatureTool : EditorTool
 
     public override void OnDeselect()
     {
+        Reset();
+
         GameObject.Destroy(CursorLineRenderer.gameObject);
         GameObject.Destroy(FeatureLineRenderer.gameObject);
-        Tooltip.Instance.Hide();
     }
 
     public override void HandleLeftClick()

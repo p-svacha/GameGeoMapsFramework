@@ -63,7 +63,7 @@ public static class LineFeatureDefs
             Label = "gravel road",
             Description = "A path or road made of gravel.",
             Color = new Color(0.567f, 0.625f, 0.688f),
-            Width = 5f,
+            Width = 4f,
             Surface = SurfaceDefOf.Gravel,
             Texture = LineTexture.Specked,
         },
@@ -118,6 +118,36 @@ public static class LineFeatureDefs
             Description = "A flowing water body.",
             Color = new Color(0.565f, 0.855f, 0.933f),
             Width = 8f,
+            Surface = SurfaceDefOf.Water,
+        },
+
+        new LineFeatureDef()
+        {
+            DefName = "RiverMedium",
+            Label = "river",
+            Description = "A quite wide flowing water body.",
+            Color = new Color(0.565f, 0.855f, 0.933f),
+            Width = 14f,
+            Surface = SurfaceDefOf.Water,
+        },
+
+        new LineFeatureDef()
+        {
+            DefName = "RiverWide",
+            Label = "wide river",
+            Description = "A wide flowing water body.",
+            Color = new Color(0.565f, 0.855f, 0.933f),
+            Width = 20f,
+            Surface = SurfaceDefOf.Water,
+        },
+
+        new LineFeatureDef()
+        {
+            DefName = "RiverVeryWide",
+            Label = "very wide river",
+            Description = "A wide flowing water body.",
+            Color = new Color(0.565f, 0.855f, 0.933f),
+            Width = 30f,
             Surface = SurfaceDefOf.Water,
         },
 

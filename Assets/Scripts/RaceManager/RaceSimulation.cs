@@ -5,12 +5,17 @@ using UnityEngine;
 public class RaceSimulation : GameLoop
 {
     private Map Map;
+    private int Ticks;
 
     // private NavigationPath RaceLine;
     private Point RaceStart;
     private Point RaceEnd;
 
-    private List<Entity> Racers;
+    private List<Racer> Racers;
+
+    private List<Point> NetworkPoints;
+
+    int NumFinishers = 0;
 
     private void Start()
     {
@@ -24,17 +29,17 @@ public class RaceSimulation : GameLoop
         RaceEnd = Map.PointFeatures.Values.First(p => p.Label == "TestRaceEnd").Point;
         */
 
-        List<Point> racePointCandidates = Map.Points.Values.Where(p => p.HasLineFeature).ToList();
+        NetworkPoints = Map.GetNavigationNetworkPoints();
 
-        RaceStart = racePointCandidates.RandomElement();
-        RaceEnd = racePointCandidates.RandomElement();
+        RaceStart = NetworkPoints.RandomElement();
+        RaceEnd = NetworkPoints.RandomElement();
 
         Map.AddPointFeature(RaceStart, PointFeatureDefOf.Pin, "Start");
         Map.AddPointFeature(RaceEnd, PointFeatureDefOf.Pin, "End");
 
         CameraHandler.Instance.SetPosition(RaceStart.Position);
 
-        Racers = new List<Entity>();
+        Racers = new List<Racer>();
 
         /*
         Entity testRacer = new Entity(Map, "TestRacer", Color.yellow, RaceStart);
@@ -52,13 +57,13 @@ public class RaceSimulation : GameLoop
         */
         for(int i = 0; i < 1000; i++)
         {
-            Entity testRacer = new Entity(Map, "TestRacer" + (i + 1), new Color(Random.value, Random.value, Random.value), RaceStart);
+            Racer testRacer = new Racer(Map, "TestRacer" + (i + 1), new Color(Random.value, Random.value, Random.value), RaceStart);
             foreach (SurfaceDef surface in DefDatabase<SurfaceDef>.AllDefs) testRacer.SetSurfaceSpeedModififer(surface, Random.Range(0.5f, 3f));
             // testRacer.GeneralSpeedModifier = Random.Range(0.5f, 25f);
             Racers.Add(testRacer);
         }
 
-        foreach (Entity racer in Racers)
+        foreach (Racer racer in Racers)
         {
             NavigationPath racePath = Pathfinder.GetCheapestPath(Map, racer, RaceStart, RaceEnd);
             racer.SetPath(racePath);
@@ -68,6 +73,37 @@ public class RaceSimulation : GameLoop
     }
 
     #region Loop
+
+    protected override void Tick()
+    {
+        Ticks++;
+
+        foreach (Racer racer in Racers)
+        {
+            racer.Tick();
+
+            
+            if (racer.CurrentPath == null)
+            {
+                // Racer has reached the end
+                if (!racer.IsFinished)
+                {
+                    racer.IsFinished = true;
+                    NumFinishers++;
+                    float time = Ticks * GameLoop.TickDeltaTime;
+                    string timeString = HelperFunctions.GetDurationString(time, includeMilliseconds: true);
+                    Debug.Log($"{racer.Name} has reached the finish on rank {NumFinishers} in {timeString}.");
+                }
+
+                /*
+                // Make racers move randomly around map after having reached target
+                Point newTarget = NetworkPoints.RandomElement();
+                NavigationPath newPath = Pathfinder.GetCheapestPath(Map, racer, racer.Point, newTarget);
+                racer.SetPath(newPath);
+                */
+            }
+        }
+    }
 
     protected override void HandleInputs()
     {
@@ -81,14 +117,11 @@ public class RaceSimulation : GameLoop
     protected override void Render(float alpha)
     {
         Map.Render();
-        foreach (Entity racer in Racers) racer.Render(alpha);
+        foreach (Racer racer in Racers) racer.Render(alpha);
     }
 
 
-    protected override void Tick()
-    {
-        foreach(Entity racer in Racers) racer.Tick();
-    }
+    
 
     #endregion
 }

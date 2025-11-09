@@ -17,7 +17,7 @@ public static class Pathfinder
     public static NavigationPath GetCheapestPath(Map map, Entity entity, Point from, Point to, List<LineFeature> forbiddenLineFeatures = null)
     {
         Map = map;
-        if (Map == null || from == null || to == null) return null;
+        if (Map == null || from == null || to == null || from == to) return null;
 
         PriorityQueue<Point> openSet = new PriorityQueue<Point>(); // Nodes that are queued for searching
         HashSet<Point> closedSet = new HashSet<Point>(); // Nodes that have already been searched
@@ -119,6 +119,7 @@ public static class Pathfinder
         List<Transition> transitions = new List<Transition>(); // reversed list of traversed transitions
 
         nodes.Add(to);
+        if (!transitionToNodes.ContainsKey(to)) throw new System.Exception($"Point {to} is not in the transitionTo dictionary.");
         Transition currentTransition = transitionToNodes[to];
         transitions.Add(currentTransition);
 

@@ -143,15 +143,7 @@ public class NavigationPath
     public string GetCostAsTimeString(Entity entity)
     {
         float seconds = GetCost(entity);
-
-        bool isNegative = seconds < 0;
-        TimeSpan ts = TimeSpan.FromSeconds(Math.Floor(Math.Abs(seconds)));
-
-        string core = ts.TotalHours >= 1
-            ? $"{(int)ts.TotalHours:00}:{ts.Minutes:00}:{ts.Seconds:00}"
-            : $"{(int)ts.TotalMinutes:00}:{ts.Seconds:00}";
-
-        return isNegative ? "-" + core : core;
+        return HelperFunctions.GetDurationString(seconds);
     }
 
     /// <summary>

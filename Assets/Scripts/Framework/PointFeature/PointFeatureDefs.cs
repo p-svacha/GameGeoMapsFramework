@@ -16,7 +16,7 @@ public static class PointFeatureDefs
             Label = "town",
             Description = "A small urban area.",
             MinZoom = 100,
-            MaxZoom = 2200,
+            MaxZoom = 4000,
             LabelFontSize = 26,
         },
 

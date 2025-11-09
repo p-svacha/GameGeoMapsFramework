@@ -11,7 +11,6 @@ public class EditLineFeatureTool : EditorTool
 
     private LineFeature SelectedFeature;
 
-    private static float TEMPORARY_POINT_SCALE = 0.8f;
     private static Color MERGE_OPTION_COLOR = new Color(0f, 1f, 0f, 0.5f);
     private static Color MERGE_OPTION_HIGHLIGHTED_COLOR = new Color(0f, 1f, 0f, 0.9f);
 
@@ -539,7 +538,7 @@ public class EditLineFeatureTool : EditorTool
         TemporarySplitPoints.Add(new Point(Map, afterEndPosition, overrideSprite: ResourceManager.LoadSprite("Sprites/PointPlus")));
 
         // Scale all split points
-        foreach (Point p in TemporarySplitPoints) p.RenderedPoint.transform.localScale = new Vector3(TEMPORARY_POINT_SCALE, TEMPORARY_POINT_SCALE, 1f);
+        foreach (Point p in TemporarySplitPoints) p.RenderedPoint.transform.localScale = new Vector3(MapRenderer2D.POINT_DISPLAY_SIZE * 0.8f, MapRenderer2D.POINT_DISPLAY_SIZE * 0.8f, 1f);
     }
 
     private void ClearSplitPoints()

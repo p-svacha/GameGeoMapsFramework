@@ -57,6 +57,9 @@ public class CreateAreaFeatureTool : EditorTool
 
         // Instructions
         Editor.SetInstructionsText("Click anywhere to start creating a new area.");
+
+        // Tooltip
+        Tooltip.Instance.Hide();
     }
 
     public override void OnSelect()
@@ -111,7 +114,10 @@ public class CreateAreaFeatureTool : EditorTool
 
     public override void OnDeselect()
     {
+        Reset();
+
         GameObject.Destroy(StartCursorLineRenderer.gameObject);
+        GameObject.Destroy(EndCursorLineRenderer.gameObject);
         GameObject.Destroy(FeatureLineRenderer.gameObject);
     }
 
@@ -125,6 +131,17 @@ public class CreateAreaFeatureTool : EditorTool
         StartCursorLineRenderer.LineRenderer.endWidth = lineWidth;
         EndCursorLineRenderer.LineRenderer.startWidth = lineWidth;
         EndCursorLineRenderer.LineRenderer.endWidth = lineWidth;
+
+        // Tooltip
+        if (Tooltip.Instance.isActiveAndEnabled)
+        {
+            Vector2 prevPointPos = Points.Last().Position;
+            Vector2 currentPos = MouseHoverInfo.WorldPosition;
+            float distanceToPrevPoint = Vector2.Distance(prevPointPos, currentPos);
+            string tooltipText = $"Segment Length: {(int)distanceToPrevPoint}m";
+
+            Tooltip.Instance.Init(Tooltip.TooltipType.TextOnly, "", tooltipText);
+        }
     }
 
     public override void HandleLeftClick()
@@ -206,6 +223,9 @@ public class CreateAreaFeatureTool : EditorTool
         if (Points.Count == 1) Editor.SetInstructionsText("Click anywhere to add a second point to the area.\nRight click abort.");
         else if (Points.Count == 2) Editor.SetInstructionsText("Click anywhere to add a third point to the area.\nRight click abort.");
         else Editor.SetInstructionsText("Click anywhere to add another point to the area.\nClick on the initial point or the previously added point to confirm the area.\nRight click abort.");
+
+        // Show tooltip
+        Tooltip.Instance.Init(Tooltip.TooltipType.TextOnly, "", "");
     }
 
     /// <summary>
