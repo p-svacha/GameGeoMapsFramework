@@ -1,8 +1,18 @@
-﻿- add action in edit point feature tool "detach"
+﻿Race Management Game:
+
+- Implement stamina
+- Show stamina as bar in selection
+- Show ranking on the right
+- Add own racer to control
+
+
+
+Editor Features:
+
+- add action in edit point feature tool "detach"
  - available if feature point is connected to other features
  - clicking will create a new point close to the original point and move the selected point feature to it
 
 - Holding ctrl should disable snapping
 
 - add checkbox to mark if a line feature is a bridge => draw it with outline, use for water, crossings over other paths
-- add tundra/greymountain/agriculture area types

@@ -100,9 +100,9 @@ public class MapEditor : MonoBehaviour
 
     private void Update()
     {
-        Map.Render();
+        Map.UpdateHoverInfo();
+        Map.Render(0f);
 
-        MouseHoverInfo.Update(Map);
         UpdateHoverInfoText();
 
         HandleInputs();
@@ -123,7 +123,14 @@ public class MapEditor : MonoBehaviour
             HoverInfoText.text += $"\nSnapped Point: [{MouseHoverInfo.HoveredPoint.Id}] {MouseHoverInfo.HoveredPoint.Position}";
             HoverInfoText.text += $"\nconnected to {MouseHoverInfo.HoveredPoint.ConnectedFeatures.Count} features.";
         }
-        if (MouseHoverInfo.HoveredMapFeature != null) HoverInfoText.text += $"\nHovered Feature: {MouseHoverInfo.HoveredMapFeature.Id}";
+        if (MouseHoverInfo.HoveredMapFeature != null)
+        {
+            HoverInfoText.text += $"\nHovered Feature: {MouseHoverInfo.HoveredMapFeature.Id}";
+        }
+        if (MouseHoverInfo.HoveredEntity != null)
+        {
+            HoverInfoText.text += $"\nHovered Entity: {MouseHoverInfo.HoveredEntity.Name}";
+        }
 
         HoverInfoText.text = HoverInfoText.text.Trim();
     }

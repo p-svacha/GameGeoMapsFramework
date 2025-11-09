@@ -17,6 +17,10 @@ public class RaceSimulation : GameLoop
 
     int NumFinishers = 0;
 
+    // UI
+    private Racer SelectedRacer;
+    public UI_Race UI;
+
     private void Start()
     {
         DefDatabaseRegistry.AddAllDefs();
@@ -29,7 +33,7 @@ public class RaceSimulation : GameLoop
         RaceEnd = Map.PointFeatures.Values.First(p => p.Label == "TestRaceEnd").Point;
         */
 
-        NetworkPoints = Map.GetNavigationNetworkPoints();
+        NetworkPoints = Map.GetNavigationNetworkPointsNoWater();
 
         RaceStart = NetworkPoints.RandomElement();
         RaceEnd = NetworkPoints.RandomElement();
@@ -61,6 +65,7 @@ public class RaceSimulation : GameLoop
             foreach (SurfaceDef surface in DefDatabase<SurfaceDef>.AllDefs) testRacer.SetSurfaceSpeedModififer(surface, Random.Range(0.5f, 3f));
             // testRacer.GeneralSpeedModifier = Random.Range(0.5f, 25f);
             Racers.Add(testRacer);
+            Map.RegisterEntity(testRacer);
         }
 
         foreach (Racer racer in Racers)
@@ -70,6 +75,9 @@ public class RaceSimulation : GameLoop
         }
 
         SetSimulationSpeed(1f);
+
+        // UI
+        UI.RacerInfo.Hide();
     }
 
     #region Loop
@@ -77,12 +85,10 @@ public class RaceSimulation : GameLoop
     protected override void Tick()
     {
         Ticks++;
+        Map.Tick();
 
         foreach (Racer racer in Racers)
         {
-            racer.Tick();
-
-            
             if (racer.CurrentPath == null)
             {
                 // Racer has reached the end
@@ -107,17 +113,27 @@ public class RaceSimulation : GameLoop
 
     protected override void HandleInputs()
     {
+        Map.UpdateHoverInfo();
+
         if (Input.GetKey(KeyCode.Period)) SetSimulationSpeed(SimulationSpeed += 1f);
         if (Input.GetKey(KeyCode.Comma)) SetSimulationSpeed(Mathf.Max(0f, SimulationSpeed -= 1f));
         if (Input.GetKeyDown(KeyCode.Space)) SetSimulationSpeed(1f);
+
+        if(Input.GetMouseButtonDown(0))
+        {
+            if (MouseHoverInfo.HoveredEntity != null)
+            {
+                UI.RacerInfo.Show(MouseHoverInfo.HoveredEntity as Racer);
+            }
+            else UI.RacerInfo.Hide();
+        }
     }
 
     protected override void OnFrame() { }
 
     protected override void Render(float alpha)
     {
-        Map.Render();
-        foreach (Racer racer in Racers) racer.Render(alpha);
+        Map.Render(alpha);
     }
 
 

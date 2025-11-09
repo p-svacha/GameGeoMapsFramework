@@ -11,11 +11,13 @@ public class Map
     public Dictionary<int, PointFeature> PointFeatures;
     public Dictionary<int, LineFeature> LineFeatures;
     public Dictionary<int, AreaFeature> AreaFeatures;
+    public Dictionary<int, Entity> Entities;
 
     public int NextPointId;
     public int NextPointFeatureId;
     public int NextLineFeatureId;
     public int NextAreaFeatureId;
+    public int NextEntityId;
 
     public MapRenderer2D Renderer2D { get; private set; }
     public MapRenderer3D Renderer3D { get; private set; }
@@ -29,22 +31,26 @@ public class Map
         PointFeatures = new Dictionary<int, PointFeature>();
         LineFeatures = new Dictionary<int, LineFeature>();
         AreaFeatures = new Dictionary<int, AreaFeature>();
+        Entities = new Dictionary<int, Entity>();
 
         NextPointId = 1;
         NextPointFeatureId = 1;
         NextLineFeatureId = 1;
         NextAreaFeatureId = 1;
+        NextEntityId = 1;
 
         Renderer2D = new MapRenderer2D(this);
         Renderer3D = new MapRenderer3D(this);
     }
 
-    /// <summary>
-    /// Called every frame.
-    /// </summary>
-    public void Render()
+    public void Tick()
     {
-        Renderer2D.Update();
+        foreach (Entity entity in Entities.Values) entity.Tick();
+    }
+
+    public void UpdateHoverInfo()
+    {
+        MouseHoverInfo.Update(this);
     }
 
     #region Points
@@ -573,10 +579,33 @@ public class Map
     }
 
     public List<Point> GetNavigationNetworkPoints() => Points.Values.Where(p => p.HasLineFeature).ToList();
+    public List<Point> GetNavigationNetworkPointsNoWater() => Points.Values.Where(p => p.HasLineFeature && !p.LineFeatures.All(x => x.Surface == SurfaceDefOf.Water)).ToList();
+
+    #endregion
+
+    #region Entities
+
+    /// <summary>
+    /// Register an entity to the simulation so it will tick and be rendered every frame.
+    /// </summary>
+    public void RegisterEntity(Entity entity)
+    {
+        entity.OnRegistered(NextEntityId++);
+        Entities.Add(entity.Id, entity);
+    }
 
     #endregion
 
     #region Rendering
+
+    /// <summary>
+    /// Called every frame.
+    /// </summary>
+    public void Render(float alpha)
+    {
+        Renderer2D.Update();
+        foreach (Entity e in Entities.Values) e.Render(alpha);
+    }
 
     /// <summary>
     /// Changes display settings to disable all interactions with the map and hiding all points.
@@ -619,6 +648,7 @@ public class Map
         PointFeatures = new Dictionary<int, PointFeature>();
         LineFeatures = new Dictionary<int, LineFeature>();
         AreaFeatures = new Dictionary<int, AreaFeature>();
+        Entities = new Dictionary<int, Entity>();
 
         // Renderer
         Renderer2D = new MapRenderer2D(this);
@@ -677,9 +707,10 @@ public class Map
         NextPointFeatureId = PointFeatures.Count == 0 ? 1 : PointFeatures.Max(x => x.Key) + 1;
         NextLineFeatureId = LineFeatures.Count == 0 ? 1 : LineFeatures.Max(x => x.Key) + 1;
         NextAreaFeatureId = AreaFeatures.Count == 0 ? 1 : AreaFeatures.Max(x => x.Key) + 1;
+        NextEntityId = Entities.Count == 0 ? 1 : Entities.Max(x => x.Key) + 1;
 
         // Log
-        Debug.Log($"Successfully loaded Map {data.Name}: Loaded {Points.Count} points, {PointFeatures.Count} point features, {LineFeatures.Count} line features, {AreaFeatures.Count} area features.");
+        Debug.Log($"Successfully loaded Map {data.Name}: Loaded {Points.Count} points, {PointFeatures.Count} point features, {LineFeatures.Count} line features, {AreaFeatures.Count} area features, {Entities.Count} entities.");
     }
 
     /// <summary>

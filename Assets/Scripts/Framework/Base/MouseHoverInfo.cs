@@ -37,6 +37,11 @@ public static class MouseHoverInfo
     private static List<MapFeature> FeatureSelectionOptions;
 
     /// <summary>
+    /// The entity currently hovered.
+    /// </summary>
+    public static Entity HoveredEntity { get; private set; }
+
+    /// <summary>
     /// If not null, the hovered map feature will always be highlighted with this color instead of it's own color.
     /// </summary>
     private static Color? ForcedFeatureHighlightColor;
@@ -170,6 +175,20 @@ public static class MouseHoverInfo
             {
                 if (ForcedFeatureHighlightColor.HasValue) HoveredMapFeature.SetSelectionIndicatorColor(ForcedFeatureHighlightColor.Value, temporary: true);
                 HoveredMapFeature.ShowSelectionIndicator();
+            }
+        }
+
+        // Entity
+        HoveredEntity = null;
+        float minEntityDistance = float.MaxValue;
+
+        foreach (Entity e in map.Entities.Values)
+        {
+            float worldDistanceToEntity = Vector2.Distance(WorldPosition, e.CurrentWorldPosition);
+            if (worldDistanceToEntity <= MapRenderer2D.ENTITY_DISPLAY_SIZE && worldDistanceToEntity < minEntityDistance)
+            {
+                HoveredEntity = e;
+                minEntityDistance = worldDistanceToEntity;
             }
         }
     }

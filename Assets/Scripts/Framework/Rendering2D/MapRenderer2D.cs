@@ -1,7 +1,8 @@
 using System.Collections.Generic;
+using System.Xml.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 /// <summary>
 /// Renderer responsible for rendering a map in 2D.
@@ -11,6 +12,7 @@ public class MapRenderer2D
     public static Sprite DEFAULT_POINT_SPRITE = ResourceManager.LoadSprite("Sprites/Point");
 
     public static float POINT_DISPLAY_SIZE = 2f;
+    public static float ENTITY_DISPLAY_SIZE = 5f;
 
     private static float LINE_SELECTION_INDICATOR_WIDTH = 3f; // additional to line width
     public static float LINE_SELECTION_INDICATOR_ALPHA = 0.3f;
@@ -369,6 +371,24 @@ public class MapRenderer2D
             RedrawAreaFeatureOutline(area);
             RedrawAreaFeatureSelectionIndicator(area);
         }
+    }
+
+    #endregion
+
+    #region Entity
+
+    public void CreateEntityVisuals(Entity e)
+    {
+        e.VisualRoot = new GameObject("Entity_" + e.Name);
+        e.VisualRoot.transform.SetParent(MapRoot.transform);
+
+        GameObject spriteObj = new GameObject("Sprite");
+        spriteObj.transform.SetParent(e.VisualRoot.transform);
+        e.VisualSprite = spriteObj.AddComponent<SpriteRenderer>();
+        e.VisualSprite.sprite = ResourceManager.LoadSprite("Sprites/Point");
+        e.VisualSprite.color = e.Color;
+        e.VisualSprite.sortingLayerName = "Entity";
+        spriteObj.transform.localScale = new Vector3(ENTITY_DISPLAY_SIZE, ENTITY_DISPLAY_SIZE, 1f);
     }
 
     #endregion

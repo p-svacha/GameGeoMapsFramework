@@ -11,9 +11,11 @@ using TMPro;
 /// </summary>
 public class Entity
 {
-    public Map Map;
-    public string Name;
-    public Color Color;
+    public Map Map { get; private set; }
+    public int Id { get; private set; }
+    public string Name { get; private set; }
+    public Color Color { get; private set; }
+    public float CurrentSpeed { get; private set; }
 
     public float GeneralSpeedModifier = 1f;
     public Dictionary<SurfaceDef, float> SurfaceSpeedModifiers = new Dictionary<SurfaceDef, float>();
@@ -26,11 +28,11 @@ public class Entity
 
     // Visual Display
     public GameObject VisualRoot;
-    public GameObject VisualSprite;
+    public SpriteRenderer VisualSprite;
 
     // World position snapshots for render interpolation
     private Vector2 PrevTickWorldPos;
-    private Vector2 CurrentTickWorldPos;
+    public Vector2 CurrentWorldPosition { get; private set; }
 
     public Entity(Map map, string name, Color color, Point p)
     {
@@ -40,9 +42,14 @@ public class Entity
 
         if (p != null)
         {
-            InitVisuals();
+            Map.Renderer2D.CreateEntityVisuals(this);
             SetPosition(p);
         }
+    }
+
+    public void OnRegistered(int id)
+    {
+        Id = id;
     }
 
     /// <summary>
@@ -50,6 +57,9 @@ public class Entity
     /// </summary>
     public void Tick()
     {
+        // Rest values
+        CurrentSpeed = 0;
+
         // Save previous world position for render interpolation
         PrevTickWorldPos = GetWorldPosition();
 
@@ -62,13 +72,13 @@ public class Entity
         // Move along transition
         if (CurrentTransition != null)
         {
-            float transitionSpeed = GetSurfaceSpeed(CurrentTransition.LineFeature.Surface);
-            float distance = transitionSpeed * GameLoop.TickDeltaTime; // Get travelled distance this tick in units (meters)
+            CurrentSpeed = GetSurfaceSpeed(CurrentTransition.LineFeature.Surface);
+            float distance = CurrentSpeed * GameLoop.TickDeltaTime; // Get travelled distance this tick in units (meters)
             MoveDistance(distance);
         }
 
         // Save new world position for render interpolation
-        CurrentTickWorldPos = GetWorldPosition();
+        CurrentWorldPosition = GetWorldPosition();
     }
 
     /// <summary>
@@ -76,7 +86,7 @@ public class Entity
     /// </summary>
     public void Render(float alpha)
     {
-        VisualRoot.transform.position = Vector2.Lerp(PrevTickWorldPos, CurrentTickWorldPos, alpha);
+        VisualRoot.transform.position = Vector2.Lerp(PrevTickWorldPos, CurrentWorldPosition, alpha);
     }
 
     /// <summary>
@@ -118,20 +128,6 @@ public class Entity
         }
     }
 
-    private void InitVisuals()
-    {
-        VisualRoot = new GameObject("Entity_" + Name);
-        VisualRoot.transform.SetParent(Map.Renderer2D.MapRoot.transform);
-
-        VisualSprite = new GameObject("Sprite");
-        VisualSprite.transform.SetParent(VisualRoot.transform);
-        SpriteRenderer sr = VisualSprite.AddComponent<SpriteRenderer>();
-        sr.sprite = ResourceManager.LoadSprite("Sprites/Point");
-        sr.color = Color;
-        sr.sortingLayerName = "Entity";
-        VisualSprite.transform.localScale = new Vector3(5f, 5f, 1f);
-    }
-
     #region Position & Movement
 
     public void SetPosition(Point p)
@@ -143,7 +139,7 @@ public class Entity
 
         Vector3 worldPos = GetWorldPosition();
         PrevTickWorldPos = worldPos;
-        CurrentTickWorldPos = worldPos;
+        CurrentWorldPosition = worldPos;
     }
 
     public void SetPath(NavigationPath path)
