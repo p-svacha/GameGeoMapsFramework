@@ -22,11 +22,21 @@ public static class PointFeatureDefs
 
         new PointFeatureDef()
         {
+            DefName = "Landmark",
+            Label = "landmark",
+            Description = "A natural or artifical landmark.",
+            MinZoom = 100,
+            MaxZoom = 2500,
+            LabelFontSize = 20,
+        },
+
+        new PointFeatureDef()
+        {
             DefName = "RestStop",
             Label = "rest stop",
             Description = "A place to rest.",
             Icon = Resources.Load<Sprite>("Sprites/PointFeatureIcons/RestStop"),
-            IconSize = 24,
+            IconSize = 20,
             MaxZoom = 1400,
             LabelFontSize = 12,
         },

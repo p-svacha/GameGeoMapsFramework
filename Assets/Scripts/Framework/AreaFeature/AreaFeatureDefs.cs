@@ -62,7 +62,7 @@ public static class AreaFeatureDefs
             DefName = "Mountain",
             Label = "mountain",
             Description = "Mountaneous terrain.",
-            Color = new Color(0.960f, 0.941f, 0.898f),
+            Color = new Color(0.921f, 0.913f, 0.898f),
         },
 
         new AreaFeatureDef()
@@ -70,7 +70,7 @@ public static class AreaFeatureDefs
             DefName = "MountainHigh",
             Label = "high mountain",
             Description = "High mountaneous terrain.",
-            Color = new Color(0.921f, 0.913f, 0.898f),
+            Color = new Color(0.851f, 0.843f, 0.828f),
         },
 
         new AreaFeatureDef()

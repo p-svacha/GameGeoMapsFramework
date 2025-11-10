@@ -1,6 +1,7 @@
 ﻿Race Management Game:
 
 - Show current race ranking on the right
+	- sort by distance to target of "general cheapest" path
 - Show current rank in racer info
 - Add own racer to control
 

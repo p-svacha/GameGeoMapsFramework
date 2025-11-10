@@ -83,6 +83,29 @@ public static class LineFeatureDefs
 
         new LineFeatureDef()
         {
+            DefName = "HikingTrail",
+            Label = "hiking trail",
+            Description = "A hiking trail with rough, uneven surfaces.",
+            Color = new Color(0.267f, 0.451f, 0.329f),
+            Width = 2f,
+            Surface = SurfaceDefOf.Trail,
+            Texture = LineTexture.Dashed,
+            StretchFactor = 2.5f,
+            RoundedCorners = true,
+        },
+
+        new LineFeatureDef()
+        {
+            DefName = "DirtRoad",
+            Label = "dirt road",
+            Description = "A small dirt path only accessible by foot.",
+            Color = new Color(0.675f, 0.549f, 0.267f),
+            Width = 4f,
+            Surface = SurfaceDefOf.Dirt,
+        },
+
+        new LineFeatureDef()
+        {
             DefName = "Stream",
             Label = "small stream",
             Description = "A small, flowing water body.",
@@ -145,7 +168,7 @@ public static class LineFeatureDefs
         {
             DefName = "RiverVeryWide",
             Label = "very wide river",
-            Description = "A wide flowing water body.",
+            Description = "A very wide flowing water body.",
             Color = new Color(0.565f, 0.855f, 0.933f),
             Width = 30f,
             Surface = SurfaceDefOf.Water,
@@ -153,25 +176,12 @@ public static class LineFeatureDefs
 
         new LineFeatureDef()
         {
-            DefName = "HikingTrail",
-            Label = "hiking trail",
-            Description = "A hiking trail with rough, uneven surfaces.",
-            Color = new Color(0.267f, 0.451f, 0.329f),
-            Width = 2f,
-            Surface = SurfaceDefOf.Trail,
-            Texture = LineTexture.Dashed,
-            StretchFactor = 2.5f,
-            RoundedCorners = true,
-        },
-
-        new LineFeatureDef()
-        {
-            DefName = "DirtRoad",
-            Label = "dirt road",
-            Description = "A small dirt path only accessible by foot.",
-            Color = new Color(0.675f, 0.549f, 0.267f),
-            Width = 4f,
-            Surface = SurfaceDefOf.Dirt,
+            DefName = "RiverExtVeryWide",
+            Label = "extremely wide river",
+            Description = "An extremely wide flowing water body.",
+            Color = new Color(0.565f, 0.855f, 0.933f),
+            Width = 45f,
+            Surface = SurfaceDefOf.Water,
         },
     };
 }
