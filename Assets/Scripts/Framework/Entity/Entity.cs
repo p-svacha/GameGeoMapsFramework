@@ -25,6 +25,8 @@ public class Entity
     public NavigationPath CurrentPath; // The path this entity is currently following.
     public Transition CurrentTransition; // The transition this entity is currently taking.
     public float CurrentTransitionPositionRelative; // Relative position (0..1) within the current transition.
+    public bool IsMoving => CurrentTransition != null;
+    public SurfaceDef CurrentSurface => IsMoving ? CurrentTransition.LineFeature.Surface : null;
 
     // Visual Display
     public GameObject VisualRoot;
@@ -64,14 +66,14 @@ public class Entity
         // Save previous world position for render interpolation
         PrevTickWorldPos = GetWorldPosition();
 
-        // Check if new path is assigned
-        if (CurrentTransition == null && CurrentPath != null)
+        // Check if new path has been assigned
+        if (!IsMoving && CurrentPath != null)
         {
             CurrentTransition = CurrentPath.Transitions[0];
         }
 
         // Move along transition
-        if (CurrentTransition != null)
+        if (IsMoving)
         {
             CurrentSpeed = GetSurfaceSpeed(CurrentTransition.LineFeature.Surface);
             float distance = CurrentSpeed * GameLoop.TickDeltaTime; // Get travelled distance this tick in units (meters)
@@ -80,7 +82,11 @@ public class Entity
 
         // Save new world position for render interpolation
         CurrentWorldPosition = GetWorldPosition();
+
+        OnTick();
     }
+
+    protected virtual void OnTick() { }
 
     /// <summary>
     /// Called every frame.

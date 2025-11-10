@@ -119,7 +119,7 @@ public class RaceSimulation : GameLoop
         if (Input.GetKey(KeyCode.Comma)) SetSimulationSpeed(Mathf.Max(0f, SimulationSpeed -= 1f));
         if (Input.GetKeyDown(KeyCode.Space)) SetSimulationSpeed(1f);
 
-        if(Input.GetMouseButtonDown(0))
+        if(Input.GetMouseButtonDown(0) && !HelperFunctions.IsMouseOverUi())
         {
             SelectRacer(MouseHoverInfo.HoveredEntity as Racer);
         }

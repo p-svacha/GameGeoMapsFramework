@@ -17,7 +17,8 @@ public class CameraHandler : MonoBehaviour
     public static CameraHandler Instance;
     public Camera Camera { get; private set; }
 
-    // Tunables
+    public Vector2 CurrentPosition { get; private set; } // Position focussed by camera
+
     protected const float ZOOM_STEP = 1.1f;       // Base mouse wheel zoom speed (multiplicative)
     protected const float PAN_SPEED = 60f;        // Base WASD pan speed (world units/sec)
     protected const float MIN_CAMERA_SIZE = 20f;
@@ -30,9 +31,8 @@ public class CameraHandler : MonoBehaviour
     protected const bool PAN_SPEED_SCALES_WITH_ZOOM = true;
     protected const float PAN_SPEED_ZOOM_SCALE_FACTOR = 0.01f;
 
-    // Shift boosts
-    protected const float PAN_SHIFT_MULT = 6.0f;  // WASD speed boost while holding Shift
-    protected const float ZOOM_SHIFT_MULT = 6.0f; // Zoom speed boost while holding Shift
+    protected const float PAN_SHIFT_MULT = 6.0f;  // WASD speed boost while holding shift
+    protected const float ZOOM_SHIFT_MULT = 6.0f; // Zoom speed boost while holding shift
 
     // Input state
     protected bool IsLeftMouseDown;
@@ -46,9 +46,21 @@ public class CameraHandler : MonoBehaviour
     // Bounds (in world coords)
     protected float MinX, MinY, MaxX, MaxY;
 
+    // Pan animation
+    public bool IsPanning { get; private set; }
+    private float PanDuration;
+    private float PanDelay;
+    private Vector2 PanSourcePosition;
+    private Vector2 PanTargetPosition;
+    private Entity PostPanFollowEntity;
+    private System.Action OnPanDoneCallback;
+
+    // Follow
+    public Entity FollowedEntity { get; private set; }
+
     public void SetPosition(Vector2 pos)
     {
-        transform.position = new Vector3(pos.x, pos.y, transform.position.z);
+        CurrentPosition = pos;
     }
 
     public void SetZoom(float zoom)
@@ -74,6 +86,16 @@ public class CameraHandler : MonoBehaviour
 
     private void Update()
     {
+        UpdatePanAnimation();
+        UpdateFollow();
+        HandleInputs();
+
+        // Set transform position (only here)
+        Camera.transform.position = new Vector3(CurrentPosition.x, CurrentPosition.y, -10f);
+    }
+
+    private void HandleInputs()
+    {
         // --- Zoom (mouse wheel) ---
         float wheel = Input.mouseScrollDelta.y;
         if (Mathf.Abs(wheel) > 0.0001f && !HelperFunctions.IsUiFocussed() && !HelperFunctions.IsMouseOverUi())
@@ -90,9 +112,12 @@ public class CameraHandler : MonoBehaviour
 
             Camera.orthographicSize = newSize; // Apply here so anchor works
 
-            Vector3 worldAfter = Camera.ScreenToWorldPoint(new Vector3(mouseScreen.x, mouseScreen.y, -Camera.transform.position.z));
-            Vector3 delta = worldBefore - worldAfter;
-            transform.position += new Vector3(delta.x, delta.y, 0f);
+            if (FollowedEntity == null) // When following, only allow centered zoom
+            {
+                Vector3 worldAfter = Camera.ScreenToWorldPoint(new Vector3(mouseScreen.x, mouseScreen.y, -Camera.transform.position.z));
+                Vector3 delta = worldBefore - worldAfter;
+                CurrentPosition += new Vector2(delta.x, delta.y);
+            }
         }
 
         // Dragging with right/middle mouse button
@@ -100,30 +125,32 @@ public class CameraHandler : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.Mouse2)) IsMouseWheelDown = false;
         if (Input.GetKeyDown(KeyCode.Mouse1)) IsRightMouseDown = true;
         if (Input.GetKeyUp(KeyCode.Mouse1)) IsRightMouseDown = false;
-        if (IsMouseWheelDown)
+        if (IsMouseWheelDown && (Input.GetAxis("Mouse X") != 0 || Input.GetAxis("Mouse Y") != 0))
         {
             float speed = DRAG_SPEED * Camera.orthographicSize;
             float canvasScaleFactor = GameObject.Find("Canvas").GetComponent<Canvas>().scaleFactor;
-            transform.position += new Vector3(-Input.GetAxis("Mouse X") * speed / canvasScaleFactor, -Input.GetAxis("Mouse Y") * speed / canvasScaleFactor, 0f);
+            CurrentPosition += new Vector2(-Input.GetAxis("Mouse X") * speed / canvasScaleFactor, -Input.GetAxis("Mouse Y") * speed / canvasScaleFactor);
+            EndPanOrFollow();
         }
 
         // --- Panning with WASD (Shift boost) ---
         float panBoost = (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) ? PAN_SHIFT_MULT : 1f;
-        Vector3 pan = Vector3.zero;
-        if (Input.GetKey(KeyCode.W)) pan += Vector3.up;
-        if (Input.GetKey(KeyCode.S)) pan += Vector3.down;
-        if (Input.GetKey(KeyCode.A)) pan += Vector3.left;
-        if (Input.GetKey(KeyCode.D)) pan += Vector3.right;
+        Vector2 pan = Vector2.zero;
+        if (Input.GetKey(KeyCode.W)) pan += Vector2.up;
+        if (Input.GetKey(KeyCode.S)) pan += Vector2.down;
+        if (Input.GetKey(KeyCode.A)) pan += Vector2.left;
+        if (Input.GetKey(KeyCode.D)) pan += Vector2.right;
 
         if (pan.sqrMagnitude > 0f && !HelperFunctions.IsUiFocussed())
         {
             pan.Normalize();
             float panSpeed = PAN_SPEED * panBoost * Time.deltaTime;
             if (PAN_SPEED_SCALES_WITH_ZOOM) panSpeed *= (Camera.orthographicSize * PAN_SPEED_ZOOM_SCALE_FACTOR);
-            transform.position += pan * panSpeed;
+            CurrentPosition += pan * panSpeed;
+            EndPanOrFollow();
         }
 
-        // --- Left-mouse drag triggers (kept from your original) ---
+        // Drag triggers
         if (Input.GetKeyDown(KeyCode.Mouse0) && !IsLeftMouseDown)
         {
             IsLeftMouseDown = true;
@@ -135,7 +162,7 @@ public class CameraHandler : MonoBehaviour
             OnLeftMouseDragEnd();
         }
 
-        // --- Clamp to bounds (account for current camera size/aspect) ---
+        // Stay in bounds
         ClampToBounds();
     }
 
@@ -146,10 +173,10 @@ public class CameraHandler : MonoBehaviour
         float realMinY = MinY + CameraHeightWorld - 1f;
         float realMaxY = MaxY - CameraHeightWorld + 1f;
 
-        Vector3 p = transform.position;
+        Vector2 p = CurrentPosition;
         p.x = Mathf.Clamp(p.x, realMinX, realMaxX);
         p.y = Mathf.Clamp(p.y, realMinY, realMaxY);
-        transform.position = p;
+        CurrentPosition = p;
     }
 
     public void SetBounds(float minX, float minY, float maxX, float maxY)
@@ -158,9 +185,72 @@ public class CameraHandler : MonoBehaviour
         MinY = minY;
         MaxX = maxX;
         MaxY = maxY;
-        // Optional: snap inside immediately
         ClampToBounds();
     }
+
+    #region Pan & Follow
+
+    public void PanTo(float duration, Vector2 targetPos, Entity postPanFollowEntity = null, System.Action callback = null)
+    {
+        EndPanOrFollow();
+
+        // Init pan
+        IsPanning = true;
+        PanSourcePosition = CurrentPosition;
+        PanTargetPosition = targetPos;
+        PanDuration = duration;
+        PostPanFollowEntity = postPanFollowEntity;
+        PanDelay = 0f;
+        OnPanDoneCallback = callback;
+
+        // Immediately end pan if we are already very close to target position
+        if (Vector2.Distance(CurrentPosition, targetPos) <= 0.1f)
+        {
+            //Debug.Log("Panning camera skipped because it already is at target position");
+            PanDelay = PanDuration;
+        }
+    }
+
+    private void UpdatePanAnimation()
+    {
+        if (IsPanning)
+        {
+            PanDelay += Time.deltaTime;
+
+            if (PanDelay >= PanDuration) // Pan done
+            {
+                CurrentPosition = PanTargetPosition;
+                FollowedEntity = PostPanFollowEntity;
+                IsPanning = false;
+                OnPanDoneCallback?.Invoke();
+            }
+
+            else // Pan in progress
+            {
+                Vector2 target = PanTargetPosition;
+                if (PostPanFollowEntity != null) target = PostPanFollowEntity.CurrentWorldPosition;
+                CurrentPosition = HelperFunctions.SmoothLerp(PanSourcePosition, target, (PanDelay / PanDuration));
+            }
+        }
+    }
+
+    private void UpdateFollow()
+    {
+        if (FollowedEntity != null) CurrentPosition = FollowedEntity.CurrentWorldPosition;
+    }
+
+    public void Unfollow()
+    {
+        FollowedEntity = null;
+    }
+
+    private void EndPanOrFollow()
+    {
+        IsPanning = false;
+        FollowedEntity = null;
+    }
+
+    #endregion
 
     #region Triggers
     protected virtual void OnLeftMouseDragStart() { }

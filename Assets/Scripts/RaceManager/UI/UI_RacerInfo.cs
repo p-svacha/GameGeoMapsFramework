@@ -9,6 +9,20 @@ public class UI_RacerInfo : MonoBehaviour
     [Header("Elements")]
     public TextMeshProUGUI Label;
     public TextMeshProUGUI SpeedText;
+    public UI_ProgressBar StaminaBar;
+    public Button FollowButton;
+
+    private void Awake()
+    {
+        FollowButton.onClick.AddListener(FollowButton_OnClick);
+    }
+
+    private void FollowButton_OnClick()
+    {
+        if (Racer == null) return;
+        CameraHandler.Instance.PanTo(0.5f, Racer.CurrentWorldPosition, postPanFollowEntity: Racer);
+        HelperFunctions.UnfocusNonInputUiElements();
+    }
 
     public void Show(Racer racer)
     {
@@ -16,12 +30,18 @@ public class UI_RacerInfo : MonoBehaviour
         Racer = racer;
         Label.text = racer.Name;
         Label.color = racer.Color;
-        SpeedText.text = (racer.CurrentSpeed * 3.6f).ToString("F2") + " km/h";
+        UpdateDynamicValues();
     }
 
     private void Update()
     {
+        UpdateDynamicValues();
+    }   
+
+    private void UpdateDynamicValues()
+    {
         SpeedText.text = (Racer.CurrentSpeed * 3.6f).ToString("F2") + " km/h";
+        StaminaBar.SetValue(Racer.Stamina, Racer.MAX_STAMINA, ProgressBarTextType.Percent);
     }
 
     public void Hide()

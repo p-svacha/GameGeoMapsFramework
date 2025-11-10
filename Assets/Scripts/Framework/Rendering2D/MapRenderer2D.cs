@@ -396,7 +396,7 @@ public class MapRenderer2D
         e.SelectionIndicator.sprite = ResourceManager.LoadSprite("Sprites/SelectionIndicator");
         e.SelectionIndicator.sortingLayerName = "Entity";
         e.SelectionIndicator.sortingOrder = 10;
-        float selectionIndicatorScale = 1.2f;
+        float selectionIndicatorScale = 2f;
         selIndObj.transform.localScale = new Vector3(ENTITY_DISPLAY_SIZE * selectionIndicatorScale, ENTITY_DISPLAY_SIZE * selectionIndicatorScale, 1f);
         selIndObj.SetActive(false);
     }
