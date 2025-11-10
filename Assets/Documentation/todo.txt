@@ -14,5 +14,6 @@ Editor Features:
  - clicking will create a new point close to the original point and move the selected point feature to it
 
 - Holding ctrl should disable snapping
+	- or maybe even disable snapping by default, and hold ctrl to enable
 
 - add checkbox to mark if a line feature is a bridge => draw it with outline, use for water, crossings over other paths

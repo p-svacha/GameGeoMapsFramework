@@ -389,6 +389,22 @@ public class MapRenderer2D
         e.VisualSprite.color = e.Color;
         e.VisualSprite.sortingLayerName = "Entity";
         spriteObj.transform.localScale = new Vector3(ENTITY_DISPLAY_SIZE, ENTITY_DISPLAY_SIZE, 1f);
+
+        GameObject selIndObj = new GameObject("Selection Indicator");
+        selIndObj.transform.SetParent(e.VisualRoot.transform);
+        e.SelectionIndicator = selIndObj.AddComponent<SpriteRenderer>();
+        e.SelectionIndicator.sprite = ResourceManager.LoadSprite("Sprites/SelectionIndicator");
+        e.SelectionIndicator.sortingLayerName = "Entity";
+        e.SelectionIndicator.sortingOrder = 10;
+        float selectionIndicatorScale = 1.2f;
+        selIndObj.transform.localScale = new Vector3(ENTITY_DISPLAY_SIZE * selectionIndicatorScale, ENTITY_DISPLAY_SIZE * selectionIndicatorScale, 1f);
+        selIndObj.SetActive(false);
+    }
+
+    public void ShowEntityAsSelected(Entity entity, bool value)
+    {
+        entity.SelectionIndicator.gameObject.SetActive(value);
+        entity.VisualSprite.sortingOrder = value ? 1 : 0;
     }
 
     #endregion

@@ -29,6 +29,7 @@ public class Entity
     // Visual Display
     public GameObject VisualRoot;
     public SpriteRenderer VisualSprite;
+    public SpriteRenderer SelectionIndicator;
 
     // World position snapshots for render interpolation
     private Vector2 PrevTickWorldPos;
@@ -167,6 +168,8 @@ public class Entity
     {
         SurfaceSpeedModifiers[surface] = modifier;
     }
+
+    public void ShowAsSelected(bool value) => Map.Renderer2D.ShowEntityAsSelected(this, value);
 
 
     #region Getters

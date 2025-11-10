@@ -121,11 +121,26 @@ public class RaceSimulation : GameLoop
 
         if(Input.GetMouseButtonDown(0))
         {
-            if (MouseHoverInfo.HoveredEntity != null)
-            {
-                UI.RacerInfo.Show(MouseHoverInfo.HoveredEntity as Racer);
-            }
-            else UI.RacerInfo.Hide();
+            SelectRacer(MouseHoverInfo.HoveredEntity as Racer);
+        }
+    }
+
+    public void SelectRacer(Racer racer)
+    {
+        // Deselect previous
+        if (SelectedRacer != null)
+        {
+            SelectedRacer.ShowAsSelected(false);
+            SelectedRacer = null;
+            UI.RacerInfo.Hide();
+        }
+
+        // Select new
+        if (racer != null)
+        {
+            UI.RacerInfo.Show(racer);
+            SelectedRacer = racer;
+            SelectedRacer.ShowAsSelected(true);
         }
     }
 
