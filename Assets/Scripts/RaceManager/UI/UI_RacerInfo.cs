@@ -9,6 +9,7 @@ public class UI_RacerInfo : MonoBehaviour
     [Header("Elements")]
     public TextMeshProUGUI Label;
     public TextMeshProUGUI SpeedText;
+    public TextMeshProUGUI RankText;
     public UI_ProgressBar StaminaBar;
     public Button FollowButton;
 
@@ -41,6 +42,7 @@ public class UI_RacerInfo : MonoBehaviour
     private void UpdateDynamicValues()
     {
         SpeedText.text = (Racer.CurrentSpeed * 3.6f).ToString("F2") + " km/h";
+        RankText.text = $"Current Rank: {Racer.CurrentRank} (distance to fin: {Racer.CurrentDistanceToFinish})";
         StaminaBar.SetValue(Racer.Stamina, Racer.MAX_STAMINA, ProgressBarTextType.Percent);
     }
 

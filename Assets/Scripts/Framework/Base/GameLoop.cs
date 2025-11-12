@@ -18,10 +18,30 @@ public abstract class GameLoop : MonoBehaviour
     public const float TPS = 60f;
 
     /// <summary>
+    /// Seconds per tick.
+    /// </summary>
+    public const float TickDeltaTime = 1f / TPS;
+
+    /// <summary>
+    /// Maximum number of real time delta to be accumulated in a single frame to avoid massive spikes. 
+    /// </summary>
+    public const float MaxDeltaTime = 0.25f;
+
+    /// <summary>
+    /// The maximum nuber of ticks that can be processed in a single frame.
+    /// </summary>
+    public const int MaxTicksPerFrame = 20;
+
+    /// <summary>
+    /// Maximum amount of real-time allowed to be in the accumulator before the real-time gets shed. Used to avoid spiraling tick backlog.
+    /// </summary>
+    public const float MaxAccumulator = TickDeltaTime * MaxTicksPerFrame * 4f;
+
+    /// <summary>
     /// Allows to speed up or slow down the simulation as desired.
     /// For example, 2.0 would run simulation at double speed, 0.5 would run it at half speed.
     /// </summary>
-    public float SimulationSpeed = 1f;
+    public float SimulationSpeed { get; private set; }
 
     /// <summary>
     /// Accumulates real time (scaled by SimulationSpeed) to know when to run ticks.
@@ -32,12 +52,6 @@ public abstract class GameLoop : MonoBehaviour
     /// Keeps track of the last frame's real time (via Time.realtimeSinceStartup).
     /// </summary>
     private float LastFrameTime = 0f;
-
-    /// <summary>
-    /// Derived from TPS. This is how many seconds each discrete simulation tick spans.
-    /// For example, at 60 TPS, each tick is 1/60 = 0.01666... seconds.
-    /// </summary>
-    public const float TickDeltaTime = 1f / TPS;
 
     // ------------------------------------------------------------
     // Unity Lifecycle Methods
@@ -53,6 +67,7 @@ public abstract class GameLoop : MonoBehaviour
         DefDatabaseRegistry.OnLoadingDone();
 
         LastFrameTime = Time.realtimeSinceStartup;
+        SimulationSpeed = 1f;
     }
 
     private void Update()
@@ -65,17 +80,22 @@ public abstract class GameLoop : MonoBehaviour
         float deltaTime = currentFrameTime - LastFrameTime;
         LastFrameTime = currentFrameTime;
 
+        if (deltaTime > MaxDeltaTime) deltaTime = MaxDeltaTime; // Clamp to avoid spikes
+
         // Scale the real time by SimulationSpeed to allow slow-mo or fast-forward effects.
         deltaTime *= SimulationSpeed;
 
         // Accumulate time to know how many discrete ticks we need to simulate.
         Accumulator += deltaTime;
+        if (Accumulator > MaxAccumulator) Accumulator = MaxAccumulator; // Shed excess acumulated time if too much gets accumulated
 
         // Run as many "ticks" as needed to catch up with real time. Multiple ticks may be run in a single frame.
-        while (Accumulator >= TickDeltaTime)
+        int ticksProcessed = 0;
+        while (Accumulator >= TickDeltaTime && ticksProcessed < MaxTicksPerFrame)
         {
             Tick();
             Accumulator -= TickDeltaTime;
+            ticksProcessed++;
         }
 
         // General stuff called every frame
@@ -121,5 +141,6 @@ public abstract class GameLoop : MonoBehaviour
     protected void SetSimulationSpeed(float newSpeed)
     {
         SimulationSpeed = Mathf.Max(0f, newSpeed);
+        Debug.Log($"Setting simulation speed to {newSpeed}.");
     }
 }

@@ -37,6 +37,11 @@ public class NavigationPath
     private GameObject PathPreviewObject;
 
     /// <summary>
+    /// Full length of this path in units / meters.
+    /// </summary>
+    public float Length { get; private set; }
+
+    /// <summary>
     /// Creates a path with the given source node as the starting point and no transitions or target yet.
     /// </summary>
     public NavigationPath(Map map, Point source)
@@ -54,6 +59,8 @@ public class NavigationPath
         Map = map;
         Points = new List<Point>() { transition.From, transition.To };
         Transitions = new List<Transition>() { transition };
+
+        RecalculateLength();
     }
 
     /// <summary>
@@ -67,6 +74,8 @@ public class NavigationPath
 
         Transitions = new List<Transition>();
         Transitions.AddRange(source.Transitions);
+
+        RecalculateLength();
     }
 
     /// <summary>
@@ -77,6 +86,8 @@ public class NavigationPath
         Map = map;
         Points = nodes;
         Transitions = transitions;
+
+        RecalculateLength();
     }
 
     #region Change Path
@@ -90,6 +101,8 @@ public class NavigationPath
 
         Transitions.Add(t);
         Points.Add(t.To);
+
+        Length += t.Length;
     }
 
     /// <summary>
@@ -109,6 +122,8 @@ public class NavigationPath
     {
         if (Transitions.Count != Points.Count) throw new System.Exception("Can't remove first transition if the current starting point of this path is already a node.");
 
+        Length -= Transitions[0].Length;
+
         Transitions.RemoveAt(0);
     }
 
@@ -124,6 +139,11 @@ public class NavigationPath
             RemoveFirstNode();
             RemoveFirstTransition();
         }
+    }
+
+    private void RecalculateLength()
+    {
+        Length = Transitions.Sum(t => t.Length);
     }
 
     #endregion

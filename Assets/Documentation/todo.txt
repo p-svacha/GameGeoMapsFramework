@@ -1,10 +1,37 @@
 ﻿Race Management Game:
 
+
+- add "Remaning Distance" attribute to racer
 - Show current race ranking on the right
 	- sort by distance to target of "general cheapest" path
 - Show current rank in racer info
-- Add own racer to control
+- Add "run modes" affecting speed and stamina drain [walk/stride/jog/run/sprint]
+- stamina at 0 disables all run modes but walk
+- Add own racer to control run mode
+- make it possible to choose route
 
+- add real racer attributes/traits instead of just speed modifiers
+
+- implement rest stop functionality
+
+- render line features wider when passing a zoom threshold to still see them
+- continue new desert area (add zhulang ruins)
+
+
+- race types: Fixed Route, Laps, A -> B (free route), Collect all checkpoints (OL/Dijkstra)
+- race modifers: starting money, transport allowed y/n, shopping allowed y/n, etc.
+
+- hunger
+- weather
+- temperature
+- chance-based events (on line feature attributes, based on weather, stamina, hunger, etc.)
+- injuries
+- equipment
+- money
+- inventory, shops
+- fixed transport routes (trains, ferries that depart at fixed time, pay at each station, when leaving first in first out with small delays)
+
+- tactical layer (overworld)
 
 
 Editor Features:

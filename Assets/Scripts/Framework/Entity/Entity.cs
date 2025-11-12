@@ -17,6 +17,11 @@ public class Entity
     public Color Color { get; private set; }
     public float CurrentSpeed { get; private set; }
 
+    /// <summary>
+    /// The exact tick (including decimal) when this entity has reached its previous target.
+    /// </summary>
+    public float LastArrivalTick { get; private set; }
+
     public float GeneralSpeedModifier = 1f;
     public Dictionary<SurfaceDef, float> SurfaceSpeedModifiers = new Dictionary<SurfaceDef, float>();
 
@@ -77,7 +82,7 @@ public class Entity
         {
             CurrentSpeed = GetSurfaceSpeed(CurrentTransition.LineFeature.Surface);
             float distance = CurrentSpeed * GameLoop.TickDeltaTime; // Get travelled distance this tick in units (meters)
-            MoveDistance(distance);
+            MoveDistance(distance, tickFraction: 1f);
         }
 
         // Save new world position for render interpolation
@@ -98,8 +103,9 @@ public class Entity
 
     /// <summary>
     /// Moves the entity along the current path for the given distance.
+    /// <param name="tickFraction">The fraction of the tick still to move.</param>
     /// </summary>
-    private void MoveDistance(float distance)
+    private void MoveDistance(float distance, float tickFraction)
     {
         float relDistanceOnCurrentTransition = distance / CurrentTransition.Length; // Get relative distance on current transition
         if (CurrentTransitionPositionRelative + relDistanceOnCurrentTransition < 1f)
@@ -112,6 +118,7 @@ public class Entity
             // We will reach end of transition
             float remainingTransitionDistanceRel = 1f - CurrentTransitionPositionRelative;
             float remainingTransitionDistanceAbs = CurrentTransition.Length * remainingTransitionDistanceRel;
+            float remaniningTickFraction = (1f - (remainingTransitionDistanceAbs / distance)) * tickFraction;
 
             // Get the absolute distance we will move after having reached end of current transition
             float distanceAfterTransitionEnd = distance - remainingTransitionDistanceAbs;
@@ -123,7 +130,7 @@ public class Entity
             {
                 CurrentTransition = CurrentPath.Transitions[0];
                 CurrentTransitionPositionRelative = 0f;
-                MoveDistance(distanceAfterTransitionEnd);
+                MoveDistance(distanceAfterTransitionEnd, remaniningTickFraction);
             }
             else
             {
@@ -131,9 +138,16 @@ public class Entity
                 CurrentPath = null;
                 CurrentTransition = null;
                 CurrentTransitionPositionRelative = 0f;
+                OnTargetReached(remaniningTickFraction);
             }
         }
     }
+
+    /// <summary>
+    /// Called when the entity has reached the end of its CurrentPath.
+    /// </summary>
+    /// <param name="remainingTickFraction">Describes the fraction of the tick (where the entity arrived) that was unused.</param>
+    protected virtual void OnTargetReached(float remainingTickFraction) { }
 
     #region Position & Movement
 

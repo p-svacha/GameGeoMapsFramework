@@ -5,13 +5,14 @@ using UnityEngine;
 public class RaceSimulation : GameLoop
 {
     private Map Map;
-    private int Ticks;
+    public int TickNumber { get; private set; }
 
     // private NavigationPath RaceLine;
     private Point RaceStart;
     private Point RaceEnd;
 
     private List<Racer> Racers;
+    private List<Racer> CurrentRanking;
 
     private List<Point> NetworkPoints;
 
@@ -45,23 +46,9 @@ public class RaceSimulation : GameLoop
 
         Racers = new List<Racer>();
 
-        /*
-        Entity testRacer = new Entity(Map, "TestRacer", Color.yellow, RaceStart);
-        Racers.Add(testRacer);
-
-        Entity testRacerSwim = new Entity(Map, "TestRacer", Color.blue, RaceStart);
-        testRacerSwim.SetSurfaceSpeedModififer(SurfaceDefOf.Asphalt, 0.99f);
-        testRacerSwim.SetSurfaceSpeedModififer(SurfaceDefOf.Water, 2f);
-        Racers.Add(testRacerSwim);
-
-        Entity testRacerTrail = new Entity(Map, "Trail", Color.red, RaceStart);
-        testRacerTrail.SetSurfaceSpeedModififer(SurfaceDefOf.Asphalt, 0.985f);
-        testRacerTrail.SetSurfaceSpeedModififer(SurfaceDefOf.Trail, 2f);
-        Racers.Add(testRacerTrail);
-        */
         for(int i = 0; i < 1000; i++)
         {
-            Racer testRacer = new Racer(Map, "TestRacer" + (i + 1), new Color(Random.value, Random.value, Random.value), RaceStart);
+            Racer testRacer = new Racer(this, Map, "TestRacer" + (i + 1), new Color(Random.value, Random.value, Random.value), RaceStart);
             foreach (SurfaceDef surface in DefDatabase<SurfaceDef>.AllDefs) testRacer.SetSurfaceSpeedModififer(surface, Random.Range(0.5f, 3f));
             // testRacer.GeneralSpeedModifier = Random.Range(0.5f, 25f);
             Racers.Add(testRacer);
@@ -74,6 +61,8 @@ public class RaceSimulation : GameLoop
             racer.SetPath(racePath);
         }
 
+        CurrentRanking = new List<Racer>(Racers);
+
         SetSimulationSpeed(1f);
 
         // UI
@@ -84,30 +73,14 @@ public class RaceSimulation : GameLoop
 
     protected override void Tick()
     {
-        Ticks++;
+        TickNumber++;
         Map.Tick();
 
-        foreach (Racer racer in Racers)
+        // Current ranking
+        CurrentRanking = CurrentRanking.OrderBy(r => r.CurrentDistanceToFinish).ToList();
+        for(int i = 0; i < CurrentRanking.Count; i++)
         {
-            if (racer.CurrentPath == null)
-            {
-                // Racer has reached the end
-                if (!racer.IsFinished)
-                {
-                    racer.IsFinished = true;
-                    NumFinishers++;
-                    float time = Ticks * GameLoop.TickDeltaTime;
-                    string timeString = HelperFunctions.GetDurationString(time, includeMilliseconds: true);
-                    Debug.Log($"{racer.Name} has reached the finish on rank {NumFinishers} in {timeString}.");
-                }
-
-                /*
-                // Make racers move randomly around map after having reached target
-                Point newTarget = NetworkPoints.RandomElement();
-                NavigationPath newPath = Pathfinder.GetCheapestPath(Map, racer, racer.Point, newTarget);
-                racer.SetPath(newPath);
-                */
-            }
+            if (!CurrentRanking[i].IsFinished) CurrentRanking[i].CurrentRank = i + 1;
         }
     }
 
@@ -115,8 +88,8 @@ public class RaceSimulation : GameLoop
     {
         Map.UpdateHoverInfo();
 
-        if (Input.GetKey(KeyCode.Period)) SetSimulationSpeed(SimulationSpeed += 1f);
-        if (Input.GetKey(KeyCode.Comma)) SetSimulationSpeed(Mathf.Max(0f, SimulationSpeed -= 1f));
+        if (Input.GetKey(KeyCode.Period)) SetSimulationSpeed(SimulationSpeed + 1f);
+        if (Input.GetKey(KeyCode.Comma)) SetSimulationSpeed(Mathf.Max(0f, SimulationSpeed - 1f));
         if (Input.GetKeyDown(KeyCode.Space)) SetSimulationSpeed(1f);
 
         if(Input.GetMouseButtonDown(0) && !HelperFunctions.IsMouseOverUi())
