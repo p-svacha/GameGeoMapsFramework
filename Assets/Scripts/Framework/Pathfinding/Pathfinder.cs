@@ -85,6 +85,14 @@ public static class Pathfinder
     }
 
     /// <summary>
+    /// Returns the generally cheapest path with default surface costs, independently from an entity.
+    /// </summary>
+    public static NavigationPath GetCheapestPath(Map map, Point from, Point to)
+    {
+        return GetCheapestPath(map, null, from, to);
+    }
+
+    /// <summary>
     /// Returns the cost of going from any one node to any other for a specified entity when taking the cheapest possible path.
     /// </summary>
     public static float GetPathCost(Map map, Entity entity, Point from, Point to, List<LineFeature> forbiddenLineFeatures = null)

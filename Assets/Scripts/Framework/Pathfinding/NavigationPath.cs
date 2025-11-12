@@ -66,16 +66,16 @@ public class NavigationPath
     /// <summary>
     /// Creates a copy of an existing NavigationPath.
     /// </summary>
-    public NavigationPath(Map map,NavigationPath source)
+    public NavigationPath(NavigationPath source)
     {
-        Map = map;
+        Map = source.Map;
         Points = new List<Point>();
         Points.AddRange(source.Points);
 
         Transitions = new List<Transition>();
         Transitions.AddRange(source.Transitions);
 
-        RecalculateLength();
+        Length = source.Length;
     }
 
     /// <summary>
@@ -133,7 +133,7 @@ public class NavigationPath
     /// </summary>
     public void CutEverythingBefore(Point node)
     {
-        if (!Points.Contains(node)) throw new System.Exception($"Can't cut path because {node} is not part of it. Path has {Points.Count} nodes and {Transitions.Count} transitions.");
+        //if (!Points.Contains(node)) throw new System.Exception($"Can't cut path because {node} is not part of it. Path has {Points.Count} nodes and {Transitions.Count} transitions.");
         while(Points[0] != node)
         {
             RemoveFirstNode();

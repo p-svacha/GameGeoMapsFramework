@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 
 public class Racer : Entity
@@ -16,6 +17,18 @@ public class Racer : Entity
 
     // Current values
     public float CurrentStaminaDrain; // Stamina drain per tick
+
+
+    /// <summary>
+    /// The best general (non-entity-specific) path from the current transitions end point to the finish.
+    /// <br/>Used for calculating the CurrentDistanceToFinish to get an intuitive ranking.
+    /// </summary>
+    public NavigationPath BestGeneralPathToFin;
+    /// <summary>
+    /// Flag is true, if the best general path is cheaper from the current transitions start vs the end, 
+    /// meaning the racer is currently moving in the opposite direction of the best general path.
+    /// </summary>
+    public bool BestGeneralPathIsFromTransitionStart;
     public float CurrentDistanceToFinish;
     public int CurrentRank;
 
@@ -23,6 +36,11 @@ public class Racer : Entity
     {
         Race = race;
         Stamina = MAX_STAMINA;
+    }
+
+    public void OnRaceStart()
+    {
+        
     }
 
     protected override void OnTick()
@@ -38,11 +56,40 @@ public class Racer : Entity
 
             ReduceStamina(CurrentStaminaDrain);
 
-            CurrentDistanceToFinish = CurrentPath.Length - (CurrentTransitionPositionRelative * CurrentTransition.Length);
-            // todo: replace current path with best general path (but performant) (calculate from next crossroads and only recalculate when next crossroads changes AND changes differently from calculated path)
-            // todo: maybe needs a more performant pathfinder
-            // with a new NetworkTransition class that sums up all transitions between two crossroads
-            // crossroads would then act as the nodes in this bigger network
+            float distanceLeftOnTransition;
+            // Inverse distance left on current transition if we move in opposite direction of best general path
+            if (BestGeneralPathIsFromTransitionStart) distanceLeftOnTransition = CurrentTransitionPositionRelative * CurrentTransition.Length;
+            else distanceLeftOnTransition = (1f - CurrentTransitionPositionRelative) * CurrentTransition.Length;
+
+            CurrentDistanceToFinish = BestGeneralPathToFin.Length + distanceLeftOnTransition;
+        }
+    }
+
+    protected override void OnTransitionStarted()
+    {
+        // If we just move along the best general path, simply update it to next transition
+        if (BestGeneralPathToFin != null && CurrentTransition == BestGeneralPathToFin.Transitions[1] && !BestGeneralPathIsFromTransitionStart)
+        {
+            BestGeneralPathToFin.CutEverythingBefore(BestGeneralPathToFin.Points[1]);
+        }
+        else
+        {
+            // Else 
+            NavigationPath bestPathFromTransitionStart = Race.GetBestPathToFin(CurrentTransition.From);
+            NavigationPath bestPathFromTransitionEnd = Race.GetBestPathToFin(CurrentTransition.To);
+
+            if (bestPathFromTransitionStart.Length < bestPathFromTransitionEnd.Length)
+            {
+                // We move away from best path
+                BestGeneralPathToFin = bestPathFromTransitionStart;
+                BestGeneralPathIsFromTransitionStart = true;
+            }
+            else
+            {
+                // We move along best path
+                BestGeneralPathToFin = bestPathFromTransitionEnd;
+                BestGeneralPathIsFromTransitionStart = false;
+            }
         }
     }
 

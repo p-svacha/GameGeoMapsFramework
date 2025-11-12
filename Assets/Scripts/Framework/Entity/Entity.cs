@@ -75,6 +75,7 @@ public class Entity
         if (!IsMoving && CurrentPath != null)
         {
             CurrentTransition = CurrentPath.Transitions[0];
+            OnTransitionStarted();
         }
 
         // Move along transition
@@ -126,10 +127,13 @@ public class Entity
             // Update current transition and move further
             CurrentPath.CutEverythingBefore(CurrentPath.Points[1]);
             Point = CurrentPath.Points[0];
-            if(CurrentPath.Transitions.Count > 0)
+            OnTransitionCompleted();
+
+            if (CurrentPath.Transitions.Count > 0)
             {
                 CurrentTransition = CurrentPath.Transitions[0];
                 CurrentTransitionPositionRelative = 0f;
+                OnTransitionStarted();
                 MoveDistance(distanceAfterTransitionEnd, remaniningTickFraction);
             }
             else
@@ -142,12 +146,6 @@ public class Entity
             }
         }
     }
-
-    /// <summary>
-    /// Called when the entity has reached the end of its CurrentPath.
-    /// </summary>
-    /// <param name="remainingTickFraction">Describes the fraction of the tick (where the entity arrived) that was unused.</param>
-    protected virtual void OnTargetReached(float remainingTickFraction) { }
 
     #region Position & Movement
 
@@ -166,7 +164,10 @@ public class Entity
     public void SetPath(NavigationPath path)
     {
         CurrentPath = path;
+        OnPathSet();
     }
+
+    
 
     /// <summary>
     /// Returns the world position of this entity based on its Point, CurrentTransition and CurrentTransitionPositionRelative.
@@ -190,6 +191,32 @@ public class Entity
     }
 
     public void ShowAsSelected(bool value) => Map.Renderer2D.ShowEntityAsSelected(this, value);
+
+    #region Hooks
+
+    /// <summary>
+    /// Called after a new path gets set.
+    /// </summary>
+    protected virtual void OnPathSet() { }
+
+    /// <summary>
+    /// Called every time after the entity has started moving on a new transition.
+    /// </summary>
+    protected virtual void OnTransitionStarted() { }
+
+    /// <summary>
+    /// Called every time after the end of a transition has been reached.
+    /// <br/>When called, the CurrentTransition and CurrentPath are already updated.
+    /// </summary>
+    protected virtual void OnTransitionCompleted() { }
+
+    /// <summary>
+    /// Called after the entity has reached the end of its CurrentPath.
+    /// </summary>
+    /// <param name="remainingTickFraction">Describes the fraction of the tick (where the entity arrived) that was unused.</param>
+    protected virtual void OnTargetReached(float remainingTickFraction) { }
+
+    #endregion
 
 
     #region Getters

@@ -141,6 +141,5 @@ public abstract class GameLoop : MonoBehaviour
     protected void SetSimulationSpeed(float newSpeed)
     {
         SimulationSpeed = Mathf.Max(0f, newSpeed);
-        Debug.Log($"Setting simulation speed to {newSpeed}.");
     }
 }

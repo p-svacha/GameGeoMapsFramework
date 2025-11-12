@@ -18,13 +18,21 @@ public class Transition
         Length = Vector2.Distance(from.Position, to.Position);
     }
 
+    /// <summary>
+    /// Returns the cost of this transition for an entity.
+    /// Entity may be null to get the general cost.
+    /// </summary>
     public float GetCost(Entity e)
     {
         // Base cost
         float cost = Length;
 
         // Surface modifier
-        cost /= e.GetSurfaceSpeed(LineFeature.Def.Surface);
+        float surfaceSpeed;
+        if (e != null) surfaceSpeed = e.GetSurfaceSpeed(LineFeature.Def.Surface);
+        else surfaceSpeed = LineFeature.Def.Surface.DefaultSpeed;
+
+        cost /= surfaceSpeed;
 
         return cost;
     }

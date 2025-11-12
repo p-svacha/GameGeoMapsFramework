@@ -1,7 +1,7 @@
 ﻿Race Management Game:
 
 
-- add "Remaning Distance" attribute to racer
+- crossroads based navigation and BestGeneralPathIsFromTransitionStart
 - Show current race ranking on the right
 	- sort by distance to target of "general cheapest" path
 - Show current rank in racer info

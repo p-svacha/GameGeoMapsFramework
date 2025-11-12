@@ -8,8 +8,8 @@ public class RaceSimulation : GameLoop
     public int TickNumber { get; private set; }
 
     // private NavigationPath RaceLine;
-    private Point RaceStart;
-    private Point RaceEnd;
+    public Point StartPoint { get; private set; }
+    public Point EndPoint { get; private set; }
 
     private List<Racer> Racers;
     private List<Racer> CurrentRanking;
@@ -18,6 +18,9 @@ public class RaceSimulation : GameLoop
 
     int NumFinishers = 0;
 
+    // Path cache
+    private Dictionary<Point, NavigationPath> BestPathsToFin; // Caches the non-entity-specific best paths from specific points to the finish.
+
     // UI
     private Racer SelectedRacer;
     public UI_Race UI;
@@ -25,6 +28,10 @@ public class RaceSimulation : GameLoop
     private void Start()
     {
         DefDatabaseRegistry.AddAllDefs();
+
+        Racers = new List<Racer>();
+        BestPathsToFin = new Dictionary<Point, NavigationPath>();
+
         Map = Map.LoadMap("racingworld");
 
         Map.SetDisplayToViewMode();
@@ -36,19 +43,17 @@ public class RaceSimulation : GameLoop
 
         NetworkPoints = Map.GetNavigationNetworkPointsNoWater();
 
-        RaceStart = NetworkPoints.RandomElement();
-        RaceEnd = NetworkPoints.RandomElement();
+        StartPoint = NetworkPoints.RandomElement();
+        EndPoint = NetworkPoints.RandomElement();
 
-        Map.AddPointFeature(RaceStart, PointFeatureDefOf.Pin, "Start");
-        Map.AddPointFeature(RaceEnd, PointFeatureDefOf.Pin, "End");
+        Map.AddPointFeature(StartPoint, PointFeatureDefOf.Pin, "Start");
+        Map.AddPointFeature(EndPoint, PointFeatureDefOf.Pin, "End");
 
-        CameraHandler.Instance.SetPosition(RaceStart.Position);
-
-        Racers = new List<Racer>();
+        CameraHandler.Instance.SetPosition(StartPoint.Position);
 
         for(int i = 0; i < 1000; i++)
         {
-            Racer testRacer = new Racer(this, Map, "TestRacer" + (i + 1), new Color(Random.value, Random.value, Random.value), RaceStart);
+            Racer testRacer = new Racer(this, Map, "TestRacer" + (i + 1), new Color(Random.value, Random.value, Random.value), StartPoint);
             foreach (SurfaceDef surface in DefDatabase<SurfaceDef>.AllDefs) testRacer.SetSurfaceSpeedModififer(surface, Random.Range(0.5f, 3f));
             // testRacer.GeneralSpeedModifier = Random.Range(0.5f, 25f);
             Racers.Add(testRacer);
@@ -57,7 +62,7 @@ public class RaceSimulation : GameLoop
 
         foreach (Racer racer in Racers)
         {
-            NavigationPath racePath = Pathfinder.GetCheapestPath(Map, racer, RaceStart, RaceEnd);
+            NavigationPath racePath = Pathfinder.GetCheapestPath(Map, racer, StartPoint, EndPoint);
             racer.SetPath(racePath);
         }
 
@@ -67,6 +72,28 @@ public class RaceSimulation : GameLoop
 
         // UI
         UI.RacerInfo.Hide();
+
+        // Immediately start
+        StartRace();
+    }
+
+    public void StartRace()
+    {
+        foreach (Racer racer in Racers) racer.OnRaceStart();
+    }
+
+    /// <summary>
+    /// Returns the general (non-entity-specific) cheapest path from any point to the race finish.
+    /// <br/>Caches every path ever queried for performance.
+    /// </summary>
+    public NavigationPath GetBestPathToFin(Point from)
+    {
+        // Check cache
+        if (BestPathsToFin.ContainsKey(from)) return new NavigationPath(BestPathsToFin[from]);
+
+        NavigationPath bestPath = Pathfinder.GetCheapestPath(Map, from, EndPoint);
+        BestPathsToFin[from] = bestPath;
+        return bestPath;
     }
 
     #region Loop
@@ -90,7 +117,11 @@ public class RaceSimulation : GameLoop
 
         if (Input.GetKey(KeyCode.Period)) SetSimulationSpeed(SimulationSpeed + 1f);
         if (Input.GetKey(KeyCode.Comma)) SetSimulationSpeed(Mathf.Max(0f, SimulationSpeed - 1f));
-        if (Input.GetKeyDown(KeyCode.Space)) SetSimulationSpeed(1f);
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (SimulationSpeed > 0f) SetSimulationSpeed(0f); // Pause
+            else SetSimulationSpeed(1f); // Unpause
+        }
 
         if(Input.GetMouseButtonDown(0) && !HelperFunctions.IsMouseOverUi())
         {
