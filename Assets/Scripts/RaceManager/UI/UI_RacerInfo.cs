@@ -24,7 +24,7 @@ public class UI_RacerInfo : MonoBehaviour
     private void FollowButton_OnClick()
     {
         if (Racer == null) return;
-        CameraHandler.Instance.PanTo(0.5f, Racer.CurrentWorldPosition, postPanFollowEntity: Racer);
+        Racer.Race.PanToAndFollowRacer(Racer);
         HelperFunctions.UnfocusNonInputUiElements();
     }
 

@@ -11,8 +11,8 @@ public class RaceSimulation : GameLoop
     public Point StartPoint { get; private set; }
     public Point EndPoint { get; private set; }
 
-    private List<Racer> Racers;
-    private List<Racer> CurrentRanking;
+    public List<Racer> Racers;
+    public List<Racer> Standings; // Current in-race standings
 
     private List<Point> NetworkPoints;
 
@@ -66,11 +66,12 @@ public class RaceSimulation : GameLoop
             racer.SetPath(racePath);
         }
 
-        CurrentRanking = new List<Racer>(Racers);
+        Standings = new List<Racer>(Racers);
 
         SetSimulationSpeed(1f);
 
         // UI
+        UI.Init(this);
         UI.RacerInfo.Hide();
 
         // Immediately start
@@ -104,10 +105,10 @@ public class RaceSimulation : GameLoop
         Map.Tick();
 
         // Current ranking
-        CurrentRanking = CurrentRanking.OrderBy(r => r.CurrentDistanceToFinish).ToList();
-        for(int i = 0; i < CurrentRanking.Count; i++)
+        Standings = Standings.OrderBy(r => r.CurrentDistanceToFinish).ToList();
+        for(int i = 0; i < Standings.Count; i++)
         {
-            if (!CurrentRanking[i].IsFinished) CurrentRanking[i].CurrentRank = i + 1;
+            if (!Standings[i].IsFinished) Standings[i].CurrentRank = i + 1;
         }
     }
 
@@ -134,7 +135,7 @@ public class RaceSimulation : GameLoop
         // Deselect previous
         if (SelectedRacer != null)
         {
-            SelectedRacer.ShowAsSelected(false);
+            ShowRacerAsSelected(SelectedRacer, false);
             SelectedRacer = null;
             UI.RacerInfo.Hide();
         }
@@ -144,7 +145,7 @@ public class RaceSimulation : GameLoop
         {
             UI.RacerInfo.Show(racer);
             SelectedRacer = racer;
-            SelectedRacer.ShowAsSelected(true);
+            ShowRacerAsSelected(SelectedRacer, true);
         }
     }
 
@@ -156,7 +157,18 @@ public class RaceSimulation : GameLoop
     }
 
 
-    
+
 
     #endregion
+
+    private void ShowRacerAsSelected(Racer racer, bool value)
+    {
+        UI.Standings.ShowRacerAsSelected(racer, value);
+        racer.ShowAsSelected(value);
+    }
+    
+    public void PanToAndFollowRacer(Racer racer)
+    {
+        CameraHandler.Instance.PanTo(racer.CurrentWorldPosition, postPanFollowEntity: racer);
+    }
 }

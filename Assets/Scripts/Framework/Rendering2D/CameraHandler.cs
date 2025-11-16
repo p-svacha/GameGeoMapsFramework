@@ -190,7 +190,7 @@ public class CameraHandler : MonoBehaviour
 
     #region Pan & Follow
 
-    public void PanTo(float duration, Vector2 targetPos, Entity postPanFollowEntity = null, System.Action callback = null)
+    public void PanTo(Vector2 targetPos, float duration = 0.5f, Entity postPanFollowEntity = null, System.Action callback = null)
     {
         EndPanOrFollow();
 

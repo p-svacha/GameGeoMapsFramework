@@ -61,19 +61,32 @@ public class Racer : Entity
             if (BestGeneralPathIsFromTransitionStart) distanceLeftOnTransition = CurrentTransitionPositionRelative * CurrentTransition.Length;
             else distanceLeftOnTransition = (1f - CurrentTransitionPositionRelative) * CurrentTransition.Length;
 
-            CurrentDistanceToFinish = BestGeneralPathToFin.Length + distanceLeftOnTransition;
+            float bestPathLength = BestGeneralPathToFin != null ? BestGeneralPathToFin.Length : 0f;
+
+            CurrentDistanceToFinish = bestPathLength + distanceLeftOnTransition;
         }
     }
 
     protected override void OnTransitionStarted()
     {
         // If we just move along the best general path, simply update it to next transition
-        if (BestGeneralPathToFin != null && CurrentTransition == BestGeneralPathToFin.Transitions[1] && !BestGeneralPathIsFromTransitionStart)
+        if (BestGeneralPathToFin != null && BestGeneralPathToFin.Transitions.Count > 1 && CurrentTransition == BestGeneralPathToFin.Transitions[1] && !BestGeneralPathIsFromTransitionStart)
         {
             BestGeneralPathToFin.CutEverythingBefore(BestGeneralPathToFin.Points[1]);
         }
         else
         {
+            if (Race.EndPoint == CurrentTransition.From) throw new System.Exception("Why are me moving away from the race end point? This should never happen.");
+
+            // No path needed if we are on final transition
+            if (Race.EndPoint == CurrentTransition.To)
+            {
+                BestGeneralPathIsFromTransitionStart = false;
+                BestGeneralPathToFin = null;
+                return;
+            }
+
+
             // Else 
             NavigationPath bestPathFromTransitionStart = Race.GetBestPathToFin(CurrentTransition.From);
             NavigationPath bestPathFromTransitionEnd = Race.GetBestPathToFin(CurrentTransition.To);

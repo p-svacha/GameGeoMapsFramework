@@ -1,14 +1,18 @@
 ﻿Race Management Game:
 
-
-- crossroads based navigation and BestGeneralPathIsFromTransitionStart
 - Show current race ranking on the right
 	- sort by distance to target of "general cheapest" path
-- Show current rank in racer info
 - Add "run modes" affecting speed and stamina drain [walk/stride/jog/run/sprint]
 - stamina at 0 disables all run modes but walk
 - Add own racer to control run mode
 - make it possible to choose route
+
+- crossroads based pathfinding:
+	create higher layer network where crossroad points are the nodes and the combined transitions between crossroads are edges
+	for pathfinding, first calculate both path costs from current point to the next crossroad in both direction
+	then do the same for the finish point
+	then search cheapest paths StartCrossroad1 -> EndCrossroad1, StartCrossroad2 -> EndCrossroad1, StartCrossroad1 -> EndCrossroad2, StartCrossroad2 -> EndCrossroad2
+	combine these elements to find cheapest path
 
 - add real racer attributes/traits instead of just speed modifiers
 
