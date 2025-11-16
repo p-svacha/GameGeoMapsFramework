@@ -2,9 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 /// <summary>
 /// An entity represents a moving actor whose position is always somewhere on the LineFeature network graph.
@@ -22,8 +22,9 @@ public class Entity
     /// </summary>
     public float LastArrivalTick { get; private set; }
 
-    public float GeneralSpeedModifier = 1f;
-    public Dictionary<SurfaceDef, float> SurfaceSpeedModifiers = new Dictionary<SurfaceDef, float>();
+    // Attributes & Stats
+    protected Dictionary<AttributeDef, Attribute> Attributes = new Dictionary<AttributeDef, Attribute>();
+    protected Dictionary<StatDef, Stat> Stats = new Dictionary<StatDef, Stat>();
 
     // Position & Movement
     public Point Point; // The point the entity has last visited. If CurrentTransition is null or CurrentTransitionPosition is 0, the entity is exactly on this point.
@@ -93,6 +94,9 @@ public class Entity
     }
 
     protected virtual void OnTick() { }
+
+    public void SetAttributeValue(AttributeDef def, float value) => Attributes[def].Value = value;
+    public void ModifyAttributeValue(AttributeDef def, float value) => Attributes[def].Value += value;
 
     /// <summary>
     /// Called every frame.
@@ -185,11 +189,6 @@ public class Entity
 
     #endregion
 
-    public void SetSurfaceSpeedModififer(SurfaceDef surface, float modifier)
-    {
-        SurfaceSpeedModifiers[surface] = modifier;
-    }
-
     public void ShowAsSelected(bool value) => Map.Renderer2D.ShowEntityAsSelected(this, value);
 
     #region Hooks
@@ -223,22 +222,19 @@ public class Entity
 
     public virtual float GetCurrentSpeed()
     {
-        return GetSurfaceSpeed(CurrentTransition.LineFeature.Surface);
+        return CurrentSurface.DefaultSpeed;
     }
 
     /// <summary>
-    /// Returns this entity's speed in units per second on the given surface.
+    /// Cost modifier of traveling on the given surface used in pathfinding.
     /// </summary>
-    public float GetSurfaceSpeed(SurfaceDef surface)
+    public virtual float GetSurfaceCostModifier(SurfaceDef surface)
     {
-        return surface.DefaultSpeed * GetSurfaceSpeedModifier(surface) * GeneralSpeedModifier;
+        return 1f / CurrentSurface.DefaultSpeed;
     }
 
-    private float GetSurfaceSpeedModifier(SurfaceDef surface)
-    {
-        if (SurfaceSpeedModifiers.TryGetValue(surface, out float modifier)) return modifier;
-        else return 1.0f;
-    }
+    public float GetAttribute(AttributeDef def) => Attributes[def].Value;
+    public float GetStat(StatDef def) => Stats[def].GetValue();
 
     #endregion
 }

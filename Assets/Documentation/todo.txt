@@ -1,15 +1,7 @@
-﻿Race Management Game:
+﻿######### RACE MANAGEMENT GAME
 
 - Add own racer to control run mode
 - make it possible to choose route
-
-- crossroads based pathfinding:
-	create higher layer network where crossroad points are the nodes and the combined transitions between crossroads are edges
-	for pathfinding, first calculate both path costs from current point to the next crossroad in both direction
-	then do the same for the finish point
-	then search cheapest paths StartCrossroad1 -> EndCrossroad1, StartCrossroad2 -> EndCrossroad1, StartCrossroad1 -> EndCrossroad2, StartCrossroad2 -> EndCrossroad2
-		disallow going in direction where we came from at first crossroads
-	combine these elements to find cheapest path
 
 - add real racer attributes/traits instead of just speed modifiers
 
@@ -18,6 +10,7 @@
 - render line features wider when passing a zoom threshold to still see them
 - continue new desert area (add zhulang ruins)
 
+- new attribute affecting sprint speed
 
 - race types: Fixed Route, Laps, A -> B (free route), Collect all checkpoints (OL/Dijkstra)
 - race modifers: starting money, transport allowed y/n, shopping allowed y/n, etc.
@@ -35,7 +28,7 @@
 - tactical layer (overworld)
 
 
-Editor Features:
+######### EDITOR
 
 - add action in edit point feature tool "detach"
  - available if feature point is connected to other features
@@ -45,3 +38,29 @@ Editor Features:
 	- or maybe even disable snapping by default, and hold ctrl to enable
 
 - add checkbox to mark if a line feature is a bridge => draw it with outline, use for water, crossings over other paths
+
+- support elevation
+
+
+######### FRAMEWORK
+
+- proper elevation
+	- 2 new int attributes "StartElevation" and "EndElevation" for line features
+	- from these 2 the slope of the line feature is calculated
+	- slope is the same on every point on a line feature (gets calculated and stored at same points as length)
+	- make it clear which one is the start point and which one the end point
+	- add buttons "jump to start point", "jump to end point" to actions
+	- when loading a map, give warning when a point is connected to two line features but with different elevation at that point
+		- better even, show red exclamation mark in editor
+	- visually just handled with area features
+	- maybe add new "visual line features" like contour lines which may connect to self
+		- use for contour lines: do a 0m contour where elevation starts, and 100m where it ends and only use 100m increments in elevations
+		- and then just use the mountain area defs at rly high elevations (500m intervals maybe)
+
+- crossroads based pathfinding:
+	create higher layer network where crossroad points are the nodes and the combined transitions between crossroads are edges
+	for pathfinding, first calculate both path costs from current point to the next crossroad in both direction
+	then do the same for the finish point
+	then search cheapest paths StartCrossroad1 -> EndCrossroad1, StartCrossroad2 -> EndCrossroad1, StartCrossroad1 -> EndCrossroad2, StartCrossroad2 -> EndCrossroad2
+		disallow going in direction where we came from at first crossroads
+	combine these elements to find cheapest path

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Profiling;
@@ -46,10 +47,27 @@ public class Racer : Entity
     public float CurrentTimeGapToRacerInFront => CurrentDistanceToRacerInFront / CurrentSpeed; // In seconds (takes speed of this raceras reference speed)
     public float CurrentTimeGapToRacerInBack => CurrentDistanceToRacerInBack / CurrentSpeed; // In seconds (takes speed of this raceras reference speed)
 
+    // Test attributes
+    public float GeneralSpeedModifier = 1f;
+    public Dictionary<SurfaceDef, float> SurfaceSpeedModifiers = new Dictionary<SurfaceDef, float>();
+
     public Racer(RaceSimulation race, Map map, string name, Color color, Point p) : base(map, name, color, p)
     {
         Race = race;
         Stamina = MAX_STAMINA;
+
+        InitAttributes();
+        InitStats();
+    }
+
+    private void InitAttributes()
+    {
+        Attributes = new Dictionary<AttributeDef, Attribute>();
+    }
+
+    private void InitStats()
+    {
+        Stats = new Dictionary<StatDef, Stat>();
     }
 
     /// <summary>
@@ -62,9 +80,28 @@ public class Racer : Entity
 
     public override float GetCurrentSpeed()
     {
-        float speed = base.GetCurrentSpeed();
+        float speed = GetSurfaceSpeed(CurrentSurface); ;
         speed *= CurrentMovementMode.SpeedModifier;
         return speed;
+    }
+
+    public override float GetSurfaceCostModifier(SurfaceDef surface)
+    {
+        return 1f / GetSurfaceSpeed(surface);
+    }
+
+    private float GetSurfaceSpeed(SurfaceDef surface)
+    {
+        float speed = surface.DefaultSpeed;
+        speed *= GeneralSpeedModifier;
+        speed *= GetSurfaceSpeedModifier(surface);
+        return speed;
+    }
+
+    private float GetSurfaceSpeedModifier(SurfaceDef surface)
+    {
+        if (SurfaceSpeedModifiers.TryGetValue(surface, out float modifier)) return modifier;
+        else return 1.0f;
     }
 
     protected override void OnTick()
@@ -72,7 +109,7 @@ public class Racer : Entity
         CurrentStaminaDrain = 0f;
 
         // Change movement mode randomly
-        if (Random.value < 0.0002f)
+        if (Random.value < 0.0001f)
         {
             CurrentMovementMode = DefDatabase<MovementModeDef>.AllDefs.RandomElement();
         }

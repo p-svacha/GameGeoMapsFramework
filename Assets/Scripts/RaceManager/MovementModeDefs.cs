@@ -26,7 +26,7 @@ public static class MovementModeDefs
             Color = new Color(0.5f, 0.72f, 0.33f),
             Char = 'P',
             SpeedModifier = 0.7f,
-            StaminaDrainModifier = 0.7f,
+            StaminaDrainModifier = 0.5f,
         },
 
         new MovementModeDef()

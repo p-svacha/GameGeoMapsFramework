@@ -29,6 +29,8 @@ public class RaceSimulation : GameLoop
     protected override void AddAdditionalDefs()
     {
         DefDatabase<MovementModeDef>.AddDefs(MovementModeDefs.Defs);
+        DefDatabase<AttributeDef>.AddDefs(AttributeDefs.Defs);
+        DefDatabase<StatDef>.AddDefs(StatDefs.Defs);
     }
 
     private void Start()
@@ -58,7 +60,7 @@ public class RaceSimulation : GameLoop
         for(int i = 0; i < 1000; i++)
         {
             Racer testRacer = new Racer(this, Map, "TestRacer" + (i + 1), new Color(Random.value, Random.value, Random.value), StartPoint);
-            foreach (SurfaceDef surface in DefDatabase<SurfaceDef>.AllDefs) testRacer.SetSurfaceSpeedModififer(surface, Random.Range(0.5f, 3f));
+            foreach (SurfaceDef surface in DefDatabase<SurfaceDef>.AllDefs) testRacer.SurfaceSpeedModifiers[surface] = Random.Range(0.5f, 3f);
             // testRacer.GeneralSpeedModifier = Random.Range(0.5f, 25f);
             Racers.Add(testRacer);
             Map.RegisterEntity(testRacer);

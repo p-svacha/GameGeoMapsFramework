@@ -34,10 +34,12 @@ public class UI_RacerInfo : MonoBehaviour
 
     private void RankToBeforeButton_OnClick()
     {
+        if (CameraHandler.Instance.FollowedEntity == Racer) Racer.Race.PanToAndFollowRacer(Racer.CurrentRacerInFront); // Change follow if currently following this
         Racer.Race.SelectRacer(Racer.CurrentRacerInFront);
     }
     private void RankToAfterButton_OnClick()
     {
+        if (CameraHandler.Instance.FollowedEntity == Racer) Racer.Race.PanToAndFollowRacer(Racer.CurrentRacerInBack); // Change follow if currently following this
         Racer.Race.SelectRacer(Racer.CurrentRacerInBack);
     }
 

@@ -13,8 +13,8 @@
     },
     {
       "Id": 3,
-      "X": 19985.793,
-      "Y": -19989.4727
+      "X": 20003.3086,
+      "Y": -20000.9258
     },
     {
       "Id": 4,
@@ -34553,7 +34553,7 @@
     },
     {
       "Id": 7063,
-      "X": 20006.9512,
+      "X": 19967.4961,
       "Y": 23.48877
     },
     {
@@ -44707,7 +44707,7 @@
     },
     {
       "Id": 331,
-      "DefName": "MountainHigh",
+      "DefName": "Mountain2",
       "PointIds": [
         5804,
         5805,
@@ -44814,7 +44814,7 @@
     },
     {
       "Id": 337,
-      "DefName": "MountainHigh",
+      "DefName": "Mountain2",
       "PointIds": [
         5877,
         5878,
@@ -44840,7 +44840,7 @@
     },
     {
       "Id": 338,
-      "DefName": "MountainHigh",
+      "DefName": "Mountain2",
       "PointIds": [
         5896,
         5897,
@@ -44861,7 +44861,7 @@
     },
     {
       "Id": 339,
-      "DefName": "MountainHigh",
+      "DefName": "Mountain2",
       "PointIds": [
         5910,
         5911,
@@ -45003,7 +45003,7 @@
     },
     {
       "Id": 342,
-      "DefName": "MountainHigh",
+      "DefName": "Mountain2",
       "PointIds": [
         6335,
         6336,
@@ -46083,6 +46083,7 @@
       "DefName": "DesertSand",
       "PointIds": [
         7062,
+        6956,
         7063,
         7064,
         7060

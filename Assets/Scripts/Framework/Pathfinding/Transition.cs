@@ -24,15 +24,15 @@ public class Transition
     /// </summary>
     public float GetCost(Entity e)
     {
-        // Base cost
+        // Base cost is length
         float cost = Length;
 
         // Surface modifier
-        float surfaceSpeed;
-        if (e != null) surfaceSpeed = e.GetSurfaceSpeed(LineFeature.Def.Surface);
-        else surfaceSpeed = LineFeature.Def.Surface.DefaultSpeed;
+        float surfaceCostModifier;
+        if (e != null) surfaceCostModifier = e.GetSurfaceCostModifier(LineFeature.Def.Surface);
+        else surfaceCostModifier = (1f / LineFeature.Def.Surface.DefaultSpeed);
 
-        cost /= surfaceSpeed;
+        cost *= surfaceCostModifier;
 
         return cost;
     }

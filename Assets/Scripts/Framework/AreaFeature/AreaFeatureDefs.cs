@@ -59,22 +59,6 @@ public static class AreaFeatureDefs
 
         new AreaFeatureDef()
         {
-            DefName = "Mountain",
-            Label = "mountain",
-            Description = "Mountaneous terrain.",
-            Color = new Color(0.921f, 0.913f, 0.898f),
-        },
-
-        new AreaFeatureDef()
-        {
-            DefName = "MountainHigh",
-            Label = "high mountain",
-            Description = "High mountaneous terrain.",
-            Color = new Color(0.851f, 0.843f, 0.828f),
-        },
-
-        new AreaFeatureDef()
-        {
             DefName = "DesertSand",
             Label = "desert",
             Description = "Desert.",
@@ -87,6 +71,22 @@ public static class AreaFeatureDefs
             Label = "rocky desert",
             Description = "Rocky desert.",
             Color = new Color(0.949f, 0.906f, 0.831f),
+        },
+
+        new AreaFeatureDef()
+        {
+            DefName = "Mountain",
+            Label = "mountain",
+            Description = "Mountaneous terrain.",
+            Color = new Color(0.921f, 0.913f, 0.898f),
+        },
+
+        new AreaFeatureDef()
+        {
+            DefName = "Mountain2",
+            Label = "high mountain",
+            Description = "High mountaneous terrain.",
+            Color = new Color(0.851f, 0.843f, 0.828f),
         },
     };
 }
