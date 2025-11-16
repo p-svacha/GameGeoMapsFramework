@@ -191,7 +191,7 @@ public class PathfindingTool : EditorTool
 
             if (path != null)
             {
-                EntityRows[e].PathCostText.text = path.GetCostAsTimeString(e);
+                EntityRows[e].PathCostText.text = path.GetCost(e).GetAsDuration();
             }
 
             ShowPathPreviewFor(e);

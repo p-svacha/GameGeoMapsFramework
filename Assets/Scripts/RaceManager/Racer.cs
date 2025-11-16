@@ -32,16 +32,25 @@ public class Racer : Entity
     public float CurrentDistanceToFinish;
     public int CurrentRank;
 
+    public Racer CurrentRacerInFront;
+    public Racer CurrentRacerInBack;
+
+    public float CurrentDistanceToRacerInFront => CurrentDistanceToFinish - CurrentRacerInFront.CurrentDistanceToFinish; // In meters
+    public float CurrentDistanceToRacerInBack => CurrentRacerInBack.CurrentDistanceToFinish - CurrentDistanceToFinish; // In meters
+
+    public float CurrentTimeGapToRacerInFront => CurrentDistanceToRacerInFront / CurrentSpeed; // In seconds (takes speed of this raceras reference speed)
+    public float CurrentTimeGapToRacerInBack => CurrentDistanceToRacerInBack / CurrentSpeed; // In seconds (takes speed of this raceras reference speed)
+
     public Racer(RaceSimulation race, Map map, string name, Color color, Point p) : base(map, name, color, p)
     {
         Race = race;
         Stamina = MAX_STAMINA;
     }
 
-    public void OnRaceStart()
-    {
-        
-    }
+    /// <summary>
+    /// Called when the race starts.
+    /// </summary>
+    public void OnRaceStart() { }
 
     protected override void OnTick()
     {
@@ -112,7 +121,7 @@ public class Racer : Entity
         FinishTick = Race.TickNumber - remainingTickFraction;
         FinishTime = FinishTick * GameLoop.TickDeltaTime;
         FinishRank = CurrentRank;
-        string timeString = HelperFunctions.GetDurationString(FinishTime, includeMilliseconds: true);
+        string timeString = FinishTime.GetAsDuration(millisecondDigits: 3);
         Debug.Log($"{Name} has reached the finish on rank {FinishRank} in {timeString}.");
     }
 

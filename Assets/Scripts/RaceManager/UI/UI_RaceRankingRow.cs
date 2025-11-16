@@ -24,11 +24,12 @@ public class UI_RaceRankingRow : MonoBehaviour
     {
         Button.onClick.AddListener(OnClick);
         Racer = racer;
-        UpdateValues();
     }
 
     private void OnClick()
     {
+        HelperFunctions.UnfocusNonInputUiElements();
+
         float now = Time.unscaledTime;
 
         if (now - LastClickTime <= DoubleClickMaxDelay)
@@ -55,7 +56,16 @@ public class UI_RaceRankingRow : MonoBehaviour
         RankText.text = Racer.CurrentRank + ".";
         NameText.text = Racer.Name;
         StaminaBar.SetValue(Racer.Stamina, Racer.MAX_STAMINA, ProgressBarTextType.NoText);
-        GapText.text = "-";
+
+        // Gap
+        if(Racer.IsFinished)
+        {
+            GapText.text = "Finished";
+        }
+        else
+        {
+            GapText.text = Racer.CurrentRank == 1 ? "-" : "+" + Racer.CurrentTimeGapToRacerInFront.GetAsDuration(millisecondDigits: 1);
+        }
     }
 
     public void ShowAsSelected(bool value)

@@ -109,6 +109,8 @@ public class RaceSimulation : GameLoop
         for(int i = 0; i < Standings.Count; i++)
         {
             if (!Standings[i].IsFinished) Standings[i].CurrentRank = i + 1;
+            Standings[i].CurrentRacerInFront = i > 0 ? Standings[i - 1] : null;
+            Standings[i].CurrentRacerInBack = i < Standings.Count - 1 ? Standings[i + 1] : null;
         }
     }
 

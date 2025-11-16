@@ -1,7 +1,5 @@
 ﻿Race Management Game:
 
-- Show current race ranking on the right
-	- sort by distance to target of "general cheapest" path
 - Add "run modes" affecting speed and stamina drain [walk/stride/jog/run/sprint]
 - stamina at 0 disables all run modes but walk
 - Add own racer to control run mode

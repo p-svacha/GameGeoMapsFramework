@@ -160,12 +160,6 @@ public class NavigationPath
         return Transitions.Sum(t => t.GetCost(entity));
     }
 
-    public string GetCostAsTimeString(Entity entity)
-    {
-        float seconds = GetCost(entity);
-        return HelperFunctions.GetDurationString(seconds);
-    }
-
     /// <summary>
     /// Returns if this is a path from one node to another one in a single transition.
     /// </summary>
