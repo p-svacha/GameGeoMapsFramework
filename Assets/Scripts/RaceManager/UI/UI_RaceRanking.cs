@@ -12,22 +12,19 @@ public class UI_RaceRanking : MonoBehaviour
     [Header("Prefabs")]
     public UI_RaceRankingRow RowPrefab;
 
-    private Dictionary<Racer, UI_RaceRankingRow> Rows;
-    private List<Racer> ShownRacers;
+    private List<UI_RaceRankingRow> Rows;
     
     public void Init(RaceSimulation race)
     {
         HelperFunctions.DestroyAllChildredImmediately(Container);
 
         Race = race;
-        Rows = new Dictionary<Racer, UI_RaceRankingRow>();
-        ShownRacers = new List<Racer>();
-        foreach(Racer racer in Race.Racers)
+        Rows = new List<UI_RaceRankingRow>();
+        for (int i = 0; i < 20; i++)
         {
             UI_RaceRankingRow elem = GameObject.Instantiate(RowPrefab, Container.transform);
-            elem.Init(racer);
-            Rows[racer] = elem;
-            elem.gameObject.SetActive(false);
+            elem.Init();
+            Rows.Add(elem);
         }
     }
 
@@ -36,27 +33,12 @@ public class UI_RaceRanking : MonoBehaviour
     /// </summary>
     public void UpdateStandings(RaceSimulation race)
     {
-        // Hide 
-        foreach (Racer racer in ShownRacers)
-        {
-            if (racer.CurrentRank > NUM_ROWS) Rows[racer].gameObject.SetActive(false);
-        }
-        ShownRacers.Clear();
-        
         // Show
         for (int i = 0; i < 20; i++)
         {
             Racer racer = race.Standings[i];
-            if (!Rows[racer].gameObject.activeSelf) Rows[racer].gameObject.SetActive(true);
-            Rows[racer].UpdateValues();
-            Rows[racer].transform.SetSiblingIndex(i);
-
-            ShownRacers.Add(racer);
+            Rows[i].UpdateValues(racer);
+            Rows[i].ShowAsSelected(Race.SelectedRacer == racer);
         }
-    }
-
-    public void ShowRacerAsSelected(Racer racer, bool value)
-    {
-        Rows[racer].ShowAsSelected(value);
     }
 }

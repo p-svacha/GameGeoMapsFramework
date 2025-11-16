@@ -63,12 +63,15 @@ public abstract class GameLoop : MonoBehaviour
 
         ResourceManager.ClearCache();
         DefDatabaseRegistry.AddAllDefs();
+        AddAdditionalDefs();
         DefDatabaseRegistry.ResolveAllReferences();
         DefDatabaseRegistry.OnLoadingDone();
 
         LastFrameTime = Time.realtimeSinceStartup;
         SimulationSpeed = 1f;
     }
+
+    protected abstract void AddAdditionalDefs();
 
     private void Update()
     {

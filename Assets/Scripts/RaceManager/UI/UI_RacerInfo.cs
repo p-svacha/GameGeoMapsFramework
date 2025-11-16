@@ -9,7 +9,16 @@ public class UI_RacerInfo : MonoBehaviour
     [Header("Elements")]
     public TextMeshProUGUI Label;
     public TextMeshProUGUI SpeedText;
+
+    public Button RankBeforeButton;
+    public TextMeshProUGUI RankBeforeText;
+    public TextMeshProUGUI GapToBeforeText;
     public TextMeshProUGUI RankText;
+    public TextMeshProUGUI GapToAfterText;
+    public TextMeshProUGUI RankAfterText;
+    public Button RankAfterButton;
+
+
     public UI_ProgressBar StaminaBar;
     public Button FollowButton;
 
@@ -19,6 +28,17 @@ public class UI_RacerInfo : MonoBehaviour
     private void Awake()
     {
         FollowButton.onClick.AddListener(FollowButton_OnClick);
+        RankBeforeButton.onClick.AddListener(RankToBeforeButton_OnClick);
+        RankAfterButton.onClick.AddListener(RankToAfterButton_OnClick);
+    }
+
+    private void RankToBeforeButton_OnClick()
+    {
+        Racer.Race.SelectRacer(Racer.CurrentRacerInFront);
+    }
+    private void RankToAfterButton_OnClick()
+    {
+        Racer.Race.SelectRacer(Racer.CurrentRacerInBack);
     }
 
     private void FollowButton_OnClick()
@@ -53,9 +73,37 @@ public class UI_RacerInfo : MonoBehaviour
 
     private void UpdateDynamicValues()
     {
-        SpeedText.text = (Racer.CurrentSpeed * 3.6f).ToString("F2") + " km/h";
-        string rev = Racer.BestGeneralPathIsFromTransitionStart ? " <rev> " : "";
-        RankText.text = $"Current Rank: {Racer.CurrentRank} (distance to fin: {Racer.CurrentDistanceToFinish.ToString("F1")}{rev})";
+        SpeedText.text = $"{(Racer.CurrentSpeed * 3.6f).ToString("F2")}  km/h ({Racer.CurrentMovementMode.Verb})";
+
+        // Before
+        if(Racer.IsCurrentlyFirst() || Racer.IsFinished)
+        {
+            if (RankBeforeButton.gameObject.activeSelf) RankBeforeButton.gameObject.SetActive(false);
+            GapToBeforeText.text = "";
+        }
+        else
+        {
+            if (!RankBeforeButton.gameObject.activeSelf) RankBeforeButton.gameObject.SetActive(true);
+            RankBeforeText.text = $"{Racer.CurrentRank - 1}.";
+            GapToBeforeText.text = "-" + (int)Racer.CurrentDistanceToRacerInFront + "m";
+        }
+
+        // Own
+        RankText.text = $"{Racer.CurrentRank}.";
+
+        // Behind
+        if (Racer.IsCurrentlyLast() || Racer.IsFinished)
+        {
+            if (RankAfterButton.gameObject.activeSelf) RankAfterButton.gameObject.SetActive(false);
+            GapToAfterText.text = "";
+        }
+        else
+        {
+            if (!RankAfterButton.gameObject.activeSelf) RankAfterButton.gameObject.SetActive(true);
+            RankAfterText.text = $"{Racer.CurrentRank + 1}.";
+            GapToAfterText.text = "+" + (int)Racer.CurrentDistanceToRacerInBack + "m";
+        }
+
         StaminaBar.SetValue(Racer.Stamina, Racer.MAX_STAMINA, ProgressBarTextType.Percent);
     }
 

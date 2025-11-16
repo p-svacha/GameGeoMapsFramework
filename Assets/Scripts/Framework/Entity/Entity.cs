@@ -81,7 +81,7 @@ public class Entity
         // Move along transition
         if (IsMoving)
         {
-            CurrentSpeed = GetSurfaceSpeed(CurrentTransition.LineFeature.Surface);
+            CurrentSpeed = GetCurrentSpeed();
             float distance = CurrentSpeed * GameLoop.TickDeltaTime; // Get travelled distance this tick in units (meters)
             MoveDistance(distance, tickFraction: 1f);
         }
@@ -220,6 +220,11 @@ public class Entity
 
 
     #region Getters
+
+    public virtual float GetCurrentSpeed()
+    {
+        return GetSurfaceSpeed(CurrentTransition.LineFeature.Surface);
+    }
 
     /// <summary>
     /// Returns this entity's speed in units per second on the given surface.

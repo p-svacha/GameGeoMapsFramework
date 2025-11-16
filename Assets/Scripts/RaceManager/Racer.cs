@@ -1,5 +1,6 @@
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Profiling;
 
 public class Racer : Entity
 {
@@ -16,6 +17,7 @@ public class Racer : Entity
     public const float MAX_STAMINA = 120f;
 
     // Current values
+    public MovementModeDef CurrentMovementMode { get; private set; }
     public float CurrentStaminaDrain; // Stamina drain per tick
 
 
@@ -31,6 +33,9 @@ public class Racer : Entity
     public bool BestGeneralPathIsFromTransitionStart;
     public float CurrentDistanceToFinish;
     public int CurrentRank;
+
+    public bool IsCurrentlyFirst() => CurrentRank == 1;
+    public bool IsCurrentlyLast() => CurrentRank == Race.Racers.Count;
 
     public Racer CurrentRacerInFront;
     public Racer CurrentRacerInBack;
@@ -50,24 +55,50 @@ public class Racer : Entity
     /// <summary>
     /// Called when the race starts.
     /// </summary>
-    public void OnRaceStart() { }
+    public void OnRaceStart()
+    {
+        CurrentMovementMode = MovementModeDefOf.Jog;
+    }
+
+    public override float GetCurrentSpeed()
+    {
+        float speed = base.GetCurrentSpeed();
+        speed *= CurrentMovementMode.SpeedModifier;
+        return speed;
+    }
 
     protected override void OnTick()
     {
         CurrentStaminaDrain = 0f;
+
+        // Change movement mode randomly
+        if (Random.value < 0.0002f)
+        {
+            CurrentMovementMode = DefDatabase<MovementModeDef>.AllDefs.RandomElement();
+        }
+
+        // Only allow walk on 0 stamina
+        if (Stamina == 0f && CurrentMovementMode != MovementModeDefOf.Walk)
+        {
+            CurrentMovementMode = MovementModeDefOf.Walk;
+        }
+
+        // General
         if (IsMoving)
         {
+            // Stamina drain
             float drainPerMinute = BASE_STAMINA_DRAIN;
             drainPerMinute *= CurrentSurface.EnergyDrainFactor;
             float drainPerSecond = drainPerMinute / 60f;
             float drainPerTick = drainPerSecond / GameLoop.TPS;
+            drainPerTick *= CurrentMovementMode.StaminaDrainModifier;
             CurrentStaminaDrain = drainPerTick;
 
             ReduceStamina(CurrentStaminaDrain);
 
+            // Distance to finish
             float distanceLeftOnTransition;
-            // Inverse distance left on current transition if we move in opposite direction of best general path
-            if (BestGeneralPathIsFromTransitionStart) distanceLeftOnTransition = CurrentTransitionPositionRelative * CurrentTransition.Length;
+            if (BestGeneralPathIsFromTransitionStart) distanceLeftOnTransition = CurrentTransitionPositionRelative * CurrentTransition.Length; // Inverse distance left on current transition if we move in opposite direction of best general path
             else distanceLeftOnTransition = (1f - CurrentTransitionPositionRelative) * CurrentTransition.Length;
 
             float bestPathLength = BestGeneralPathToFin != null ? BestGeneralPathToFin.Length : 0f;
@@ -97,8 +128,10 @@ public class Racer : Entity
 
 
             // Else 
+            Profiler.BeginSample("GetBestPathToFin");
             NavigationPath bestPathFromTransitionStart = Race.GetBestPathToFin(CurrentTransition.From);
             NavigationPath bestPathFromTransitionEnd = Race.GetBestPathToFin(CurrentTransition.To);
+            Profiler.EndSample();
 
             if (bestPathFromTransitionStart.Length < bestPathFromTransitionEnd.Length)
             {

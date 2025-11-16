@@ -20,10 +20,9 @@ public class UI_RaceRankingRow : MonoBehaviour
     private float LastClickTime = -1f;
     private const float DoubleClickMaxDelay = 0.25f;
 
-    public void Init(Racer racer)
+    public void Init()
     {
         Button.onClick.AddListener(OnClick);
-        Racer = racer;
     }
 
     private void OnClick()
@@ -51,11 +50,17 @@ public class UI_RaceRankingRow : MonoBehaviour
         Racer.Race.PanToAndFollowRacer(Racer);
     }
 
-    public void UpdateValues()
+    public void UpdateValues(Racer racer)
     {
+        Racer = racer;
+
         RankText.text = Racer.CurrentRank + ".";
         NameText.text = Racer.Name;
         StaminaBar.SetValue(Racer.Stamina, Racer.MAX_STAMINA, ProgressBarTextType.NoText);
+
+        // Mode
+        MovementModeImage.color = Racer.CurrentMovementMode.Color;
+        MovementModeText.text = Racer.CurrentMovementMode.Char.ToString();
 
         // Gap
         if(Racer.IsFinished)
@@ -64,7 +69,7 @@ public class UI_RaceRankingRow : MonoBehaviour
         }
         else
         {
-            GapText.text = Racer.CurrentRank == 1 ? "-" : "+" + Racer.CurrentTimeGapToRacerInFront.GetAsDuration(millisecondDigits: 1);
+            GapText.text = Racer.CurrentRank == 1 ? "-" : "+" + (int)Racer.CurrentDistanceToRacerInFront + "m";
         }
     }
 

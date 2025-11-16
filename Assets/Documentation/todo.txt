@@ -1,7 +1,5 @@
 ﻿Race Management Game:
 
-- Add "run modes" affecting speed and stamina drain [walk/stride/jog/run/sprint]
-- stamina at 0 disables all run modes but walk
 - Add own racer to control run mode
 - make it possible to choose route
 
@@ -10,6 +8,7 @@
 	for pathfinding, first calculate both path costs from current point to the next crossroad in both direction
 	then do the same for the finish point
 	then search cheapest paths StartCrossroad1 -> EndCrossroad1, StartCrossroad2 -> EndCrossroad1, StartCrossroad1 -> EndCrossroad2, StartCrossroad2 -> EndCrossroad2
+		disallow going in direction where we came from at first crossroads
 	combine these elements to find cheapest path
 
 - add real racer attributes/traits instead of just speed modifiers

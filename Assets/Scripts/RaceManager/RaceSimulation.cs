@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Profiling;
 
 public class RaceSimulation : GameLoop
 {
@@ -22,13 +23,16 @@ public class RaceSimulation : GameLoop
     private Dictionary<Point, NavigationPath> BestPathsToFin; // Caches the non-entity-specific best paths from specific points to the finish.
 
     // UI
-    private Racer SelectedRacer;
+    public Racer SelectedRacer { get; private set; }
     public UI_Race UI;
+
+    protected override void AddAdditionalDefs()
+    {
+        DefDatabase<MovementModeDef>.AddDefs(MovementModeDefs.Defs);
+    }
 
     private void Start()
     {
-        DefDatabaseRegistry.AddAllDefs();
-
         Racers = new List<Racer>();
         BestPathsToFin = new Dictionary<Point, NavigationPath>();
 
@@ -165,7 +169,6 @@ public class RaceSimulation : GameLoop
 
     private void ShowRacerAsSelected(Racer racer, bool value)
     {
-        UI.Standings.ShowRacerAsSelected(racer, value);
         racer.ShowAsSelected(value);
     }
     
